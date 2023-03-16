@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "devhttps": "nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
+    "devhttp": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.12.3",
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.1",
+    "firebase-functions-test": "^3.0.0",
+    "nuxt": "3.2.2",
+    "vuetify": "^3.1.6"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-brands-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@mdi/font": "^7.0.96",
+    "@nozomuikuta/h3-cors": "^0.2.1",
+    "@pinia/nuxt": "^0.4.6",
+    "firebase": "^9.17.1",
+    "material-design-icons-iconfont": "^6.7.0",
+    "mongoose": "^6.10.0",
+    "nuxt-security": "^0.10.2",
+    "nuxt3": "^3.2.3-rc.0-27949872.7479d46",
+    "pinia": "^2.0.27",
+    "sass": "^1.58.3"
+  }
+}
