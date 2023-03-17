@@ -4,12 +4,8 @@
   
   <script>
   export default {
-    setup() {
-      useHead({
-        title: 'Home',
-      });
-    },
-    name: 'homePage',
+    setup() {},
+    name: 'indexPage',
     data() {
       return {};
     },

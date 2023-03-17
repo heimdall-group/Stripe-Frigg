@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
-
+import { useTheme } from 'vuetify';
 
 export const useMainStore = defineStore("MainStore", {
     state: () => {
@@ -7,7 +7,7 @@ export const useMainStore = defineStore("MainStore", {
             user: null,
             firebaseAuth: false,
             error: null,
-            count: 0
+            count: 0,
         }
 
     },
