@@ -6,9 +6,29 @@
 </template>
 
 <style>
-  .bg-contrast {
-    
+  @import url(~/assets/css/fonts.css);
+  @import url(~/assets/css/bg-colors.css);
+  @import url(~/assets/css/text-colors.css);
+
+  * {
+    font-family: 'Quicksand-Regular';
+    text-transform: unset !important;
   }
+
+  .component-main-container {
+    min-height: calc(100vh - 32px);
+  }
+
+  .v-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .v-form > * {
+    width: calc(100% - 48px);
+  }
+
 </style>
 
 <script>

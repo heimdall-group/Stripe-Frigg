@@ -5,7 +5,7 @@
   <script>
   export default {
     setup() {},
-    name: 'Page',
+    name: 'plansPage',
     data() {
       return {};
     },

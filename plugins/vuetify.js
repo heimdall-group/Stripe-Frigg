@@ -9,7 +9,7 @@ const light = {
       background: '#dddddd',
       surface: '#FFFFFF',
       primary: '#ededed',
-      secondary: '#555',
+      secondary: '#7c7c7c',
       error: '#B00020',
       info: '#2196F3',
       success: '#4CAF50',
