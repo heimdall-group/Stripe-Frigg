@@ -6,7 +6,9 @@
 </template>
 
 <style>
-
+  .bg-contrast {
+    
+  }
 </style>
 
 <script>

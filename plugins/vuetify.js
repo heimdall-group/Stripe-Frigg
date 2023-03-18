@@ -7,11 +7,13 @@ const light = {
     dark: false,
     colors: {
       background: '#dddddd',
+      surface: '#FFFFFF',
       primary: '#ededed',
-      secondary: '#20a78c',
-      navbar: '#fff',
-      color: '#000000',
-      cardprimary: '#fff'
+      secondary: '#555',
+      error: '#B00020',
+      info: '#2196F3',
+      success: '#4CAF50',
+      warning: '#FB8C00',
     }
 }
 
@@ -19,11 +21,6 @@ const dark = {
     dark: true,
     colors: {
       background: '#293340',
-      primary: '#161b22',
-      secondary: '#20a78c',
-      navbar: '#161b22',
-      color: '#fff',
-      cardprimary: '#293340'
     }
 }
 
@@ -33,7 +30,7 @@ export default defineNuxtPlugin(nuxtApp => {
     components,
     directives,
     theme: {
-        defaultTheme: 'dark',
+        defaultTheme: 'light',
         themes: {
           light,
           dark,
