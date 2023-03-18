@@ -1,11 +1,15 @@
 <template>
-    <landing-page></landing-page>
+    <div>landingpage</div>
   </template>
   
   <script>
   export default {
-    setup() {},
-    name: 'indexPage',
+    setup() {
+      useHead({
+        title: '',
+      });
+    },
+    name: 'Page',
     data() {
       return {};
     },

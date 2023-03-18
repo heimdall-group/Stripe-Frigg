@@ -1,23 +1,6 @@
 <template>
   <v-container fluid color="primary" class="">
     <v-navigation-drawer app temporary color="primary" v-model="drawer">
-      <v-list v-if="mobile" density="comfortable">
-        <v-list-item
-          ><v-btn nuxt to="/login" class="bg-contast" rounded border flat
-            >Login</v-btn
-          ></v-list-item
-        >
-        <v-list-item
-          ><v-btn nuxt to="/register" class="bg-contast" rounded border flat
-            >Register</v-btn
-          ></v-list-item
-        >
-        <v-list-item
-          ><v-btn nuxt to="/plans" class="bg-contast" rounded border flat
-            >Plans</v-btn
-          ></v-list-item
-        >
-      </v-list>
       <v-list>
         <v-list-item v-for="(link, index) in navigationLinks" :key="index" :prepend-icon="link.icon">
           <v-btn
@@ -30,17 +13,11 @@
             {{ link.title }}
           </v-btn>
         </v-list-item>
-        <v-list-item>
-          <v-btn @click="toggleTheme" rounded flat outlined>
-            <v-icon v-if="theme()">mdi-weather-sunny</v-icon>
-            <v-icon v-else>mdi-weather-night</v-icon>
-          </v-btn>
-        </v-list-item>
       </v-list>
       <template v-slot:append>
         <v-list>
           <v-list-item>
-            <v-btn to="/privacy-policy" nuxt rounded flat color="transparent" class="text-subtitle">Privacy Policy</v-btn>
+            <v-btn to="/privacy-policy" nuxt rounded flat size="x-small" color="transparent" class="text-subtitle">Privacy Policy</v-btn>
           </v-list-item>
         </v-list>
       </template>
@@ -48,18 +25,15 @@
     <v-app-bar app rounded class="px-15">
       <v-toolbar-title></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-row align="center" justify="end">
-        <v-btn v-if="!mobile" nuxt to="/login" rounded flat class="bg-contrast mx-1">
+      <v-row v-if="!mobile" align="center" justify="end">
+        <v-btn nuxt to="/login" rounded flat class="mx-1">
           Login
         </v-btn>
-        <v-btn v-if="!mobile" nuxt to="/register" rounded flat class="bg-contrast mx-1"
+        <v-btn nuxt to="/register" rounded flat class="mx-1"
           >Register</v-btn
-        >
-        <v-btn v-if="!mobile" nuxt to="/plans" rounded flat class="bg-contrast mx-1"
-          >Plans</v-btn
-        >
-        <v-app-bar-nav-icon @click="drawer = !drawer" class="mr-4" />
+        >  
       </v-row>
+      <v-app-bar-nav-icon v-else @click="drawer = !drawer" class="mr-4" />
     </v-app-bar>
   </v-container>
 </template>
@@ -94,6 +68,22 @@ export default {
       drawer: false,
       mobile: true,
       navigationLinks: [
+
+      {
+          to: '/login',
+          title: 'Login',
+          icon: '',
+        },
+        {
+          to: '/register',
+          title: 'Register',
+          icon: '',
+        },
+        {
+          to: '/plans',
+          title: 'Plans',
+          icon: '',
+        },
         {
           to: '/about-us',
           title: 'About us',
