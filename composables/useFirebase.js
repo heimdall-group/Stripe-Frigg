@@ -13,8 +13,8 @@ export const createUser = async (username, email, password) => {
         return true;
     })
     .catch((error) => {
-        console.log(error)
-    }) 
+        return error
+    })
     return credentials
 }
 
@@ -26,7 +26,7 @@ export const signInUser = async(email, password) => {
         return true;
     })
     .catch((error) => {
-        console.log(error)
+        return error
     })
     return credentials;
 }
@@ -37,10 +37,8 @@ export const initUser = async () => {
     onAuthStateChanged(auth, (user) => {
         if(user === null) {
             store.setUser(false)
-            store.setFirebaseAuth(true)
         } else {
             store.setUser(auth.currentUser)
-            store.setFirebaseAuth(true)
         } 
     });
 }

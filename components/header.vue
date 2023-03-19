@@ -1,15 +1,21 @@
 <template>
-  <v-container fluid color="primary" class="">
-    <v-navigation-drawer app temporary color="primary" v-model="drawer">
+  <v-container v-if="user" fluid color="primary" class="">
+    <v-navigation-drawer
+
+      app
+      width="96px"
+      v-model="drawer"
+      :permanent="!mobile"
+      :temporary="mobile"
+      color="primary"
+    >
       <v-list>
-        <v-list-item v-for="(link, index) in navigationLinks" :key="index" :prepend-icon="link.icon">
-          <v-btn
-            nuxt
-            :to="link.to"
-            rounded
-            border
-            flat
-          >
+        <v-list-item
+          v-for="(link, index) in userNavigationLinks"
+          :key="index"
+
+        >
+          <v-btn nuxt :to="link.to" color="transparent" flat>
             {{ link.title }}
           </v-btn>
         </v-list-item>
@@ -17,7 +23,43 @@
       <template v-slot:append>
         <v-list>
           <v-list-item>
-            <v-btn to="/privacy-policy" nuxt rounded flat size="x-small" color="transparent" class="text-subtitle">Privacy Policy</v-btn>
+            <v-btn @click="signOut">Logout</v-btn>
+          </v-list-item>
+        </v-list>
+      </template>
+    </v-navigation-drawer>
+    <v-app-bar v-if="mobile">
+      <v-toolbar-title></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon @click="drawer = !drawer" class="mr-4" />
+    </v-app-bar>
+  </v-container>
+  <v-container v-else fluid color="primary" class="">
+    <v-navigation-drawer app temporary color="primary" v-model="drawer">
+      <v-list>
+        <v-list-item
+          v-for="(link, index) in navigationLinks"
+          :key="index"
+          :prepend-icon="link.icon"
+        >
+          <v-btn nuxt :to="link.to" rounded border flat>
+            {{ link.title }}
+          </v-btn>
+        </v-list-item>
+      </v-list>
+      <template v-slot:append>
+        <v-list>
+          <v-list-item>
+            <v-btn
+              to="/privacy-policy"
+              nuxt
+              rounded
+              flat
+              size="x-small"
+              color="transparent"
+              class="text-subtitle"
+              >Privacy Policy</v-btn
+            >
           </v-list-item>
         </v-list>
       </template>
@@ -26,12 +68,8 @@
       <v-toolbar-title></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-row v-if="!mobile" align="center" justify="end">
-        <v-btn nuxt to="/login" rounded flat class="mx-1">
-          Login
-        </v-btn>
-        <v-btn nuxt to="/register" rounded flat class="mx-1"
-          >Register</v-btn
-        >  
+        <v-btn nuxt to="/login" rounded flat class="mx-1"> Login </v-btn>
+        <v-btn nuxt to="/register" rounded flat class="mx-1">Register</v-btn>
       </v-row>
       <v-app-bar-nav-icon v-else @click="drawer = !drawer" class="mr-4" />
     </v-app-bar>
@@ -49,8 +87,11 @@ import { useTheme } from 'vuetify';
 import { useMainStore } from '~~/stores/mainStore';
 export default {
   setup() {
-    const store = useMainStore;
+    const store = useMainStore();
     const theme = useTheme();
+    const signOut = async () => {
+      const result = await signOutUser();
+    };
     return {
       store,
       theme: () => {
@@ -60,6 +101,7 @@ export default {
         (theme.global.name.value = theme.global.current.value.dark
           ? 'light'
           : 'dark'),
+      signOut,
     };
   },
   name: 'headerComponent',
@@ -68,8 +110,7 @@ export default {
       drawer: false,
       mobile: true,
       navigationLinks: [
-
-      {
+        {
           to: '/login',
           title: 'Login',
           icon: '',
@@ -95,6 +136,21 @@ export default {
           icon: '',
         },
       ],
+      userNavigationLinks: [
+        {
+          to: '/',
+          title: 'Dashboard',
+        },
+        {
+          to: '/plans',
+          title: 'Plans',
+        },
+        {
+          to: '/contact-us',
+          title: 'Contact us',
+          icon: '',
+        },
+      ],
     };
   },
   computed: {
@@ -109,6 +165,7 @@ export default {
   },
   mounted() {
     this.onResize();
+    console.log(this.user);
     window.addEventListener('resize', this.onResize, { passive: true });
   },
   updated() {},

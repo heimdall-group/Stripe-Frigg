@@ -1,18 +1,15 @@
 <template>
-  <v-container fluid color="primary" class="">
-    <v-row></v-row>
-  </v-container>
+  <div>dashboard</div>
 </template>
-
-<style scoped>
-</style>
 
 <script>
 export default {
   setup() {
-    return {};
+    useHead({
+      title: '',
+    });
   },
-  name: 'footerComponent',
+  name: 'dashboardPage',
   data() {
     return {};
   },
@@ -21,6 +18,5 @@ export default {
   mounted() {},
   updated() {},
   components: {},
-  emits: [],
 };
 </script>

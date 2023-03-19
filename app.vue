@@ -2,6 +2,7 @@
   <v-app>
     <Header />
     <NuxtPage/>
+    <Footer />
   </v-app>
 </template>
 
@@ -23,6 +24,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100% !important;
   }
 
   .v-form > * {

@@ -9,7 +9,7 @@
         title: '',
       });
     },
-    name: 'Page',
+    name: 'landingPage',
     data() {
       return {};
     },
