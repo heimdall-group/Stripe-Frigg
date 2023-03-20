@@ -5,6 +5,7 @@ export const useMainStore = defineStore('MainStore', {
   state: () => {
     return {
       user: false,
+      profile: null,
       plans: [
         {
           title: 'Name',
@@ -55,6 +56,9 @@ export const useMainStore = defineStore('MainStore', {
     getUser() {
       return this.user;
     },
+    getProfile() {
+      return this.profile;
+    },
     getPlans() {
       return this.plans;
     },
@@ -63,5 +67,13 @@ export const useMainStore = defineStore('MainStore', {
     setUser(user) {
       this.user = user;
     },
+    getUserData(payload) {
+      fetch('/api/profile', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      }).then(res => res.json()).then(async data => {
+        this.profile = data.profile
+      })
+    }
   },
 });

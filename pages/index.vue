@@ -1,34 +1,33 @@
 <template>
     <dashboard v-if="user"></dashboard>
     <landing-page v-else></landing-page>
-  </template>
+</template>
   
-  <script>
+<script>
 import { useMainStore } from '~~/stores/mainStore';
 export default {
-  setup() {
-    const store = useMainStore();
-    const signOut = async () => {
-      const result = await signOutUser();
-    };
-    return {
-      store,
-      signOut,
-    };
-  },
-    name: 'indexPage',
+    setup() {
+        const store = useMainStore();
+        const signOut = async () => {
+            const result = await signOutUser();
+        };
+        return {
+            store,
+            signOut,
+        };
+    },
+    name: "indexPage",
     data() {
-      return {};
+        return {};
     },
     computed: {
-    user() {
-      return this.store.getUser;
+        user() {
+            return this.store.getUser;
+        },
     },
-  },
     methods: {},
-    mounted() {},
-    updated() {},
-    components: {},
-  };
-  </script>
+    mounted() { },
+    updated() { },
+};
+</script>
   

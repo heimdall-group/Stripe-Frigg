@@ -2,7 +2,6 @@
   <v-app>
     <Header />
     <NuxtPage/>
-    <Footer />
   </v-app>
 </template>
 
@@ -15,11 +14,7 @@
     font-family: 'Quicksand-Regular';
     text-transform: unset !important;
   }
-
-  .component-main-container {
-    min-height: calc(100vh - 32px);
-  }
-
+  
   .v-form {
     display: flex;
     flex-direction: column;

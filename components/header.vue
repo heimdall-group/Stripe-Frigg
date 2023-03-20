@@ -1,40 +1,23 @@
 <template>
-  <v-container v-if="user" fluid color="primary" class="">
-    <v-navigation-drawer
-
-      app
-      width="96px"
-      v-model="drawer"
-      :permanent="!mobile"
-      :temporary="mobile"
-      color="primary"
-    >
+  <div>
+    <v-navigation-drawer v-if="user" color="white" expand-on-hover rail floating>
       <v-list>
-        <v-list-item
-          v-for="(link, index) in userNavigationLinks"
-          :key="index"
-
-        >
-          <v-btn nuxt :to="link.to" color="transparent" flat>
-            {{ link.title }}
-          </v-btn>
-        </v-list-item>
+        <v-list-item title="Dashboard Drawer" prepend-icon="mdi-shield-crown"></v-list-item>
+        <v-btn>sd</v-btn>
       </v-list>
-      <template v-slot:append>
-        <v-list>
-          <v-list-item>
-            <v-btn @click="signOut">Logout</v-btn>
-          </v-list-item>
-        </v-list>
-      </template>
     </v-navigation-drawer>
-    <v-app-bar v-if="mobile">
-      <v-toolbar-title></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-app-bar-nav-icon @click="drawer = !drawer" class="mr-4" />
-    </v-app-bar>
-  </v-container>
-  <v-container v-else fluid color="primary" class="">
+    <v-toolbar color="white" :density="compact">
+      <v-container>
+        <v-row>
+          <v-col v-if="!user" align="end">
+            <v-btn nuxt to="/login" rounded flat class="mx-1"> Login </v-btn>
+            <v-btn nuxt to="/register" rounded flat class="mx-1">Register</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-toolbar>
+  </div>
+  <!-- <v-container v-else fluid color="primary" class="">
     <v-navigation-drawer app temporary color="primary" v-model="drawer">
       <v-list>
         <v-list-item
@@ -73,7 +56,7 @@
       </v-row>
       <v-app-bar-nav-icon v-else @click="drawer = !drawer" class="mr-4" />
     </v-app-bar>
-  </v-container>
+  </v-container> -->
 </template>
 
 <style scoped>

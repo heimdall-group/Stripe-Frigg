@@ -1,6 +1,8 @@
 <template>
+  <v-container>
     <div>landingpage</div>
-  </template>
+  </v-container>
+</template>
   
   <script>
   export default {

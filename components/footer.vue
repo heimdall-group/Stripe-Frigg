@@ -1,7 +1,9 @@
 <template>
-  <v-container fluid color="primary" class="">
-    <v-row></v-row>
-  </v-container>
+  <v-app>
+    <v-container fluid color="primary" class="">
+      <v-row></v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <style scoped>

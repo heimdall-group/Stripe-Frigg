@@ -4,6 +4,7 @@
     "build": "nuxt build",
     "devhttps": "nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "devhttp": "nuxt dev",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -17,6 +18,7 @@
     "vuetify": "^3.1.6"
   },
   "dependencies": {
+    "@apperate/iexjs": "^0.10.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-brands-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
