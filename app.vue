@@ -23,7 +23,7 @@
   }
 
   .v-form > * {
-    width: calc(100% - 48px);
+    width: 100%;
   }
 
 </style>

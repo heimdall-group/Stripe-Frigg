@@ -6,7 +6,7 @@
         <v-btn>sd</v-btn>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="white" :density="compact">
+    <v-toolbar color="white">
       <v-container>
         <v-row>
           <v-col v-if="!user" align="end">
@@ -151,7 +151,9 @@ export default {
     console.log(this.user);
     window.addEventListener('resize', this.onResize, { passive: true });
   },
-  updated() {},
+  updated() {
+    console.log('updated')
+  },
   components: {},
   emits: [],
 };

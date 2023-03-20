@@ -8,8 +8,11 @@ export const useMainStore = defineStore('MainStore', {
       profile: null,
       plans: [
         {
+          id: 1,
+          stripe: false,
           title: 'Name',
           price: 'Price',
+          selected: true,
           perks: [
             'Perk 1',
             'Perk 2',
@@ -17,13 +20,14 @@ export const useMainStore = defineStore('MainStore', {
             'Perk 4',
             'Perk 5',
             'Perk 6',
-            'Perk 7',
-            'Perk 8',
           ],
         },
         {
+          id: 2,
+          stripe: true,
           title: 'Name',
           price: 'Price',
+          selected: false,
           perks: [
             'Perk 1',
             'Perk 2',
@@ -31,13 +35,14 @@ export const useMainStore = defineStore('MainStore', {
             'Perk 4',
             'Perk 5',
             'Perk 6',
-            'Perk 7',
-            'Perk 8',
           ],
         },
         {
+          id: 3,
+          stripe: true,
           title: 'Name',
           price: 'Price',
+          selected: false,
           perks: [
             'Perk 1',
             'Perk 2',
@@ -45,8 +50,6 @@ export const useMainStore = defineStore('MainStore', {
             'Perk 4',
             'Perk 5',
             'Perk 6',
-            'Perk 7',
-            'Perk 8',
           ],
         },
       ],

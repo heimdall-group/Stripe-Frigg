@@ -1,12 +1,12 @@
 <template>
-  <v-container fluid class="component-main-container">
+  <v-container fluid :class="['component-main-container', 'py-0', mobile ? 'px-1' : '']">
     <v-row class="fill-height" justify="center" no-gutters align="center">
-      <v-col cols="1">
+      <v-col cols="auto" v-if="!mobile">
         <v-list density="comfortable" bg-color="transparent">
           <v-list-item
             v-for="(step, index) in steps"
             :key="index"
-            class="pa-2 d-flex justify-center"
+            class="py-2 px-0 d-flex justify-center"
           >
             <v-btn
               height="36px"
@@ -33,6 +33,7 @@
             @submit="submitCallback"
             @input="inputCallback"
           >
+            <h1>Step 1:</h1>
             <v-text-field
               v-model="name"
               density="compact"
@@ -72,35 +73,34 @@
             <v-btn type="submit" flat>Continue</v-btn>
           </v-form>
         </v-col>
-        <v-col>
-          <v-radio-group v-model="plan">
-            <v-row justify="space-around">
-              <v-card
-                v-for="(plan, index) in plans"
-                :key="index"
-                width="300px"
-                height="520px"
-              >
-                <v-card-title>{{ plan.title }}</v-card-title>
-                <v-card-title>{{ plan.price }}</v-card-title>
-                <!-- <v-card-text> -->
-                <v-list>
-                  <v-list-item
-                    size="small"
-                    v-for="(perk, index2) in plan.perks"
-                    :key="index2"
-                  >
-                    {{ perk }}
-                  </v-list-item>
-                </v-list>
-                <!-- </v-card-text> -->
-                <v-card-actions>
-                  <v-radio :value="index + 1"></v-radio>
-                </v-card-actions>
-              </v-card>
-            </v-row>
-          </v-radio-group>
-          <v-row justify="center" align="center" class="ma-1"
+        <v-col class="fill-height d-flex flex-column justify-center">
+          <v-row
+            :justify="mobile ? 'center' : 'space-around'"
+            :class="mobile ? ['flex-column', 'plans-row', 'plans-row-mobile'] : ['plans-row']"
+          >
+            <v-card
+              v-for="(plan, index) in plans"
+              :key="index"
+              :width="mobile ? '100%' : '300px'"
+              height="480px"
+              @click="() => cardCallback(plan.id)"
+              :class="['my-4', plan.selected ? 'selected' : '']"
+            >
+              <v-card-title>{{ plan.title }}</v-card-title>
+              <v-card-title>{{ plan.price }}</v-card-title>
+              <v-list>
+                <v-list-item
+                  density="compact"
+                  prepend-icon="mdi-check"
+                  v-for="(perk, index2) in plan.perks"
+                  :key="index2"
+                >
+                  {{ perk }}
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-row>
+          <v-row justify="center" align="center" class="mb-3 mt-1"
             ><v-btn flat @click="plansCallback">Continue</v-btn></v-row
           >
         </v-col>
@@ -109,8 +109,7 @@
           <v-btn flat @click="stripeCallback">Continue</v-btn>
         </v-col>
         <v-col>
-          Sign up successfull
-          <v-btn flat @click="signUpCallback">Continue</v-btn>
+          Sign up successfull You will be redirected to the dashboard
         </v-col>
       </v-col>
     </v-row>
@@ -119,25 +118,30 @@
 
 <style scoped>
 .register-v-col {
-  height: 610px;
+  height: 100vh;
+  max-height: 100vh;
   overflow: hidden;
 }
 
 .register-v-col > * {
   transition-property: all;
   transition-duration: 0.5s;
-  height: 600px;
+  height: 100vh !important;
   margin: 12px 0 0 0;
   transform: translateY(0px);
   opacity: 0;
 }
 
 .register-v-col.current-step-2 > * {
-  transform: translateY(-600px);
+  transform: translateY(-100vh);
 }
 
 .register-v-col.current-step-3 > * {
-  transform: translateY(-1200px);
+  transform: translateY(-200vh);
+}
+
+.register-v-col.current-step-4 > * {
+  transform: translateY(-300vh);
 }
 
 .register-v-col.current-step-1 > *:nth-child(1) {
@@ -151,6 +155,21 @@
 .register-v-col.current-step-3 > *:nth-child(3) {
   opacity: 1;
 }
+
+.register-v-col.current-step-4 > *:nth-child(4) {
+  opacity: 1;
+}
+
+.register-v-col .plans-row {
+  max-height: 600px;
+  overflow: scroll;
+}
+
+.register-v-col .plans-row-mobile {
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;;
+}
+
 </style>
 
 <script>
@@ -165,11 +184,11 @@ export default {
   name: 'registerComponent',
   data() {
     return {
+      mobile: true,
       email: 'test@gmail.com',
       name: 'test',
       pwd: '1234567',
       pwdRepeat: '1234567',
-      plan: 1,
       steps: [
         {
           step: 1,
@@ -260,24 +279,69 @@ export default {
         this.steps[i].disabled = true;
       }
     },
-    plansCallback() {},
+    cardCallback(id) {
+      const arr = Object.keys(this.plans);
+      const index = parseInt(arr.find((key) => this.plans[key].id === id));
+      for (let i = 0; i < this.plans.length; i++) {
+        if (i === index) {
+          this.plans[i].selected = true;
+          continue;
+        }
+        this.plans[i].selected = false;
+        console.log(this.plans[i]);
+      }
+    },
+    plansCallback() {
+      const arr = Object.keys(this.plans);
+      const index = parseInt(
+        arr.find((key) => this.plans[key].id === this.plan)
+      );
+      console.log(this.plans)
+      console.log(index)
+      if (this.plans[index].stripe) {
+        this.stepCallback(this.currentStep + 1, 'continue');
+      } else {
+        const arr = Object.keys(this.steps);
+        const index = parseInt(
+          arr.find((key) => this.steps[key].step === this.currentStep + 1)
+        );
+        this.steps[index].disabled = true;
+        this.stepCallback(this.currentStep + 1, 'continue');
+        this.stepCallback(this.currentStep + 1, 'continue');
+        this.signUpUser();
+      }
+    },
     // When all stripe stuff is confirmed call this.
     async stripeCallback() {
       // Signup user to firebase
+      this.signUpUser();
+    },
+    async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
         const res = await createUser(this.name, this.email, this.pwd);
         if (res) {
           this.stepCallback(this.currentStep + 1, 'continue');
+          for (let i = 0; i < this.steps.length; i++) {
+            this.steps[i].disabled = true;
+          }
           setTimeout(() => {
             this.signUpCallback();
-          }, 2);
+          }, 3000);
         }
       }
     },
     // When firebase responds that
-    signUpCallback() {},
+    signUpCallback() {
+      this.$router.push('/');
+    },
+    onResize() {
+      this.mobile = window.innerWidth < 1200;
+    },
   },
-  mounted() {},
+  mounted() {
+    this.onResize();
+    window.addEventListener('resize', this.onResize, { passive: true });
+  },
   updated() {},
   components: {},
 };
