@@ -10,7 +10,7 @@ export const useMainStore = defineStore('MainStore', {
         {
           id: 1,
           stripe: false,
-          title: 'Name',
+          title: 'Basic',
           price: 'Price',
           selected: true,
           perks: [
@@ -25,7 +25,7 @@ export const useMainStore = defineStore('MainStore', {
         {
           id: 2,
           stripe: true,
-          title: 'Name',
+          title: 'Medium',
           price: 'Price',
           selected: false,
           perks: [
@@ -40,7 +40,7 @@ export const useMainStore = defineStore('MainStore', {
         {
           id: 3,
           stripe: true,
-          title: 'Name',
+          title: 'Premium',
           price: 'Price',
           selected: false,
           perks: [

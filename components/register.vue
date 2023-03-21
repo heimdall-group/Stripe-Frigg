@@ -50,6 +50,8 @@
               color="secondary"
               variant="outlined"
               type="text"
+              :error-messages="mailError ? 'Email already in use' : ''"
+              @change="mailChangeCallback"
               :rules="[requiredRule, emailRule]"
             ></v-text-field>
             <v-text-field
@@ -84,11 +86,14 @@
               :width="mobile ? '100%' : '300px'"
               height="480px"
               @click="() => cardCallback(plan.id)"
+              :ripple="false"
               :class="['my-4', plan.selected ? 'selected' : '']"
+              :elevation="mobile ? '0' : plan.select ? '24' : '0'"
+              variant="elevated"
             >
               <v-card-title>{{ plan.title }}</v-card-title>
               <v-card-title>{{ plan.price }}</v-card-title>
-              <v-list>
+              <v-list bg-color="transparent">
                 <v-list-item
                   density="compact"
                   prepend-icon="mdi-check"
@@ -162,13 +167,18 @@
 
 .register-v-col .plans-row {
   max-height: 600px;
-  overflow: scroll;
 }
 
 .register-v-col .plans-row-mobile {
-  flex-direction: column !important;
-  flex-wrap: nowrap !important;;
+  display: block !important;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+
+.selected {
+  border: thin solid currentColor;
+} 
 
 </style>
 
@@ -185,10 +195,10 @@ export default {
   data() {
     return {
       mobile: true,
-      email: 'test@gmail.com',
+      email: 'testo13@gmail.com',
       name: 'test',
-      pwd: '1234567',
-      pwdRepeat: '1234567',
+      pwd: '123456',
+      pwdRepeat: '123456',
       steps: [
         {
           step: 1,
@@ -207,6 +217,8 @@ export default {
           disabled: true,
         },
       ],
+      plan: '',
+      mailError: false,
       currentStep: 1,
       vcolClass: 'current-step-1',
       requiredRule: (value) => !!value || 'Required.',
@@ -219,7 +231,7 @@ export default {
         return this.pwd === value ? true : 'Password doesnt match';
       },
       lengthRule: (value) => {
-        return value.length > 6
+        return value.length >= 6
           ? true
           : 'Password length needs to be atleast 6 characters';
       },
@@ -243,7 +255,7 @@ export default {
       this.currentStep = step;
       this.vcolClass = `current-step-${this.currentStep}`;
     },
-    submitCallback(event) {
+    async submitCallback(event) {
       event.preventDefault();
       const validations = [
         this.emailRule(this.email),
@@ -251,9 +263,13 @@ export default {
         this.lengthRule(this.pwd),
         this.lengthRule(this.pwdRepeat),
         this.pwdMatchRule(this.pwdRepeat),
+        await this.mailChangeCallback(this.email),
       ];
-      if (validations.find((item) => item !== true)) {
-        return;
+      for (let i = 0; i < validations.length; i++) {
+        const validation = validations[i];
+        if (validation !== true) {
+          return
+        }
       }
       this.stepCallback(this.currentStep + 1, 'continue');
     },
@@ -279,6 +295,16 @@ export default {
         this.steps[i].disabled = true;
       }
     },
+    async mailChangeCallback() {
+      const res = await $fetch('/api/register/validEmail', {method: 'POST', body:JSON.stringify({mail: this.email})});
+      if(res) {
+        this.mailError = false;
+        return true;
+      } else {
+        this.mailError = true;
+        return false;
+      }
+    },
     cardCallback(id) {
       const arr = Object.keys(this.plans);
       const index = parseInt(arr.find((key) => this.plans[key].id === id));
@@ -288,16 +314,17 @@ export default {
           continue;
         }
         this.plans[i].selected = false;
-        console.log(this.plans[i]);
       }
     },
     plansCallback() {
       const arr = Object.keys(this.plans);
       const index = parseInt(
-        arr.find((key) => this.plans[key].id === this.plan)
+        arr.find((key) => {
+          console.log(this.plans[key])
+          return this.plans[key].selected === true
+        })
       );
-      console.log(this.plans)
-      console.log(index)
+      this.plan = this.plans[index]
       if (this.plans[index].stripe) {
         this.stepCallback(this.currentStep + 1, 'continue');
       } else {
@@ -309,7 +336,7 @@ export default {
         this.stepCallback(this.currentStep + 1, 'continue');
         this.stepCallback(this.currentStep + 1, 'continue');
         this.signUpUser();
-      }
+      } 
     },
     // When all stripe stuff is confirmed call this.
     async stripeCallback() {
@@ -318,21 +345,23 @@ export default {
     },
     async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
-        const res = await createUser(this.name, this.email, this.pwd);
+        console.log(this.plan)
+        const res = await createUser(this.name, this.email, this.pwd, this.plan.title);
+
         if (res) {
           this.stepCallback(this.currentStep + 1, 'continue');
           for (let i = 0; i < this.steps.length; i++) {
             this.steps[i].disabled = true;
           }
-          setTimeout(() => {
-            this.signUpCallback();
-          }, 3000);
+          this.signUpCallback();
         }
       }
     },
-    // When firebase responds that
     signUpCallback() {
-      this.$router.push('/');
+      // Animations?
+      setTimeout(() => {
+        this.$router.push('/');
+      }, 1000);
     },
     onResize() {
       this.mobile = window.innerWidth < 1200;

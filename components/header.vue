@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div>
     <v-navigation-drawer v-if="user" color="white" expand-on-hover rail floating>
       <v-list>
         <v-list-item title="Dashboard Drawer" prepend-icon="mdi-shield-crown"></v-list-item>
@@ -16,9 +16,15 @@
         </v-row>
       </v-container>
     </v-toolbar>
-  </div>
-  <!-- <v-container v-else fluid color="primary" class="">
-    <v-navigation-drawer app temporary color="primary" v-model="drawer">
+  </div> -->
+  <v-container fluid color="primary" class="pa-0">
+    <v-navigation-drawer v-if="user" color="primary" border expand-on-hover rail floating>
+      <v-list>
+        <v-list-item title="Dashboard Drawer" prepend-icon="mdi-shield-crown"></v-list-item>
+        <v-btn>sd</v-btn>
+      </v-list>
+    </v-navigation-drawer>
+    <v-navigation-drawer v-else app temporary color="primary" v-model="drawer">
       <v-list>
         <v-list-item
           v-for="(link, index) in navigationLinks"
@@ -47,7 +53,7 @@
         </v-list>
       </template>
     </v-navigation-drawer>
-    <v-app-bar app rounded class="px-15">
+    <v-toolbar app rounded class="px-15">
       <v-toolbar-title></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-row v-if="!mobile" align="center" justify="end">
@@ -55,8 +61,8 @@
         <v-btn nuxt to="/register" rounded flat class="mx-1">Register</v-btn>
       </v-row>
       <v-app-bar-nav-icon v-else @click="drawer = !drawer" class="mr-4" />
-    </v-app-bar>
-  </v-container> -->
+    </v-toolbar>
+  </v-container>
 </template>
 
 <style scoped>
