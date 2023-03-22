@@ -18,11 +18,6 @@ export const createUser = async (username, email, password, plan) => {
     .then(async () => {
       updateProfile(auth.currentUser, { displayName: username });
       store.setUser(auth.currentUser);
-      console.log({ 
-        id: auth.currentUser.uid,
-        username: username,
-        plan: plan,
-      })
       const res = await fetch('/api/register/addUser', {
         method: 'POST',
         body: JSON.stringify({ 
