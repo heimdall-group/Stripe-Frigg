@@ -33,24 +33,24 @@
       <template v-slot:append v-if="!mobile">
         <v-list>
           <v-list-item rounded class="text-subtitle" prepend-icon="empty">
-            <v-btn nuxt class="text-subtitle" color="transparent" to="/pricary-policy" rounded flat>
+            <v-btn nuxt class="text-subtitle" color="transparent" to="/pricary-policy" rounded width="100%" flat>
               Privacy Policy
             </v-btn>
           </v-list-item>
           <v-list-item rounded prepend-icon="mdi-logout">
-            <v-btn rounded flat @click="signOut">
+            <v-btn rounded width="100%" flat @click="signOut">
               Logout
             </v-btn>
           </v-list-item>
         </v-list>
       </template>
     </v-navigation-drawer>
-    <v-navigation-drawer v-if="mobile" v-model="mobileSubmenu" rail class="mobile-sub-navbar" location="bottom" >
+    <v-navigation-drawer v-if="mobile && user" v-model="mobileSubmenu" rail class="mobile-sub-navbar" location="bottom" >
         <v-row v-if="mobile" justify="space-around" class="flex-nowrap ma-0 pa-2">
           <v-btn v-for="link in mobileSubNavigationLinks" nuxt :to="link.to" rounded flat :icon="link.icon">
           </v-btn>
           <v-divider vertical></v-divider>
-          <v-btn nuxt to="/" rounded flat icon="mdi-logout">
+          <v-btn nuxt to="/" rounded flat icon="mdi-logout" @click="signOut">
           </v-btn>
         </v-row>
       </v-navigation-drawer>

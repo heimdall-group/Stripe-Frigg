@@ -1,6 +1,9 @@
 <template>
-  <v-container fluid :class="['component-main-container', 'py-0', mobile ? 'px-1' : '']">
-    <v-row class="fill-height" justify="center" no-gutters align="center">
+  <v-container
+    fluid
+    :class="['component-main-container', 'py-0', mobile ? 'px-1' : '']"
+  >
+    <v-row justify="center" no-gutters align="center">
       <v-col cols="auto" v-if="!mobile">
         <v-list density="comfortable" bg-color="transparent">
           <v-list-item
@@ -27,13 +30,12 @@
         </v-list>
       </v-col>
       <v-col cols="11" :class="[vcolClass, 'register-v-col']">
-        <v-col class="fill-height d-flex align-center">
+        <v-col class="d-flex align-center">
           <v-form
             validate-on="submit"
             @submit="submitCallback"
             @input="inputCallback"
           >
-            <h1>Step 1:</h1>
             <v-text-field
               v-model="name"
               density="compact"
@@ -75,39 +77,38 @@
             <v-btn type="submit" flat>Continue</v-btn>
           </v-form>
         </v-col>
-        <v-col class="fill-height d-flex flex-column justify-center">
-          <v-row
-            :justify="mobile ? 'center' : 'space-around'"
-            :class="mobile ? ['flex-column', 'plans-row', 'plans-row-mobile'] : ['plans-row']"
-          >
-            <v-card
-              v-for="(plan, index) in plans"
-              :key="index"
-              :width="mobile ? '100%' : '300px'"
-              height="480px"
-              @click="() => cardCallback(plan.id)"
-              :ripple="false"
-              :class="['my-4', plan.selected ? 'selected' : '']"
-              :elevation="mobile ? '0' : plan.select ? '24' : '0'"
-              variant="elevated"
-            >
-              <v-card-title>{{ plan.title }}</v-card-title>
-              <v-card-title>{{ plan.price }}</v-card-title>
-              <v-list bg-color="transparent">
-                <v-list-item
-                  density="compact"
-                  prepend-icon="mdi-check"
-                  v-for="(perk, index2) in plan.perks"
-                  :key="index2"
-                >
-                  {{ perk }}
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-row>
-          <v-row justify="center" align="center" class="mb-3 mt-1"
-            ><v-btn flat @click="plansCallback">Continue</v-btn></v-row
-          >
+        <v-col class="v-col-plans">
+          <v-col cols="12">
+            <v-row>
+              <v-card
+                v-for="(plan, index) in plans"
+                :key="index"
+                :width="mobile ? '100%' : '300px'"
+                height="480px"
+                @click="() => cardCallback(plan.id)"
+                :ripple="false"
+                :class="['my-4', plan.selected ? 'selected' : '']"
+                :elevation="mobile ? '0' : plan.select ? '24' : '0'"
+                variant="elevated"
+              >
+                <v-card-title>{{ plan.title }}</v-card-title>
+                <v-card-title>{{ plan.price }}</v-card-title>
+                <v-list bg-color="transparent">
+                  <v-list-item
+                    density="compact"
+                    prepend-icon="mdi-check"
+                    v-for="(perk, index2) in plan.perks"
+                    :key="index2"
+                  >
+                    {{ perk }}
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-row>
+          </v-col>
+          <v-col cols="12">
+            <v-btn class="mt-6" flat @click="plansCallback">Continue</v-btn>
+          </v-col>
         </v-col>
         <v-col>
           Stripe
@@ -128,58 +129,51 @@
   overflow: hidden;
 }
 
-.register-v-col > * {
+.register-v-col > .v-col {
   transition-property: all;
   transition-duration: 0.5s;
   height: 100vh !important;
   margin: 12px 0 0 0;
   transform: translateY(0px);
   opacity: 0;
+  overflow: hidden;
 }
 
-.register-v-col.current-step-2 > * {
+.register-v-col.current-step-2 > .v-col {
   transform: translateY(-100vh);
 }
 
-.register-v-col.current-step-3 > * {
+.register-v-col.current-step-3 > .v-col {
   transform: translateY(-200vh);
 }
 
-.register-v-col.current-step-4 > * {
+.register-v-col.current-step-4 > .v-col {
   transform: translateY(-300vh);
 }
 
-.register-v-col.current-step-1 > *:nth-child(1) {
+.register-v-col.current-step-1 > .v-col:nth-child(1) {
   opacity: 1;
 }
 
-.register-v-col.current-step-2 > *:nth-child(2) {
+.register-v-col.current-step-2 > .v-col:nth-child(2) {
   opacity: 1;
 }
 
-.register-v-col.current-step-3 > *:nth-child(3) {
+.register-v-col.current-step-3 > .v-col:nth-child(3) {
   opacity: 1;
 }
 
-.register-v-col.current-step-4 > *:nth-child(4) {
+.register-v-col.current-step-4 > .v-col:nth-child(4) {
   opacity: 1;
 }
 
-.register-v-col .plans-row {
-  max-height: 600px;
-}
-
-.register-v-col .plans-row-mobile {
-  display: block !important;
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  overflow-x: hidden;
+.register-v-col .v-col-plans {
+  
 }
 
 .selected {
   border: thin solid currentColor;
-} 
-
+}
 </style>
 
 <script>
@@ -268,7 +262,7 @@ export default {
       for (let i = 0; i < validations.length; i++) {
         const validation = validations[i];
         if (validation !== true) {
-          return
+          return;
         }
       }
       this.stepCallback(this.currentStep + 1, 'continue');
@@ -296,8 +290,11 @@ export default {
       }
     },
     async mailChangeCallback() {
-      const res = await $fetch('/api/register/validEmail', {method: 'POST', body:JSON.stringify({mail: this.email})});
-      if(res) {
+      const res = await $fetch('/api/register/validEmail', {
+        method: 'POST',
+        body: JSON.stringify({ mail: this.email }),
+      });
+      if (res) {
         this.mailError = false;
         return true;
       } else {
@@ -320,11 +317,11 @@ export default {
       const arr = Object.keys(this.plans);
       const index = parseInt(
         arr.find((key) => {
-          console.log(this.plans[key])
-          return this.plans[key].selected === true
+          console.log(this.plans[key]);
+          return this.plans[key].selected === true;
         })
       );
-      this.plan = this.plans[index]
+      this.plan = this.plans[index];
       if (this.plans[index].stripe) {
         this.stepCallback(this.currentStep + 1, 'continue');
       } else {
@@ -336,7 +333,7 @@ export default {
         this.stepCallback(this.currentStep + 1, 'continue');
         this.stepCallback(this.currentStep + 1, 'continue');
         this.signUpUser();
-      } 
+      }
     },
     // When all stripe stuff is confirmed call this.
     async stripeCallback() {
@@ -345,8 +342,13 @@ export default {
     },
     async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
-        console.log(this.plan)
-        const res = await createUser(this.name, this.email, this.pwd, this.plan.title);
+        console.log(this.plan);
+        const res = await createUser(
+          this.name,
+          this.email,
+          this.pwd,
+          this.plan.title
+        );
 
         if (res) {
           this.stepCallback(this.currentStep + 1, 'continue');
