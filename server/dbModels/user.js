@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema(
     uid: String,
     stocks: Object,
     plan: String,
+    number: String,
+    dateOfBirth: Number,
   },
 )
 export default mongoose.model("Users", UserSchema);

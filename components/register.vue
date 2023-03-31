@@ -31,54 +31,95 @@
       </v-col>
       <v-col cols="11" :class="[vcolClass, 'register-v-col']">
         <v-col class="d-flex align-center">
-          <v-form
-            validate-on="submit"
-            @submit="submitCallback"
-            @input="inputCallback"
+          <v-card
+            rounded="xl"
+            :color="mobile ? 'transparent' : 'surface'"
+            :flat="mobile ? true : false"
+            width="100%"
+            class="px-8 py-16"
           >
-            <v-text-field
-              v-model="name"
-              density="compact"
-              label="Name"
-              color="secondary"
-              variant="outlined"
-              type="text"
-              :rules="[requiredRule]"
-            ></v-text-field>
-            <v-text-field
-              v-model="email"
-              density="compact"
-              label="Email"
-              color="secondary"
-              variant="outlined"
-              type="text"
-              :error-messages="mailError ? 'Email already in use' : ''"
-              @change="mailChangeCallback"
-              :rules="[requiredRule, emailRule]"
-            ></v-text-field>
-            <v-text-field
-              v-model="pwd"
-              density="compact"
-              label="Password"
-              color="secondary"
-              variant="outlined"
-              type="password"
-              :rules="[requiredRule, lengthRule]"
-            ></v-text-field>
-            <v-text-field
-              v-model="pwdRepeat"
-              density="compact"
-              label="Repeat Password"
-              color="secondary"
-              variant="outlined"
-              type="password"
-              :rules="[requiredRule, pwdMatchRule, lengthRule]"
-            ></v-text-field>
-            <v-btn type="submit" flat>Continue</v-btn>
-          </v-form>
+            <v-form
+              validate-on="submit"
+              @submit="submitCallback"
+              @input="inputCallback"
+              color="surface"
+            >
+              <v-text-field
+                v-model="name"
+                label="Name"
+                color="secondary"
+                variant="outlined"
+                type="text"
+                :rules="[requiredRule]"
+              ></v-text-field>
+              <v-text-field
+                v-model="email"
+                label="Email"
+                color="secondary"
+                variant="outlined"
+                type="text"
+                :error-messages="mailError ? 'Email already in use' : ''"
+                @change="mailChangeCallback"
+                :rules="[requiredRule, emailRule]"
+              ></v-text-field>
+              <v-text-field
+                v-model="number"
+                label="Number (Optional)"
+                color="secondary"
+                variant="outlined"
+                type="text"
+              ></v-text-field>
+              <v-row>
+                <v-text-field
+                  v-model="dateOfBirth.year"
+                  label="yyyy"
+                  color="secondary"
+                  variant="outlined"
+                  type="text"
+                  maxlength="4"
+                  :rules="[requiredRule]"
+                ></v-text-field>
+                <v-text-field
+                  v-model="dateOfBirth.month"
+                  label="mm"
+                  color="secondary"
+                  variant="outlined"
+                  type="text"
+                  maxlength="2"
+                  :rules="[requiredRule]"
+                ></v-text-field>
+                <v-text-field
+                  v-model="dateOfBirth.day"
+                  label="dd"
+                  color="secondary"
+                  variant="outlined"
+                  type="text"
+                  maxlength="2"
+                  :rules="[requiredRule]"
+                ></v-text-field>
+              </v-row>
+              <v-text-field
+                v-model="pwd"
+                label="Password"
+                color="secondary"
+                variant="outlined"
+                type="password"
+                :rules="[requiredRule, lengthRule]"
+              ></v-text-field>
+              <v-text-field
+                v-model="pwdRepeat"
+                label="Repeat Password"
+                color="secondary"
+                variant="outlined"
+                type="password"
+                :rules="[requiredRule, pwdMatchRule, lengthRule]"
+              ></v-text-field>
+              <v-btn type="submit" rounded elevation="10">Continue</v-btn>
+            </v-form>
+          </v-card>
         </v-col>
         <v-col class="v-col-plans">
-          <v-col cols="12">
+          <v-col cols="12" class="v-col-cards overflow-y-auto">
             <v-row>
               <v-card
                 v-for="(plan, index) in plans"
@@ -90,6 +131,7 @@
                 :class="['my-4', plan.selected ? 'selected' : '']"
                 :elevation="mobile ? '0' : plan.select ? '24' : '0'"
                 variant="elevated"
+                rounded="xl"
               >
                 <v-card-title>{{ plan.title }}</v-card-title>
                 <v-card-title>{{ plan.price }}</v-card-title>
@@ -106,7 +148,7 @@
               </v-card>
             </v-row>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="v-col-cards-confirm-button">
             <v-btn class="mt-6" flat @click="plansCallback">Continue</v-btn>
           </v-col>
         </v-col>
@@ -115,7 +157,19 @@
           <v-btn flat @click="stripeCallback">Continue</v-btn>
         </v-col>
         <v-col>
-          Sign up successfull You will be redirected to the dashboard
+          Summary page: Plan credentials ect
+          <v-row v-if="summary !== false">
+            <v-col>
+              {{ this.summary.email }}
+              {{ this.summary.name }}
+              {{ this.summary.number }}
+              {{ this.summary.dateOfBirth }}
+            </v-col>
+            <v-col>
+              {{ this.summary.plan }}
+            </v-col>
+            <v-col v-if="this.summary.plan.stripe"> Card and shit??? </v-col>
+          </v-row> 
         </v-col>
       </v-col>
     </v-row>
@@ -167,8 +221,11 @@
   opacity: 1;
 }
 
-.register-v-col .v-col-plans {
-  
+.register-v-col .v-col-cards {
+  max-height: 80%;
+}
+
+.register-v-col .v-col-cards-confirm-button {
 }
 
 .selected {
@@ -191,8 +248,15 @@ export default {
       mobile: true,
       email: 'testo13@gmail.com',
       name: 'test',
+      number: '',
+      dateOfBirth: {
+        year: '',
+        month: '',
+        day: '',
+      },
       pwd: '123456',
       pwdRepeat: '123456',
+      summary: false,
       steps: [
         {
           step: 1,
@@ -317,7 +381,6 @@ export default {
       const arr = Object.keys(this.plans);
       const index = parseInt(
         arr.find((key) => {
-          console.log(this.plans[key]);
           return this.plans[key].selected === true;
         })
       );
@@ -332,38 +395,39 @@ export default {
         this.steps[index].disabled = true;
         this.stepCallback(this.currentStep + 1, 'continue');
         this.stepCallback(this.currentStep + 1, 'continue');
-        this.signUpUser();
       }
     },
     // When all stripe stuff is confirmed call this.
     async stripeCallback() {
-      // Signup user to firebase
-      this.signUpUser();
+      this.stepCallback(this.currentStep + 1, 'continue');
     },
     async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
-        console.log(this.plan);
         const res = await createUser(
           this.name,
           this.email,
           this.pwd,
-          this.plan.title
+          this.plan.title,
+          `${this.dateOfBirth.year}/${this.dateOfBirth.month}/${this.dateOfBirth.day}`,
+          this.number
         );
 
         if (res) {
           this.stepCallback(this.currentStep + 1, 'continue');
-          for (let i = 0; i < this.steps.length; i++) {
-            this.steps[i].disabled = true;
+          const arr = [...this.steps];
+          this.summary = {
+            email: this.email,
+            name: this.name,
+            number: this.number,
+            dateOfBirth: `${this.dateOfBirth.year}/${this.dateOfBirth.month}/${this.dateOfBirth.day}`,
+            plan: this.plan
           }
-          this.signUpCallback();
+          for (let i = 0; i < arr.length; i++) {
+            arr[i].disabled = true;
+          }
+          this.steps = arr;
         }
       }
-    },
-    signUpCallback() {
-      // Animations?
-      setTimeout(() => {
-        this.$router.push('/');
-      }, 1000);
     },
     onResize() {
       this.mobile = window.innerWidth < 1200;

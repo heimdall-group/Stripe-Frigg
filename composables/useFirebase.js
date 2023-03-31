@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth';
 import { useMainStore } from '/stores/MainStore';
 
-export const createUser = async (username, email, password, plan) => {
+export const createUser = async (username, email, password, plan, date, number) => {
   const store = useMainStore();
   const auth = getAuth();
   const credentials = await createUserWithEmailAndPassword(
@@ -24,6 +24,8 @@ export const createUser = async (username, email, password, plan) => {
           id: auth.currentUser.uid,
           username: username,
           plan: plan,
+          date: date,
+          number: number,
         }),
       });
       if( res.status === 200) {
