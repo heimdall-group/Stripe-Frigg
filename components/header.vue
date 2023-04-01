@@ -146,7 +146,7 @@ export default {
           icon: 'mdi-account-outline',
         },
         {
-          to: '/register',
+          to: '/register/step-1',
           title: 'Register',
           icon: 'mdi-account-plus-outline',
         },

@@ -1,11 +1,15 @@
 <template>
-  <register></register>
+  <register-step-summary />
 </template>
 
 <script>
 export default {
-  setup() {},
-  name: 'registerPage',
+  setup() {
+    useHead({
+      title: '',
+    });
+  },
+  name: 'registerStepSummaryPage',
   data() {
     return {};
   },

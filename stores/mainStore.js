@@ -53,6 +53,13 @@ export const useMainStore = defineStore('MainStore', {
           ],
         },
       ],
+      registerSummary: {
+        email: '',
+        name: '',
+        number: '',
+        dateOfBirth: '',
+        plan: '',
+      }
     };
   },
   getters: {
@@ -65,10 +72,16 @@ export const useMainStore = defineStore('MainStore', {
     getPlans() {
       return this.plans;
     },
+    getSummary() {
+      return this.summary;
+    }
   },
   actions: {
     setUser(user) {
       this.user = user;
+    },
+    setSummary(summary) {
+      this.summary = summary
     },
     getUserData(payload) {
       fetch('/api/profile', {

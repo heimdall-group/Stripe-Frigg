@@ -4,32 +4,7 @@
     :class="['component-main-container', 'py-0', mobile ? 'px-1' : '']"
   >
     <v-row justify="center" no-gutters align="center">
-      <v-col cols="auto" v-if="!mobile">
-        <v-list density="comfortable" bg-color="transparent">
-          <v-list-item
-            v-for="(step, index) in steps"
-            :key="index"
-            class="py-2 px-0 d-flex justify-center"
-          >
-            <v-btn
-              height="36px"
-              size="x-small"
-              :disabled="step.disabled"
-              :class="step.active ? 'active' : ''"
-              flat
-              rounded
-              outlined
-              @click="
-                () => {
-                  this.stepCallback(step.step);
-                }
-              "
-              >{{ step.step }}</v-btn
-            >
-          </v-list-item>
-        </v-list>
-      </v-col>
-      <v-col cols="11" :class="[vcolClass, 'register-v-col']">
+      <v-col>
         <v-col class="d-flex align-center">
           <v-card
             rounded="xl"
@@ -257,24 +232,6 @@ export default {
       pwd: '123456',
       pwdRepeat: '123456',
       summary: false,
-      steps: [
-        {
-          step: 1,
-          disabled: false,
-        },
-        {
-          step: 2,
-          disabled: true,
-        },
-        {
-          step: 3,
-          disabled: true,
-        },
-        {
-          step: 4,
-          disabled: true,
-        },
-      ],
       plan: '',
       mailError: false,
       currentStep: 1,
@@ -317,7 +274,7 @@ export default {
       event.preventDefault();
       const validations = [
         this.emailRule(this.email),
-        this.validateRequired(this.email, this.name, this.pwd, this.pwdRepeat),
+        this.validateRequired([this.email, this.name, this.pwd, this.pwdRepeat]),
         this.lengthRule(this.pwd),
         this.lengthRule(this.pwdRepeat),
         this.pwdMatchRule(this.pwdRepeat),
@@ -407,9 +364,6 @@ export default {
           this.name,
           this.email,
           this.pwd,
-          this.plan.title,
-          `${this.dateOfBirth.year}/${this.dateOfBirth.month}/${this.dateOfBirth.day}`,
-          this.number
         );
 
         if (res) {

@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema(
     plan: String,
     number: String,
     dateOfBirth: Number,
+    stepCompleted: Number,
   },
 )
 export default mongoose.model("Users", UserSchema);
