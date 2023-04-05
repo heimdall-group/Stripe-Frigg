@@ -17,10 +17,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-      recaptcha: process.env.RECAPTCHA_KEY,
+      recaptcha_v3: process.env.RECAPTCHA_V3_KEY,
+      recaptcha_v2: process.env.RECAPTCHA_V2_KEY,
     },
     mongoUrl: process.env.MONGO_URL,
-    recaptcha: process.env.RECAPTCHA_SECRET_KEY,
+    recaptcha_v3_secret: process.env.RECAPTCHA_V3_SECRET_KEY,
+    recaptcha_v2_secret: process.env.RECAPTCHA_V2_SECRET_KEY,
   },
   nitro: {
     preset: 'digital-ocean',

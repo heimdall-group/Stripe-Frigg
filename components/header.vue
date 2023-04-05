@@ -33,7 +33,7 @@
       <template v-slot:append v-if="!mobile">
         <v-list>
           <v-list-item rounded class="text-subtitle" prepend-icon="empty">
-            <v-btn nuxt class="text-subtitle" color="transparent" to="/pricary-policy" rounded width="100%" flat>
+            <v-btn nuxt class="text-subtitle" color="transparent" to="/privacy-policy" rounded width="100%" flat>
               Privacy Policy
             </v-btn>
           </v-list-item>
@@ -227,11 +227,9 @@ export default {
   },
   mounted() {
     this.onResize();
-    console.log(this.user);
     window.addEventListener('resize', this.onResize, { passive: true });
   },
   updated() {
-    console.log('updated');
   },
   components: {},
   emits: [],

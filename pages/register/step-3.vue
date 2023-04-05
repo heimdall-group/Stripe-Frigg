@@ -8,6 +8,9 @@ export default {
     useHead({
       title: '',
     });
+    definePageMeta({
+      middleware: 'restrict-auth'
+    })
   },
   name: 'registerStep3Page',
   data() {

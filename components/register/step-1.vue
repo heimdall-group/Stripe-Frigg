@@ -1,10 +1,6 @@
 <template>
   <v-container fluid class="component-main-container py-0">
-    <v-form
-      validate-on="submit"
-      @submit="submitCallback"
-      color="surface"
-    >
+    <v-form validate-on="submit" @submit="submitCallback" color="surface">
       <v-text-field
         v-model="name"
         label="Name"
@@ -75,24 +71,65 @@
         type="password"
         :rules="[requiredRule, pwdMatchRule, lengthRule]"
       ></v-text-field>
+      <client-only>
+        <div
+          id="recaptcha-container"
+          class="d-flex justify-center mb-4"
+          :data-sitekey="recaptchaSitekey"
+        ></div>
+      </client-only>
       <v-btn type="submit" rounded elevation="10">Continue</v-btn>
+      <v-alert
+        v-show="error.status"
+        :text="error.message"
+        type="warning"
+        class="mt-4"
+      >
+        <v-btn
+          flat
+          position="absolute"
+          color="transparent right top-center-36 ml-4"
+          @click="this.error.status = false"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-alert>
     </v-form>
   </v-container>
 </template>
 
 <script>
+import { useMainStore } from '~~/stores/mainStore';
+
 export default {
-  setup() {},
+  setup() {
+    useHead({
+      script: [
+        {
+          hid: 'recaptcha v2',
+          src: `https://www.google.com/recaptcha/api.js?render=${
+            useRuntimeConfig().recaptcha_v3
+          }`,
+          defer: true,
+          async: true,
+        },
+      ],
+    });
+    const store = useMainStore();
+    return {
+      store,
+    };
+  },
   name: 'registerStep1Component',
   data() {
     return {
-      email: 'testo13@gmail.com',
+      email: 'test1@gmail.com',
       name: 'test',
-      number: '',
+      number: '0793138309',
       dateOfBirth: {
-        year: '',
-        month: '',
-        day: '',
+        year: '2002',
+        month: '10',
+        day: '02',
       },
       pwd: '123456',
       pwdRepeat: '123456',
@@ -111,6 +148,13 @@ export default {
           ? true
           : 'Password length needs to be atleast 6 characters';
       },
+      v2: false,
+      error: {
+        status: false,
+        message:
+          'A verification error has accured. Please reload the page and try again',
+      },
+      recaptchaSitekey: useRuntimeConfig().recaptcha_v2,
     };
   },
   computed: {},
@@ -145,16 +189,32 @@ export default {
     async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
         // Recaptcha
-        const res = await createUser(
-          this.name,
-          this.email,
-          this.pwd,
-          this.number,
-          this.dateOfBirth,
-        );
-
+        const token = await getRecaptchaToken();
+        const res = await $fetch('/api/verify/recaptcha', {
+          method: 'POST',
+          body: {
+            token: token,
+          },
+        });
         if (res) {
-          // Update step then redirect
+          const res = await createUser(
+            this.name,
+            this.email,
+            this.pwd,
+            this.number,
+            this.dateOfBirth,
+          );
+
+          if (res) {
+            console.log('redirect');
+          }
+        } else if (this.v2 !== true) {
+          grecaptcha.render('recaptcha-container', {
+            sitekey: useRuntimeConfig().recaptcha_v2,
+          });
+          this.v2 = true;
+        } else {
+          this.error.status = true;
         }
       }
     },
@@ -167,7 +227,7 @@ export default {
           return false;
         }
       }
-      return true
+      return true;
     },
     async mailChangeCallback() {
       const res = await $fetch('/api/register/validEmail', {

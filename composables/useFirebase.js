@@ -16,19 +16,19 @@ export const createUser = async (username, email, password) => {
     password
   )
     .then(async () => {
-      updateProfile(auth.currentUser, { displayName: username });
+      updateProfile(auth.currentUser, { displayName: username, step: 2 });
       store.setUser(auth.currentUser);
       const res = await fetch('/api/register/addUser', {
         method: 'POST',
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           id: auth.currentUser.uid,
           username: username,
         }),
       });
-      if( res.status === 200) {
+      if (res.status === 200) {
         return true;
       } else {
-        return false
+        return false;
       }
     })
     .catch((error) => {
@@ -39,22 +39,24 @@ export const createUser = async (username, email, password) => {
 
 export const signInUser = async (email, password) => {
   const store = useMainStore();
+  const router = useRouter();
   const auth = getAuth();
-  const credentials = await signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
+  const res = await signInWithEmailAndPassword(auth, email, password);
+  try {
+    if (res) {
       store.setUser(auth.currentUser);
       return true;
-    })
-    .catch((error) => {
-      return error;
-    });
-  return credentials;
+    }
+  } catch (error) {
+    return error;
+  }
 };
 
 export const initUser = async () => {
   const store = useMainStore();
+  const router = useRouter();
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user === null) {
       store.setUser(false);
     } else {
@@ -65,6 +67,8 @@ export const initUser = async () => {
 
 export const signOutUser = async () => {
   const auth = getAuth();
+  const router = useRouter();
   const result = await auth.signOut();
+  router.push('/')
   return result;
 };

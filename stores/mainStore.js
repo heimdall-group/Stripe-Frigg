@@ -59,6 +59,11 @@ export const useMainStore = defineStore('MainStore', {
         number: '',
         dateOfBirth: '',
         plan: '',
+      },
+      alert: {
+        type: 'warning',
+        status: false,
+        message: '',
       }
     };
   },
@@ -74,14 +79,20 @@ export const useMainStore = defineStore('MainStore', {
     },
     getSummary() {
       return this.summary;
-    }
+    },
+    getAlert() {
+      return this.alert;
+    },
   },
   actions: {
     setUser(user) {
       this.user = user;
     },
     setSummary(summary) {
-      this.summary = summary
+      this.summary = summary;
+    },
+    setAlert(alert) {
+      this.alert = alert;
     },
     getUserData(payload) {
       fetch('/api/profile', {

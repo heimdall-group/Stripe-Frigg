@@ -2,6 +2,7 @@
   <v-app>
     <Header />
     <NuxtPage/>
+    <overlay-alert />
   </v-app>
 </template>
 
@@ -9,6 +10,7 @@
   @import url(~/assets/css/fonts.css);
   @import url(~/assets/css/bg-colors.css);
   @import url(~/assets/css/text-colors.css);
+  @import url(~/assets/css/position-helpers.css);
 
   * {
     font-family: 'Quicksand-Regular';
@@ -25,6 +27,8 @@
   .v-form > * {
     width: 100%;
   }
+
+  .grecaptcha-badge { visibility: hidden; }
 
 </style>
 

@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  setup() {},
+  setup() {
+    definePageMeta({
+      middleware: 'restrict-no-auth'
+    })
+  },
   name: 'loginPage',
   data() {
     return {};
@@ -16,5 +20,6 @@ export default {
   mounted() {},
   updated() {},
   components: {},
+  
 };
 </script>

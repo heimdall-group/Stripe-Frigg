@@ -5,9 +5,9 @@ export default defineEventHandler(async (event) => {
   const insert = new Users(  {
     username: username,
     uid: id,
-    stocks: {}
+    stocks: {},
+    step: 2,
   });
-  console.log(insert)
   try {
     await insert.save();
     return {status: 200};

@@ -1,11 +1,12 @@
 import Users from "~~/server/dbModels/user";
 
 export default defineEventHandler(async (event) => {
-	const { id, username } = await readBody(event)
-  try {
-    await insert.save();
-    return {status: 200};
-  } catch {
-    return {status: 400};
+  const body = await readBody(event);
+  if (id && user) {
+    const document = Users.findById(id);
+    const res = await document.updateOne(body);
+    return res;
+  } else {
+    return 'Error har accured'
   }
- })
+});

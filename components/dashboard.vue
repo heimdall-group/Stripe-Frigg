@@ -23,7 +23,7 @@
 
 <script>
 import {Client} from '@apperate/iexjs'
-import {useMainStore} from "@/stores/MainStore"
+import { useMainStore } from '~~/stores/mainStore';
 
 export default {
   setup() {
