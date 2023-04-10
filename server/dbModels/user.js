@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema(
     plan: String,
     number: String,
     dateOfBirth: Number,
-    step: Number,
+    step: String,
+    customerID: String,
   },
 )
 export default mongoose.model("Users", UserSchema);

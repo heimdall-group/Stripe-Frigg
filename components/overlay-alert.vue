@@ -1,9 +1,8 @@
 <template>
-  <v-alert position="absolute" v-show="alert.status" type="warning" :text="alert.message">
+  <v-alert position="absolute" class="ma-2" width="calc(100% - 16px)" v-show="alert.status" type="warning" :text="alert.message">
     <v-btn
       flat
-      rounded=""
-      color="transparent right top-center-36 ml-4"
+      color="transparent right top-center-36 right-2"
       @click="alertCallback"
     >
       <v-icon>mdi-close</v-icon>

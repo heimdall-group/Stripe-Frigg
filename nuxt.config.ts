@@ -23,6 +23,9 @@ export default defineNuxtConfig({
     mongoUrl: process.env.MONGO_URL,
     recaptcha_v3_secret: process.env.RECAPTCHA_V3_SECRET_KEY,
     recaptcha_v2_secret: process.env.RECAPTCHA_V2_SECRET_KEY,
+    stripe_secret: process.env.STRIPE_SECRET_KEY,
+    stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
+    domain_url: process.env.DOMAIN_URL,
   },
   nitro: {
     preset: 'digital-ocean',

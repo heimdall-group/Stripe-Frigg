@@ -1,7 +1,9 @@
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-
+import { mdi } from 'vuetify/iconsets/mdi'
+import { fa } from 'vuetify/iconsets/fa'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 const light = {
     dark: false,
@@ -24,7 +26,6 @@ const dark = {
     }
 }
 
-
 export default defineNuxtPlugin(nuxtApp => {
   const vuetify = createVuetify({
     components,
@@ -35,6 +36,13 @@ export default defineNuxtPlugin(nuxtApp => {
           light,
           dark,
         }
+    },
+    icons: {
+      defaultSet: 'fa',
+      sets: {
+        mdi,
+        fa,
+      }
     }
   })
 

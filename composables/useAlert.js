@@ -1,8 +1,7 @@
 import { useMainStore } from "~~/stores/mainStore"
 
-const store = useMainStore();
-
 export const restrictAuthWarning = () => {
+  const store = useMainStore();
   store.setAlert({
     type: 'warning',
     status: true,
@@ -11,9 +10,19 @@ export const restrictAuthWarning = () => {
 }
 
 export const restrictNoAuthWarning = () => {
+  const store = useMainStore();
   store.setAlert({
     type: 'warning',
     status: true,
     message: 'You are already authenticated',
+  })
+}
+
+export const resetWarning = () => {
+  const store = useMainStore();
+  store.setAlert({
+    type: 'warning',
+    status: false,
+    message: '',
   })
 }

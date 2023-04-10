@@ -1,58 +1,11 @@
-import { defineStore, storeToRefs } from 'pinia';
-import { useTheme } from 'vuetify';
+import { defineStore } from 'pinia';
 
 export const useMainStore = defineStore('MainStore', {
   state: () => {
     return {
-      user: false,
+      user: null,
       profile: null,
-      plans: [
-        {
-          id: 1,
-          stripe: false,
-          title: 'Basic',
-          price: 'Price',
-          selected: true,
-          perks: [
-            'Perk 1',
-            'Perk 2',
-            'Perk 3',
-            'Perk 4',
-            'Perk 5',
-            'Perk 6',
-          ],
-        },
-        {
-          id: 2,
-          stripe: true,
-          title: 'Medium',
-          price: 'Price',
-          selected: false,
-          perks: [
-            'Perk 1',
-            'Perk 2',
-            'Perk 3',
-            'Perk 4',
-            'Perk 5',
-            'Perk 6',
-          ],
-        },
-        {
-          id: 3,
-          stripe: true,
-          title: 'Premium',
-          price: 'Price',
-          selected: false,
-          perks: [
-            'Perk 1',
-            'Perk 2',
-            'Perk 3',
-            'Perk 4',
-            'Perk 5',
-            'Perk 6',
-          ],
-        },
-      ],
+      plans: [],
       registerSummary: {
         email: '',
         name: '',
@@ -64,7 +17,9 @@ export const useMainStore = defineStore('MainStore', {
         type: 'warning',
         status: false,
         message: '',
-      }
+      },
+      currencies: ['sek', 'usd'],
+      currency: 'usd',
     };
   },
   getters: {
@@ -77,22 +32,26 @@ export const useMainStore = defineStore('MainStore', {
     getPlans() {
       return this.plans;
     },
-    getSummary() {
-      return this.summary;
-    },
     getAlert() {
       return this.alert;
+    },
+    getCurrency() {
+      return this.currency;
     },
   },
   actions: {
     setUser(user) {
       this.user = user;
     },
-    setSummary(summary) {
-      this.summary = summary;
+    setStep(step) {
+      console.log('this.setStep')
+      this.user.step = step;
     },
     setAlert(alert) {
       this.alert = alert;
+    },
+    setPlans(plans) {
+      this.plans = plans
     },
     getUserData(payload) {
       fetch('/api/profile', {

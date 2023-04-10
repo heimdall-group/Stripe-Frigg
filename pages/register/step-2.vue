@@ -9,7 +9,7 @@ export default {
       title: '',
     });
     definePageMeta({
-      middleware: 'restrict-auth'
+      middleware: ['restrict-auth']
     })
   },
   name: 'registerStep2Page',

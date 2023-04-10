@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-container>
-      <div>dashboard</div>
       {{ profile }}
       <v-row>
         <v-col>

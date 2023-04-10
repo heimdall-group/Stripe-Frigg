@@ -204,10 +204,6 @@ export default {
             this.number,
             this.dateOfBirth,
           );
-
-          if (res) {
-            console.log('redirect');
-          }
         } else if (this.v2 !== true) {
           grecaptcha.render('recaptcha-container', {
             sitekey: useRuntimeConfig().recaptcha_v2,

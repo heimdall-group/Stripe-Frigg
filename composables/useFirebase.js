@@ -7,9 +7,12 @@ import {
 } from 'firebase/auth';
 import { useMainStore } from '/stores/MainStore';
 
+//TODO, rerun middleware + set step to user in store
+
 export const createUser = async (username, email, password) => {
   const store = useMainStore();
   const auth = getAuth();
+  const router = useRouter();
   const credentials = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -26,6 +29,12 @@ export const createUser = async (username, email, password) => {
         }),
       });
       if (res.status === 200) {
+        const res = await getDBUser();
+        if(res === false) {
+          console.error('Could not get step of user')
+          return 
+        }
+        reloadMiddleware();
         return true;
       } else {
         return false;
@@ -39,12 +48,19 @@ export const createUser = async (username, email, password) => {
 
 export const signInUser = async (email, password) => {
   const store = useMainStore();
-  const router = useRouter();
   const auth = getAuth();
+  const router = useRouter();
   const res = await signInWithEmailAndPassword(auth, email, password);
   try {
     if (res) {
       store.setUser(auth.currentUser);
+      const res = await getDBUser();
+      if(res === false) {
+        console.error('Could not get step of user')
+        return 
+      }
+      useRouter().push('/')
+      reloadMiddleware();
       return true;
     }
   } catch (error) {
@@ -54,21 +70,27 @@ export const signInUser = async (email, password) => {
 
 export const initUser = async () => {
   const store = useMainStore();
-  const router = useRouter();
   const auth = getAuth();
+  const router = useRouter();
   onAuthStateChanged(auth, async (user) => {
     if (user === null) {
       store.setUser(false);
     } else {
       store.setUser(auth.currentUser);
+      const res = await getDBUser();
+      if(res === false) {
+        console.error('Could not get step of user')
+        return 
+      }
+      reloadMiddleware();
     }
   });
 };
 
 export const signOutUser = async () => {
   const auth = getAuth();
-  const router = useRouter();
   const result = await auth.signOut();
-  router.push('/')
+  const router = useRouter();
+  router.push('/');
   return result;
 };

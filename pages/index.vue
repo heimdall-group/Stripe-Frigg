@@ -8,12 +8,11 @@ import { useMainStore } from '~~/stores/mainStore';
 export default {
     setup() {
         const store = useMainStore();
-        const signOut = async () => {
-            const result = await signOutUser();
-        };
+        definePageMeta({
+          middleware: ['step-redirect']
+        })
         return {
             store,
-            signOut,
         };
     },
     name: "indexPage",

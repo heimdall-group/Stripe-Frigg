@@ -11,10 +11,15 @@
   @import url(~/assets/css/bg-colors.css);
   @import url(~/assets/css/text-colors.css);
   @import url(~/assets/css/position-helpers.css);
+  @import url(~/assets/css/opacity.css);
 
   * {
     font-family: 'Quicksand-Regular';
     text-transform: unset !important;
+  }
+
+  .v-application {
+    height: 100vh;
   }
   
   .v-form {
@@ -30,6 +35,13 @@
 
   .grecaptcha-badge { visibility: hidden; }
 
+  .component-main-container {
+    min-height: 100vh;
+  }
+
+  @media (max-width: 850px) {
+  }
+
 </style>
 
 <script>
@@ -38,7 +50,7 @@ export default {
   setup() {
     useHead({
       titleTemplate: (pageTitle) => {
-        return pageTitle ? `${pageTitle} - Test` : 'TEst';
+        return pageTitle ? `${pageTitle} - Test` : 'Test';
       },
     });
     const store = useMainStore();
@@ -52,10 +64,12 @@ export default {
   },
   computed: {},
   methods: {},
-  mounted() {
-
+  async mounted() {
+    this.store.setPlans(await getPlans())
   },
-  updated() {},
+  updated() {
+    console.log(user)
+  },
   components: {},
 };
 </script>

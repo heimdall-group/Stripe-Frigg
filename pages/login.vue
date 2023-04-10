@@ -8,8 +8,8 @@
 export default {
   setup() {
     definePageMeta({
-      middleware: 'restrict-no-auth'
-    })
+        middleware: ['step-redirect', 'restrict-no-auth']
+      })
   },
   name: 'loginPage',
   data() {

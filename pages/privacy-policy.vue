@@ -4,7 +4,11 @@
 
 <script>
 export default {
-  setup() {},
+  setup() {
+    definePageMeta({
+      middleware: ['step-redirect']
+    })
+  },
   name: 'privacyPolicyPage',
   data() {
     return {};

@@ -1,5 +1,5 @@
 <template>
-  <register-step3 />
+  <register-summary-error />
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
       middleware: ['restrict-auth']
     })
   },
-  name: 'registerStep3Page',
+  name: 'registerSummaryErrorPage',
   data() {
     return {};
   },
