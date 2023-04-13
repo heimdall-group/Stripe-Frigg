@@ -7,8 +7,6 @@ import {
 } from 'firebase/auth';
 import { useMainStore } from '/stores/MainStore';
 
-//TODO, rerun middleware + set step to user in store
-
 export const createUser = async (username, email, password) => {
   const store = useMainStore();
   const auth = getAuth();
@@ -29,11 +27,7 @@ export const createUser = async (username, email, password) => {
         }),
       });
       if (res.status === 200) {
-        const res = await getDBUser();
-        if(res === false) {
-          console.error('Could not get step of user')
-          return 
-        }
+        const res = await getUser();
         reloadMiddleware();
         return true;
       } else {
@@ -54,11 +48,7 @@ export const signInUser = async (email, password) => {
   try {
     if (res) {
       store.setUser(auth.currentUser);
-      const res = await getDBUser();
-      if(res === false) {
-        console.error('Could not get step of user')
-        return 
-      }
+      const res = await getUser();
       useRouter().push('/')
       reloadMiddleware();
       return true;
@@ -77,11 +67,7 @@ export const initUser = async () => {
       store.setUser(false);
     } else {
       store.setUser(auth.currentUser);
-      const res = await getDBUser();
-      if(res === false) {
-        console.error('Could not get step of user')
-        return 
-      }
+      const res = await getUser();
       reloadMiddleware();
     }
   });

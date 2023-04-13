@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="component-main-container px-0"> 
+  <v-container fluid class="component-main-container"> 
     <v-row class="fill-height" align="center">
       <v-col cols="12" class="d-flex justify-center">
         <v-card
@@ -8,8 +8,9 @@
           variant="elevated"
           elevation="10"
           rounded="xl"
+          class="pb-3"
         >
-          <v-card-title class="text-center text-h4 mt-4">
+          <v-card-title class="text-center text-h4 mt-4 text-wrap">
             Subscription activated
           </v-card-title>
           <v-card-subtitle class="text-center">
@@ -19,11 +20,11 @@
           <v-card-actions>
             <v-row justify="center">
               <v-btn
-                @click="portalSessionHandler"
+                @click="getPortalSession"
                 class="text-decoration-underline"
                 color="deep-purple"
               >
-                Manage your subscription
+                Customer portal
               </v-btn>
               <v-btn
                 nuxt
@@ -75,15 +76,6 @@ export default {
           sessionID: id,
         }
       });
-    },
-    async portalSessionHandler() {
-      const res = await $fetch('/api/plans/getPortalSession', {
-        method: 'POST',
-        body: {
-          token: await this.user.getIdToken(),
-        }
-      });
-      window.location = res;
     },
     onResize() {
       this.mobile = window.innerWidth < 850;

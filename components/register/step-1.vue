@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="component-main-container py-0">
+  <v-container fluid class="component-main-container">
     <v-form validate-on="submit" @submit="submitCallback" color="surface">
       <v-text-field
         v-model="name"
@@ -226,7 +226,7 @@ export default {
       return true;
     },
     async mailChangeCallback() {
-      const res = await $fetch('/api/register/validEmail', {
+      const res = await $fetch('/api/verify/userEmail', {
         method: 'POST',
         body: JSON.stringify({ mail: this.email }),
       });

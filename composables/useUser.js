@@ -2,7 +2,7 @@ import { useMainStore } from "~/stores/mainStore"
 
 export const updateStep = async (newStep) => {
   const store = useMainStore();
-  const res = await $fetch('/api/register/updateStep', {
+  const res = await $fetch('/api/register/patchStep', {
     method: 'POST',
     body: {
       step: newStep,
@@ -10,22 +10,33 @@ export const updateStep = async (newStep) => {
     }
   })
   if (res) {
-    store.setStep(newStep);
+    store.setUserStep(newStep);
   }
 }
 
-export const getDBUser = async () => {
+export const getUser = async () => {
   const store = useMainStore();
-  const res = await $fetch('/api/register/getDBUser', {
+  const res = await $fetch('/api/user/getUser', {
     method: 'POST',
     body: {
       uid: store.getUser.uid,
     }
   })
   if (res !== false) {
-    store.setStep(res.step);
+    store.setUserStep(res.step);
   }
-  
+}
+
+export const getPortalSession = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  const res = await $fetch('/api/plans/getPortalSession', {
+    method: 'POST',
+    body: {
+      token: await user.getIdToken(),
+    }
+  });
+  window.location = res;
 }
 
 export const stepRedirectValidation = async () => {

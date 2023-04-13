@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="component-main-container px-0">
+  <v-container fluid class="component-main-container">
     error
   </v-container>
 </template>

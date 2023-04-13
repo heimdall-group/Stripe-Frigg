@@ -14,6 +14,7 @@
         <v-col>
           <v-btn @click="getStockData()">Stock data</v-btn>
           <v-btn @click="signOut()">Sign Out</v-btn>
+          <v-btn @click="getPortalSession">Customer Portal</v-btn>
         </v-col>
       </v-row>
     </v-container>

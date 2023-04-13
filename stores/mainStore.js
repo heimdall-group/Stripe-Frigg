@@ -43,9 +43,14 @@ export const useMainStore = defineStore('MainStore', {
     setUser(user) {
       this.user = user;
     },
-    setStep(step) {
-      console.log('this.setStep')
+    setUserStep(step) {
       this.user.step = step;
+    },
+    setUserStatus(status) {
+      this.user.status = status;
+    },
+    setUserExpires(expires) {
+      this.user.expires = expires;
     },
     setAlert(alert) {
       this.alert = alert;
@@ -54,7 +59,7 @@ export const useMainStore = defineStore('MainStore', {
       this.plans = plans
     },
     getUserData(payload) {
-      fetch('/api/profile', {
+      fetch('/api/user', {
         method: 'POST',
         body: JSON.stringify(payload)
       }).then(res => res.json()).then(async data => {

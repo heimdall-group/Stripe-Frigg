@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="component-main-container px-0">
+  <v-container fluid class="component-main-container">
     <v-row justify="center" align="center">
       <v-col cols="12" :class="['subscription-type-switch',]">
         <v-switch v-model="annual" label="Annual / Monthly" width="fit-content"></v-switch>

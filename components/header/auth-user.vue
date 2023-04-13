@@ -12,10 +12,11 @@
     <v-list>
       <v-list-item
         v-if="!mobile"
+        class="my-2"
         title="Dashboard Drawer"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" rounded :prepend-icon="link.icon">
+      <v-list-item v-for="link in links" class="my-2" rounded :prepend-icon="link.icon">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -45,9 +46,9 @@
 
   <!-- Mobile Auth Toolbar -->
   <v-app-bar v-if="mobile" color="primary" location="bottom">
-    <v-row justify="space-around">
+    <v-row justify="space-around" class="px-4">
       <v-btn
-        v-for="link in links"
+        v-for="link in mobile_links"
         nuxt
         :to="link.to"
         rounded
@@ -60,8 +61,6 @@
         rounded
         flat
       >
-      <font-awesome-icon icon="fa-solid fa-face-awesome" />
-        <font-awesome-icon icon="fa-solid fa-rectangle-vertical-history" />
         <font-awesome-icon icon="fa-solid fa-bars" />
       </v-btn>
     </v-row>
@@ -70,17 +69,18 @@
   <!-- Mobile Auth Drawer -->
   <v-navigation-drawer
     v-if="mobile"
+    color="primary"
     temporary
     app
-    height="100vh"
     v-model="mobile_sub_menu"
   >
     <v-list>
       <v-list-item
         title="Dashboard Drawer"
+        class="my-2"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" rounded :prepend-icon="link.icon">
+      <v-list-item v-for="link in links" rounded  class="my-2">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -113,6 +113,11 @@
   .v-app-bar .v-row .v-btn {
     font-size: 16px;
   }
+
+  .v-list .v-list-item__prepend {
+    display: flex;
+    justify-content: center !important;
+  }
 </style>
 
 <script>
@@ -137,25 +142,47 @@ export default {
           icon: 'fa-solid fa-table',
         },
         {
-          to: '/',
+          to: '/stocks',
           title: 'Stocks',
           icon: 'fa-solid fa-arrow-trend-up',
         },
         {
-          to: '/',
+          to: '/real-estate',
           title: 'Real estate',
-          icon: 'fa-solid fa-building-user',
+          icon: 'fa-solid fa-house-chimney',
         },
         {
-          to: '/',
+          to: '/e-commerce',
           title: 'E-commerce',
-          icon: 'fa-solid fa-shop',
+          icon: 'fa-solid fa-basket-shopping',
         },
         {
-          to: '/',
+          to: '/plans',
           title: 'Plans',
-          icon: 'fa-solid fa-rectangle-vertical-history',
+          icon: 'fa-solid fa-layer-group',
         }
+      ],
+      mobile_links: [
+        {
+          to: '/',
+          title: 'Overview',
+          icon: 'fa-solid fa-table',
+        },
+        {
+          to: '/stocks',
+          title: 'Stocks',
+          icon: 'fa-solid fa-arrow-trend-up',
+        },
+        {
+          to: '/real-estate',
+          title: 'Real estate',
+          icon: 'fa-solid fa-house-chimney',
+        },
+        {
+          to: '/e-commerce',
+          title: 'E-commerce',
+          icon: 'fa-solid fa-basket-shopping',
+        },
       ],
       mobile_sub_menu: false,
     };
