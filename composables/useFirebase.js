@@ -4,6 +4,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   updateProfile,
+  reload,
+  signOut,
 } from 'firebase/auth';
 import { useMainStore } from '/stores/MainStore';
 
@@ -41,15 +43,16 @@ export const createUser = async (username, email, password) => {
 };
 
 export const signInUser = async (email, password) => {
+  console.log('signInUser')
   const store = useMainStore();
   const auth = getAuth();
-  const router = useRouter();
-  const res = await signInWithEmailAndPassword(auth, email, password);
+  const router = useRouter(); 
   try {
+    const res = await signInWithEmailAndPassword(auth, email, password)
     if (res) {
+      await router.push('/');
       store.setUser(auth.currentUser);
       const res = await getUser();
-      useRouter().push('/')
       reloadMiddleware();
       return true;
     }
@@ -61,21 +64,24 @@ export const signInUser = async (email, password) => {
 export const initUser = async () => {
   const store = useMainStore();
   const auth = getAuth();
-  const router = useRouter();
-  onAuthStateChanged(auth, async (user) => {
+  const subscribe = onAuthStateChanged(auth, async (user) => {
     if (user === null) {
       store.setUser(false);
+      subscribe();
     } else {
       store.setUser(auth.currentUser);
       const res = await getUser();
       reloadMiddleware();
+      subscribe();
     }
   });
 };
 
 export const signOutUser = async () => {
+  const store = useMainStore();
   const auth = getAuth();
   const result = await auth.signOut();
+  store.setUser(false);
   const router = useRouter();
   router.push('/');
   return result;

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
 
         
-        const foundUser = await Users.find({username: body.user})
+        const foundUser = await Users.find({user_username: body.user})
         
         return {profile: foundUser[0]}
     }

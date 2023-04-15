@@ -1,19 +1,29 @@
 <template>
-  <v-alert position="absolute" class="ma-2" width="calc(100% - 16px)" v-show="alert.status" type="warning" :text="alert.message">
-    <v-btn
-      flat
-      color="transparent right top-center-36 right-2"
-      @click="alertCallback"
+  <client-only>
+    <v-alert
+      icon="fa-solid fa-circle-info"
+      position="absolute"
+      class="ma-2"
+      width="calc(100% - 16px)"
+      v-if="alert.status"
+      type="warning"
+      :text="alert.message"
     >
-      <v-icon>mdi-close</v-icon>
-    </v-btn>
-  </v-alert>
+      <v-btn
+        flat
+        color="transparent right top-center-36 right-2"
+        @click="alertCallback"
+      >
+        <font-awesome-icon icon="fa-solid fa-xmark" />
+      </v-btn>
+    </v-alert>
+  </client-only>
 </template>
 
 <style scoped>
-  .v-alert {
-    z-index: 2000;
-  }
+.v-alert {
+  z-index: 2000;
+}
 </style>
 
 <script>
@@ -42,8 +52,8 @@ export default {
         type: 'warning',
         status: false,
         message: '',
-      })
-    }
+      });
+    },
   },
 };
 </script>

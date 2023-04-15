@@ -9,9 +9,9 @@ export default defineEventHandler(async (event) => {
   const res = await getAuth().verifyIdToken(token);
   try {
     if (res) {
-      const { customerID } = await Users.findOne({uid: res.uid});
+      const { stripe_customerID } = await Users.findOne({user_uid: res.uid});
       const { url } = await stripe.billingPortal.sessions.create({
-        customer: customerID,
+        customer: stripe_customerID,
         return_url: `${useRuntimeConfig().domain_url}`,
       });
 

@@ -1,25 +1,185 @@
 <template>
-  <div></div>
+  <!-- Desktop Auth Drawer -->
+  <v-navigation-drawer
+    v-if="!mobile"
+    color="primary"
+    border
+    expand-on-hover
+    rail
+    floating
+    permanent
+  >
+    <v-list>
+      <v-list-item
+        v-if="!mobile"
+        class="my-2"
+        title="Dashboard Drawer"
+        prepend-icon="fa-solid fa-bars"
+      ></v-list-item>
+      <v-list-item v-for="link in links" class="my-2" rounded :prepend-icon="link.icon">
+        <v-btn nuxt :to="link.to" rounded flat width="100%">
+          {{ link.title }}
+        </v-btn>
+      </v-list-item>
+    </v-list>
+    <template v-slot:append>
+      <v-list>
+        <v-list-item rounded class="text-subtitle" prepend-icon="empty">
+          <v-btn
+            nuxt
+            class="text-subtitle"
+            color="transparent"
+            to="/privacy-policy"
+            rounded
+            width="100%"
+            flat
+          >
+            Privacy Policy
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </template>
+  </v-navigation-drawer>
+
+  <!-- Mobile Auth Toolbar -->
+  <v-toolbar v-if="mobile" color="primary" location="top">
+    <v-spacer></v-spacer>
+    <v-btn
+      @click="mobile_sub_menu = !mobile_sub_menu"
+      rounded
+      flat
+    >
+      <client-only>
+        <font-awesome-icon icon="fa-solid fa-bars" />
+      </client-only>
+    </v-btn>
+  </v-toolbar>
+
+  <v-navigation-drawer
+    v-if="mobile"
+    color="primary"
+    temporary
+    app
+    v-model="mobile_sub_menu"
+  >
+    <v-list>
+      <v-list-item
+        title="Dashboard Drawer"
+        class="my-2"
+        prepend-icon="fa-solid fa-bars"
+      ></v-list-item>
+      <v-list-item v-for="link in links" rounded  class="my-2">
+        <v-btn nuxt :to="link.to" rounded flat width="100%">
+          {{ link.title }}
+        </v-btn>
+      </v-list-item>
+    </v-list>
+    <template v-slot:append>
+      <v-list>
+        <v-list-item rounded class="text-subtitle">
+          <v-btn
+            nuxt
+            class="text-subtitle"
+            color="transparent"
+            to="/privacy-policy"
+            rounded
+            width="100%"
+            flat
+          >
+            Privacy Policy
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </template>
+  </v-navigation-drawer>
 </template>
 
+<style scoped>
+  .v-app-bar .v-row .v-btn {
+    font-size: 16px;
+  }
+
+  .v-list .v-list-item__prepend {
+    display: flex;
+    justify-content: center !important;
+  }
+</style>
+
 <script>
+import { useMainStore } from '~/stores/mainStore';
+
 export default {
-  setup() {},
+  setup() {
+    const store = useMainStore();
+    return { store };
+  },
   name: 'headerNoAuthComponent',
   data() {
-    return {};
+    return {
+      links: [
+        {
+          to: '/login',
+          title: 'Login',
+          icon: 'fa-solid fa-arrow-right-to-bracket',
+        },
+        {
+          to: '/register/step-1',
+          title: 'Register',
+          icon: 'fa-solid fa-user-plus',
+        },
+        {
+          to: '/plans',
+          title: 'Plans',
+          icon: 'fa-solid fa-layer-group',
+        },
+        {
+          to: '/about-us',
+          title: 'About us',
+          icon: 'fa-solid fa-circle-info',
+        },
+        {
+          to: '/contact-us',
+          title: 'Contact us',
+          icon: 'fa-solid fa-phone',
+        },
+        
+      ],
+      mobile_links: [
+        {
+          to: '/',
+          title: 'Overview',
+          icon: 'fa-solid fa-table',
+        },
+        {
+          to: '/stocks',
+          title: 'Stocks',
+          icon: 'fa-solid fa-arrow-trend-up',
+        },
+        {
+          to: '/real-estate',
+          title: 'Real estate',
+          icon: 'fa-solid fa-house-chimney',
+        },
+        {
+          to: '/e-commerce',
+          title: 'E-commerce',
+          icon: 'fa-solid fa-basket-shopping',
+        },
+      ],
+      mobile_sub_menu: false,
+    };
   },
   props: {
     mobile: {
       required: true,
       type: Boolean,
-    }
+    },
   },
   computed: {},
   methods: {},
   mounted() {},
   updated() {},
   components: {},
-  emits: []
+  emits: [],
 };
 </script>

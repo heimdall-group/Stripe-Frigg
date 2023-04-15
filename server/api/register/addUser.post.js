@@ -3,10 +3,10 @@ import Users from "~~/server/dbModels/user";
 export default defineEventHandler(async (event) => {
 	const { id, username } = await readBody(event)
   const insert = new Users(  {
-    username: username,
-    uid: id,
-    stocks: {},
-    step: 2,
+    user_username: username,
+    user_uid: id,
+    user_stocks: {},
+    register_step: 2,
   });
   try {
     await insert.save();

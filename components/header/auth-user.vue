@@ -53,6 +53,7 @@
         :to="link.to"
         rounded
         flat
+        size="small"
       >
         <font-awesome-icon :icon="link.icon" />
       </v-btn>
@@ -60,6 +61,7 @@
         @click="mobile_sub_menu = !mobile_sub_menu"
         rounded
         flat
+        size="small"
       >
         <font-awesome-icon icon="fa-solid fa-bars" />
       </v-btn>
@@ -182,6 +184,11 @@ export default {
           to: '/e-commerce',
           title: 'E-commerce',
           icon: 'fa-solid fa-basket-shopping',
+        },
+        {
+          to: '/profile',
+          title: 'Profile',
+          icon: 'fa-solid fa-user',
         },
       ],
       mobile_sub_menu: false,
