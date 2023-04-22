@@ -14,7 +14,13 @@ const handleSubscriptionDeleted = (subscription, customer) => {
 // Set status = active
 // Index plan
 const handleSubscriptionCreated = (subscription, customer) => {
-  const document = Users.findOneAndUpdate({ stripe_customerID: customer });
+  const document = Users.findOneAndUpdate(
+    { stripe_customerID: customer },
+    { 
+      stripe_status: 'active',
+      stripe_plan: subscription, 
+    }
+  );
 };
 // Index new plan
 const handleSubscriptionUpdated = (subscription, customer) => {};

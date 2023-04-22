@@ -63,8 +63,8 @@
               </v-card-subtitle>
               <v-list bg-color="transparent" class="mx-6">
                 <v-list-item
-                  v-for="(perk, index2) in plan.perks"
-                  :key="index2"
+                  v-for="(perk, index) in plan.perks"
+                  :key="index"
                   density="compact"
                 >
                   <v-row align="center">

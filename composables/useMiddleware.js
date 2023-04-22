@@ -17,7 +17,6 @@ export const restrictAuth = async () => {
       return;
     }
     if (!await stepRedirectValidation() &&!user) {
-      console.log('!user')
       restrictAuthWarning();
       return navigateTo('/login');
     }
@@ -42,6 +41,48 @@ export const restrictNoAuth = async () => {
   }
 };
 
+export const restrictAdmin = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  try {
+    if (user === null) {
+      return;
+    }
+  
+    if (user === false) {
+      return navigateTo('/')
+    }
+    
+    const ranks = await getUserRanks();
+    if (!await stepRedirectValidation() && !ranks.includes('Admin')) {
+      return navigateTo('/')
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const restrictAdminSupport = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  try {
+    if (user === null) {
+      return;
+    }
+
+    if (user === false) {
+      return navigateTo('/')
+    }
+  
+    const ranks = await getUserRanks();
+    if (!await stepRedirectValidation() && (!ranks.includes('Admin') || !ranks.includes('Support'))) {
+      return navigateTo('/')
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export const reloadMiddleware = async () => {
   const pathName = useRouter().currentRoute.value.fullPath;
 
@@ -52,5 +93,7 @@ export const reloadMiddleware = async () => {
     restrictNoAuth();
   } else if (pathName.includes('register/step-')) {
     restrictAuth();
+  } else if (pathName.includes('admin')) {
+    restrictAdmin();
   }
 };

@@ -7,9 +7,7 @@ export default defineEventHandler(async (event) => {
   try {
     if (res) {
       const document = await Users.findOne({user_uid: res.uid});
-      return {
-        step: document.register_step,
-      }
+      return document.user_ranks;
     } else {
       return 'user not authenticated'
     }

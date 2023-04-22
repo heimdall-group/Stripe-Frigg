@@ -1,9 +1,9 @@
 <template>
   <v-container fluid class="component-main-container"> 
     <v-row class="fill-height" align="center">
-      <v-col cols="12" class="d-flex justify-center">
+      <v-col cols="12" :class="['d-flex', 'justify-center', mobile ? '' : 'px-16']">
         <v-card
-          :width="mobile ? '90%' : '300px'" 
+          width="100%" 
           height="fit-content"
           variant="elevated"
           elevation="10"

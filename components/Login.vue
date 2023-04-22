@@ -1,16 +1,18 @@
 <template>
-  <v-container>
+  <v-container class="component-main-container">
     <v-form @submit.prevent="onSubmit">
       <v-text-field 
         label="Email" 
         type="email" 
         v-model="email"
+        variant="outlined"
         :rules="[requiredRule, emailRule]"
       ></v-text-field>
       <v-text-field
         label="Password"
         type="password"
         v-model="pwd"
+        variant="outlined"
         :rules="[requiredRule, lengthRule]"
       ></v-text-field>
       <v-btn type="submit">Sign in</v-btn>

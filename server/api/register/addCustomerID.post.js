@@ -11,11 +11,8 @@ export default defineEventHandler(async (event) => {
     if (res) {
       const { customer } = await stripe.checkout.sessions.retrieve(sessionID);
       const document = await Users.findOneAndUpdate({user_uid: res.uid}, {stripe_customerID: customer})
-      document.save()
-      if (document.customerID === customer) {
-        return true;
-      }
-      return false
+      document.save();
+      return true;
     } else {
       return 'user not authenticated'
     }

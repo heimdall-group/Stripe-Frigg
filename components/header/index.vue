@@ -5,6 +5,22 @@
   </v-container>
 </template>
 
+<style>
+  .v-app-bar .v-row .v-btn {
+    font-size: 16px;
+  }
+
+  .navigation-drawer-desktop .v-list .v-list-item .v-list-item__prepend {
+    width: 56px;
+  }
+
+  .navigation-drawer-desktop .v-list .v-list-item .v-list-item__prepend .v-icon {
+    margin: 0 !important;
+    width: 56px;
+    text-align: center;
+  }
+</style>
+
 <script>
 import { useTheme } from 'vuetify';
 import { useMainStore } from '~~/stores/mainStore';

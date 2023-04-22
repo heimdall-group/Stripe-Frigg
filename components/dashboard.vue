@@ -1,24 +1,22 @@
 <template>
-  <v-app>
-    <v-container>
-      {{ profile }}
-      <v-row>
-        <v-col>
-          <h1>Portfolio value: {{ this.stocks.Apple.value * 5 }}</h1>
-        </v-col>
-      </v-row>
-      <v-row no-gutters v-for="stock, index in stocks">
-          {{index}}: {{ stock.stocks }}
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-btn @click="getStockData()">Stock data</v-btn>
-          <v-btn @click="signOut()">Sign Out</v-btn>
-          <v-btn @click="getPortalSession">Customer Portal</v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+  <v-container>
+    {{ profile }}
+    <v-row>
+      <v-col>
+        <h1>Portfolio value: {{ this.stocks.Apple.value * 5 }}</h1>
+      </v-col>
+    </v-row>
+    <v-row no-gutters v-for="(stock, index) in stocks" :key="index">
+        {{index}}: {{ stock.stocks }}
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="getStockData()">Stock data</v-btn>
+        <v-btn @click="signOut()">Sign Out</v-btn>
+        <v-btn @click="getPortalSession">Customer Portal</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

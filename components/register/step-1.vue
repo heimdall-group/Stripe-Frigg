@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="component-main-container">
-    <v-form validate-on="submit" @submit="submitCallback" color="surface">
+    <v-form validate-on="submit" class="px-12" @submit="submitCallback" color="surface">
       <v-text-field
         v-model="name"
         label="Name"
@@ -108,7 +108,7 @@ export default {
         {
           hid: 'recaptcha v2',
           src: `https://www.google.com/recaptcha/api.js?render=${
-            useRuntimeConfig().recaptcha_v3
+            useRuntimeConfig().public.recaptcha_v3
           }`,
           defer: true,
           async: true,
@@ -154,7 +154,7 @@ export default {
         message:
           'A verification error has accured. Please reload the page and try again',
       },
-      recaptchaSitekey: useRuntimeConfig().recaptcha_v2,
+      recaptchaSitekey: useRuntimeConfig().public.recaptcha_v2,
     };
   },
   computed: {},
@@ -197,16 +197,19 @@ export default {
           },
         });
         if (res) {
+          const {year, month, day} = this.dateOfBirth
+          const date = new Date(`${year}-${month}-${day}`)
+          console.log(date.getTime())
           const res = await createUser(
             this.name,
             this.email,
             this.pwd,
             this.number,
-            this.dateOfBirth,
+            date.getTime(),
           );
         } else if (this.v2 !== true) {
           grecaptcha.render('recaptcha-container', {
-            sitekey: useRuntimeConfig().recaptcha_v2,
+            sitekey: useRuntimeConfig().public.recaptcha_v2,
           });
           this.v2 = true;
         } else {

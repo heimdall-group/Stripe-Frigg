@@ -4,19 +4,21 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   updateProfile,
+  EmailAuthProvider,
   reload,
   signOut,
+  reauthenticateWithCredential,
 } from 'firebase/auth';
 import { useMainStore } from '/stores/MainStore';
 
-export const createUser = async (username, email, password) => {
+export const createUser = async (username, email, password, number, dateOfBirth) => {
   const store = useMainStore();
   const auth = getAuth();
   const router = useRouter();
   const credentials = await createUserWithEmailAndPassword(
     auth,
     email,
-    password
+    password,
   )
     .then(async () => {
       updateProfile(auth.currentUser, { displayName: username, step: 2 });
@@ -26,6 +28,8 @@ export const createUser = async (username, email, password) => {
         body: JSON.stringify({
           id: auth.currentUser.uid,
           username: username,
+          number: number,
+          dateOfBirth: dateOfBirth,
         }),
       });
       if (res.status === 200) {
@@ -42,8 +46,26 @@ export const createUser = async (username, email, password) => {
   return credentials;
 };
 
+export const verifyPassword = async (pwd) => {
+  const store = useMainStore();
+  const user = store.getUser;
+  try {
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      pwd
+    )
+    const res = await reauthenticateWithCredential(
+      user, 
+      credential
+    )
+    return res.user.uid === user.uid
+  } catch (err) {
+    return err
+  }
+  
+}
+
 export const signInUser = async (email, password) => {
-  console.log('signInUser')
   const store = useMainStore();
   const auth = getAuth();
   const router = useRouter(); 

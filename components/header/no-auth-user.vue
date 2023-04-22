@@ -8,15 +8,16 @@
     rail
     floating
     permanent
+    class="navigation-drawer-desktop"
   >
     <v-list>
       <v-list-item
         v-if="!mobile"
-        class="my-2"
+        class="my-2 pl-0"
         title="Dashboard Drawer"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" class="my-2" rounded :prepend-icon="link.icon">
+      <v-list-item v-for="(link, index) in links" :key="index" class="my-2 pl-0" rounded :prepend-icon="link.icon">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -68,7 +69,7 @@
         class="my-2"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" rounded  class="my-2">
+      <v-list-item v-for="(link, index) in links" :key="index" rounded  class="my-2">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -93,17 +94,6 @@
     </template>
   </v-navigation-drawer>
 </template>
-
-<style scoped>
-  .v-app-bar .v-row .v-btn {
-    font-size: 16px;
-  }
-
-  .v-list .v-list-item__prepend {
-    display: flex;
-    justify-content: center !important;
-  }
-</style>
 
 <script>
 import { useMainStore } from '~/stores/mainStore';

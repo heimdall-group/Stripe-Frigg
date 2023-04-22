@@ -8,15 +8,21 @@
     rail
     floating
     permanent
+    class="navigation-drawer-desktop"
   >
     <v-list>
       <v-list-item
         v-if="!mobile"
-        class="my-2"
+        class="my-2 pl-0"
         title="Dashboard Drawer"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" class="my-2" rounded :prepend-icon="link.icon">
+      <v-list-item 
+      v-for="(link, index) in links"
+      :key="index"
+      class="my-2 pl-0" 
+      rounded 
+      :prepend-icon="link.icon">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -37,7 +43,7 @@
             Privacy Policy
           </v-btn>
         </v-list-item>
-        <v-list-item rounded prepend-icon="fa-solid fa-right-from-bracket">
+        <v-list-item rounded class="pl-0" prepend-icon="fa-solid fa-right-from-bracket">
           <v-btn rounded width="100%" flat @click="signOut"> Logout </v-btn>
         </v-list-item>
       </v-list>
@@ -48,7 +54,8 @@
   <v-app-bar v-if="mobile" color="primary" location="bottom">
     <v-row justify="space-around" class="px-4">
       <v-btn
-        v-for="link in mobile_links"
+        v-for="(link, index) in mobile_links"
+        :key="index"
         nuxt
         :to="link.to"
         rounded
@@ -82,7 +89,7 @@
         class="my-2"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
-      <v-list-item v-for="link in links" rounded  class="my-2">
+      <v-list-item v-for="(link, index) in links" :key="index" rounded  class="my-2">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
@@ -90,7 +97,7 @@
     </v-list>
     <template v-slot:append>
       <v-list>
-        <v-list-item rounded class="text-subtitle" prepend-icon="empty">
+        <v-list-item rounded class="text-subtitle">
           <v-btn
             nuxt
             class="text-subtitle"
@@ -103,24 +110,13 @@
             Privacy Policy
           </v-btn>
         </v-list-item>
-        <v-list-item rounded prepend-icon="fa-solid fa-right-from-bracket">
+        <v-list-item rounded>
           <v-btn rounded width="100%" flat @click="signOut"> Logout </v-btn>
         </v-list-item>
       </v-list>
     </template>
   </v-navigation-drawer>
 </template>
-
-<style scoped>
-  .v-app-bar .v-row .v-btn {
-    font-size: 16px;
-  }
-
-  .v-list .v-list-item__prepend {
-    display: flex;
-    justify-content: center !important;
-  }
-</style>
 
 <script>
 import { useMainStore } from '~/stores/mainStore';
@@ -162,7 +158,12 @@ export default {
           to: '/plans',
           title: 'Plans',
           icon: 'fa-solid fa-layer-group',
-        }
+        },
+        {
+          to: '/profile',
+          title: 'Profile',
+          icon: 'fa-solid fa-user',
+        },
       ],
       mobile_links: [
         {

@@ -16,15 +16,40 @@ export const updateStep = async (newStep) => {
 
 export const getUser = async () => {
   const store = useMainStore();
+  const user = store.getUser;
   const res = await $fetch('/api/user/getUser', {
     method: 'POST',
     body: {
-      uid: store.getUser.uid,
+      token: await user.getIdToken(),
     }
   })
   if (res !== false) {
     store.setUserStep(res.step);
   }
+}
+
+export const getUserRanks = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  const res = await $fetch('/api/user/getUserRanks', {
+    method: 'POST',
+    body: {
+      token: await user.getIdToken(),
+    }
+  });
+  return res;
+}
+
+export const getAllUsers = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  const res = await $fetch('/api/admin/getAllUsers', {
+    method: 'POST',
+    body: {
+      token: await user.getIdToken(),
+    }
+  });
+  return res;
 }
 
 export const getPortalSession = async () => {
