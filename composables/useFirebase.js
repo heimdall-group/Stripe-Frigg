@@ -1,3 +1,4 @@
+import { useMainStore } from "~~/stores/mainStore"
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -5,11 +6,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   EmailAuthProvider,
-  reload,
-  signOut,
   reauthenticateWithCredential,
 } from 'firebase/auth';
-import { useMainStore } from '/stores/MainStore';
 
 export const createUser = async (username, email, password, number, dateOfBirth) => {
   const store = useMainStore();
