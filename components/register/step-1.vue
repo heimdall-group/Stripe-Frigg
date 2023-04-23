@@ -123,16 +123,16 @@ export default {
   name: 'registerStep1Component',
   data() {
     return {
-      email: 'test1@gmail.com',
-      name: 'test',
-      number: '0793138309',
+      email: '',
+      name: '',
+      number: '',
       dateOfBirth: {
-        year: '2002',
-        month: '10',
-        day: '02',
+        year: '',
+        month: '',
+        day: '',
       },
-      pwd: '123456',
-      pwdRepeat: '123456',
+      pwd: '',
+      pwdRepeat: '',
       mailError: false,
       requiredRule: (value) => !!value || 'Required.',
       emailRulePattern:

@@ -51,8 +51,8 @@ export default {
   name: 'signInComponent',
   data() {
     return {
-      email: 'test1@gmail.com',
-      pwd: '123456',
+      email: '',
+      pwd: '',
       alert: {
         status: false,
         message: '',

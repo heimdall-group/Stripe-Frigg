@@ -227,7 +227,7 @@ export default {
   name: 'adminProductRefreshComponent',
   data() {
     return {
-      pwd: '123456',
+      pwd: '',
       users: [],
       ranks: ['Admin', 'Support'],
       changes: {},
