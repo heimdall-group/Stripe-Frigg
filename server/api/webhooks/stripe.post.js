@@ -10,6 +10,7 @@ const handleSubscriptionDeleted = (subscription, customer) => {
     { stripe_customerID: customer },
     { stripe_status: 'expired' }
   );
+  document.save();
 };
 // Set status = active
 // Index plan
@@ -21,16 +22,25 @@ const handleSubscriptionCreated = (subscription, customer) => {
       stripe_plan: subscription, 
     }
   );
+  document.save();
 };
 // Index new plan
-const handleSubscriptionUpdated = (subscription, customer) => {};
+const handleSubscriptionUpdated = (subscription, customer) => {
+  const document = Users.findOneAndUpdate(
+    { stripe_customerID: customer },
+    { 
+      stripe_plan: subscription, 
+    }
+  );
+  document.save();
+};
 
 export default defineEventHandler(async (req) => {
   const body = await readBody(req);
   let event = body;
   const endpointSecret = useRuntimeConfig().stripe_webhook_secret;
   if (endpointSecret) {
-    const signature = event.headers['stripe-signature'];
+    const signature = req.headers['stripe-signature'];
     try {
       event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
     } catch (err) {
