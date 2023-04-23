@@ -282,7 +282,6 @@ export default {
       navigator.clipboard.writeText(content);
     },
     async onSubmitHandler(event) {
-      console.log('onSubmitHandler')
       event.preventDefault();
       if (
         this.requiredRule(this.pwd) === true &&

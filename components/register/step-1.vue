@@ -199,7 +199,6 @@ export default {
         if (res) {
           const {year, month, day} = this.dateOfBirth
           const date = new Date(`${year}-${month}-${day}`)
-          console.log(date.getTime())
           const res = await createUser(
             this.name,
             this.email,

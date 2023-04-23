@@ -5,7 +5,8 @@
     <overlay-alert />
   </v-app>
   <v-app v-else>
-    loading
+    <loading-container :lines="1" vh="50" />
+    <loading-container :lines="1" vh="95" />
   </v-app>
 </template>
 
@@ -15,10 +16,15 @@
 @import url(~/assets/css/text-colors.css);
 @import url(~/assets/css/position-helpers.css);
 @import url(~/assets/css/opacity.css);
+@import url(~/assets/css/loaders.css);
 
 * {
   font-family: 'Quicksand-Regular';
   text-transform: unset !important;
+}
+
+html {
+  overflow-y: overlay;
 }
 
 .v-application {
@@ -49,19 +55,19 @@
 *::-webkit-scrollbar {
   width: 9px;
   height: 9px;
+  background: transparent;
 }
 
 *::-webkit-scrollbar-track {
   background: transparent;
+  width: 9px;
 }
 
 *::-webkit-scrollbar-thumb {
   background: #b0b0b0;
   border-radius: 7px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #696868;
+  width: 7px;
+  border: 1px solid transparent;
 }
 
 @media (max-width: 850px) {

@@ -1,0 +1,140 @@
+.loader {
+  background: #ebebeb;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  display: inline-block;
+  position: relative;
+
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+@keyframes placeholderShimmer {
+  0%,100% { opacity: 1 }
+  50% { opacity: 0.5 }
+}
+
+.loader-height-5 {
+  height: 5vh;
+}
+.loader-height-10 {
+  height: 10vh;
+}
+.loader-height-15 {
+  height: 15vh;
+}
+.loader-height-20 {
+  height: 20vh;
+}
+.loader-height-25 {
+  height: 25vh;
+}
+.loader-height-30 {
+  height: 30vh;
+}
+.loader-height-35 {
+  height: 35vh;
+}
+.loader-height-40 {
+  height: 40vh;
+}
+.loader-height-45 {
+  height: 45vh;
+}
+.loader-height-50 {
+  height: 50vh;
+}
+.loader-height-55 {
+  height: 55vh;
+}
+.loader-height-60 {
+  height: 60vh;
+}
+.loader-height-65 {
+  height: 65vh;
+}
+.loader-height-70 {
+  height: 70vh;
+}
+.loader-height-75 {
+  height: 75vh;
+}
+.loader-height-80 {
+  height: 80vh;
+}
+.loader-height-85 {
+  height: 85vh;
+}
+.loader-height-90 {
+  height: 90vh;
+}
+.loader-height-95 {
+  height: 95vh;
+}
+.loader-height-100 {
+  height: 100vh;
+}
+
+.loader-height-5-procent {
+  height: 5%;
+}
+.loader-height-10-procent {
+  height: 10%;
+}
+.loader-height-15-procent {
+  height: 15%;
+}
+.loader-height-20-procent {
+  height: 20%;
+}
+.loader-height-25-procent {
+  height: 25%;
+}
+.loader-height-30-procent {
+  height: 30%;
+}
+.loader-height-35-procent {
+  height: 35%;
+}
+.loader-height-40-procent {
+  height: 40%;
+}
+.loader-height-45-procent {
+  height: 45%;
+}
+.loader-height-50-procent {
+  height: 50%;
+}
+.loader-height-55-procent {
+  height: 55%;
+}
+.loader-height-60-procent {
+  height: 60%;
+}
+.loader-height-65-procent {
+  height: 65%;
+}
+.loader-height-70-procent {
+  height: 70%;
+}
+.loader-height-75-procent {
+  height: 75%;
+}
+.loader-height-80-procent {
+  height: 80%;
+}
+.loader-height-85-procent {
+  height: 85%;
+}
+.loader-height-90-procent {
+  height: 90%;
+}
+.loader-height-95-procent {
+  height: 95%;
+}
+.loader-height-100-procent {
+  height: 100%;
+}

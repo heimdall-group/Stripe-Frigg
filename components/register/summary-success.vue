@@ -82,18 +82,21 @@ export default {
     },
   },
   watch: {
-    user() {
-      if(this.user) {
-        const router = useRouter();
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('session_id')) {
-          const session_id = params.get('session_id');
-          this.addCustomerID(session_id);
-          updateStep('finished');
-        } else {
-          router.push('/');
+    user: {
+      handler() {
+        if(this.user) {
+          const router = useRouter();
+          const params = new URLSearchParams(window.location.search);
+          if (params.has('session_id')) {
+            const session_id = params.get('session_id');
+            this.addCustomerID(session_id);
+            updateStep('finished');
+          } else {
+            router.push('/');
+          }
         }
-      }
+      },
+      deep: true,
     }
   },
   mounted() {
