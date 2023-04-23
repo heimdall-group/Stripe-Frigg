@@ -41,9 +41,11 @@ export default defineEventHandler(async (req) => {
   if (webhook_secret) {
     const signature = await getRequestHeader(req, 'stripe-signature');
     try {
-      event = stripe.webhooks.constructEvent(body, signature, webhook_secret);
+      const rawBody = JSON.stringify(body, null, 2);
+      event = stripe.webhooks.constructEvent(rawBody, signature, webhook_secret);
     }
     catch (err) {
+      console.log(err)
       throw createError({ statusCode: 400, statusMessage: `Error validating Webhook Event` });
     }
   } else {
