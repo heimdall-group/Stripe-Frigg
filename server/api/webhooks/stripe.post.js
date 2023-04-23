@@ -39,7 +39,7 @@ export default defineEventHandler(async (req) => {
   let event;
   const webhook_secret = useRuntimeConfig().stripe_webhook_secret;
   if (webhook_secret) {
-    const signature = await getRequestHeader(req, 'stripe-signature');
+    const signature = getRequestHeader(req, 'stripe-signature');
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhook_secret);
     }
