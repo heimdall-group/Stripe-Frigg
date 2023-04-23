@@ -35,17 +35,21 @@ const handleSubscriptionUpdated = (subscription, customer) => {
 };
 
 export default defineEventHandler(async (req) => {
-  const body = await readBody(req);
-  let event = body;
-  const endpointSecret = useRuntimeConfig().stripe_webhook_secret;
-  if (endpointSecret) {
-    const signature = getRequestHeader(req, 'stripe-signature');
+  const body = await readRawBody(req);
+  let event;
+  const webhook_secret = useRuntimeConfig().stripe_webhook_secret;
+  if (webhook_secret) {
+    const signature = await getRequestHeader(req, 'stripe-signature');
     try {
-      event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
-    } catch (err) {
-      throw createError({ statusCode: 400, statusMessage: 'Webhook Error: No stripe signature in header' });
+      event = stripe.webhooks.constructEvent(body, signature, webhook_secret);
     }
+    catch (err) {
+      throw createError({ statusCode: 400, statusMessage: `Error validating Webhook Event` });
+    }
+  } else {
+    throw createError({ statusCode: 400, statusMessage: 'Webhook Error: No stripe signature in header' });
   }
+
   let subscription;
   let status;
   let customer;
