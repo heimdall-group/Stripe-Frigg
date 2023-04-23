@@ -1,5 +1,4 @@
 import Stripe from 'stripe';
-import { getAuth } from 'firebase-admin/auth';
 import Users from '~/server/dbModels/user';
 
 const stripe = new Stripe(useRuntimeConfig().stripe_secret);
@@ -40,11 +39,11 @@ export default defineEventHandler(async (req) => {
   let event = body;
   const endpointSecret = useRuntimeConfig().stripe_webhook_secret;
   if (endpointSecret) {
-    const signature = req.headers['stripe-signature'];
+    const signature = getRequestHeader(event, 'stripe-signature');
     try {
       event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
     } catch (err) {
-      return 400;
+      throw createError({ statusCode: 400, statusMessage: 'Webhook Error: No stripe signature in header' });
     }
   }
   let subscription;
@@ -55,21 +54,18 @@ export default defineEventHandler(async (req) => {
       subscription = event.data.object;
       status = subscription.status;
       customer = event.customer;
-      console.log(`Subscription status is ${status}.`);
       handleSubscriptionDeleted(subscription, customer);
       break;
     case 'customer.subscription.created':
       subscription = event.data.object;
       status = subscription.status;
       customer = event.customer;
-      console.log(`Subscription status is ${status}.`);
       handleSubscriptionCreated(subscription, customer);
       break;
     case 'customer.subscription.updated':
       subscription = event.data.object;
       status = subscription.status;
       customer = event.customer;
-      console.log(`Subscription status is ${status}.`);
       // Then define and call a method to handle the subscription update.
       handleSubscriptionUpdated(subscription, customer);
       break;
