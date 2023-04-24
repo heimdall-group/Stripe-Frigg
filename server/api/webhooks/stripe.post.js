@@ -5,6 +5,7 @@ const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
 // Set status = expired
 const handleSubscriptionDeleted = (subscription, customer) => {
+  console.log('handleSubscriptionDeleted')
   const document = Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { stripe_status: 'expired' }
@@ -14,6 +15,7 @@ const handleSubscriptionDeleted = (subscription, customer) => {
 // Set status = active
 // Index plan
 const handleSubscriptionCreated = (subscription, customer) => {
+  console.log('handleSubscriptionCreated')
   const document = Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { 
@@ -25,6 +27,7 @@ const handleSubscriptionCreated = (subscription, customer) => {
 };
 // Index new plan
 const handleSubscriptionUpdated = (subscription, customer) => {
+  console.log('handleSubscriptionUpdated')
   const document = Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { 
@@ -35,9 +38,8 @@ const handleSubscriptionUpdated = (subscription, customer) => {
 };
 
 export default defineEventHandler(async (req) => {
-  const body = await readBody(req);
+  const body = await readRawBody(await req);
   const payload = JSON.stringify(body, null, 2);
-
   const secret = await useRuntimeConfig().stripe_webhook_secret;
 
   const header = await getRequestHeader(req, 'stripe-signature');
