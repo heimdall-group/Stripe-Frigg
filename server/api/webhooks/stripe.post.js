@@ -36,16 +36,19 @@ const handleSubscriptionUpdated = (subscription, customer) => {
 
 export default defineEventHandler(async (req) => {
   const body = await readBody(req);
+  const payload = JSON.stringify(body, null, 2);
+
+  const secret = await useRuntimeConfig().stripe_webhook_secret;
+
+  const header = await getRequestHeader(req, 'stripe-signature');
+
   let event;
-  const webhook_secret = await useRuntimeConfig().stripe_webhook_secret;
-  if (webhook_secret) {
-    const signature = await getRequestHeader(req, 'stripe-signature');
+
+  if (secret) {
     try {
-      const rawBody = JSON.stringify(body, null, 2);
-      event = stripe.webhooks.constructEvent(rawBody, signature, webhook_secret);
+      event = stripe.webhooks.constructEvent(payload, header, secret);
     }
     catch (err) {
-      console.log(err)
       throw createError({ statusCode: 400, statusMessage: `Error validating Webhook Event` });
     }
   } else {
