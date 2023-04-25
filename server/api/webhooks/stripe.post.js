@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import Users from '~/server/dbModels/user';
+import { createHmac } from 'crypto';
 
 const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
@@ -37,20 +38,34 @@ const handleSubscriptionUpdated = (subscription, customer) => {
   document.save();
 };
 
-export default defineEventHandler(async (req) => {
-  const body = await readRawBody(await req);
-  const payload = JSON.stringify(body, null, 2);
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event);
   const secret = await useRuntimeConfig().stripe_webhook_secret;
+  const extracted_signature = await getRequestHeader(event, 'stripe-signature');
 
-  const header = await getRequestHeader(req, 'stripe-signature');
-
-  let event;
-
-  if (secret) {
-    try {
-      event = stripe.webhooks.constructEvent(payload, header, secret);
+  if (extracted_signature) {
+    const extracted_signature_arr = extracted_signature.split(',');
+    const extracted_signature_obj = {
+      time_stamp: extracted_signature_arr[0],
+      signatures: {
+        version: extracted_signature_arr[1].split('=')[0],
+        key: extracted_signature_arr[1].split('=')[1],
+      },
     }
-    catch (err) {
+  
+    const signed_payload = `${extracted_signature_obj.time_stamp}.${JSON.stringify(body)}`;
+    const hmac = createHmac('sha256', secret);
+    hmac.update(signed_payload);
+    const expected_signature = 'v1=' + hmac.digest('hex')
+
+    if(extracted_signature_obj.signatures.version === 'v0') {
+      throw createError({statusMessage: 'Invalid schema', statusCode: 400})
+    }
+    console.log(expected_signature);
+    console.log(extracted_signature.split(',')[1]);
+    if(extracted_signature.split(',')[1] === expected_signature) {
+
+    } else {
       throw createError({ statusCode: 400, statusMessage: `Error validating Webhook Event` });
     }
   } else {
@@ -60,23 +75,23 @@ export default defineEventHandler(async (req) => {
   let subscription;
   let status;
   let customer;
-  switch (event.type) {
+  switch (body.type) {
     case 'customer.subscription.deleted':
-      subscription = event.data.object;
+      subscription = body.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = body.customer;
       handleSubscriptionDeleted(subscription, customer);
       break;
     case 'customer.subscription.created':
-      subscription = event.data.object;
+      subscription = body.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = body.customer;
       handleSubscriptionCreated(subscription, customer);
       break;
     case 'customer.subscription.updated':
-      subscription = event.data.object;
+      subscription = body.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = body.customer;
       // Then define and call a method to handle the subscription update.
       handleSubscriptionUpdated(subscription, customer);
       break;
