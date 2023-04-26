@@ -40,6 +40,7 @@ export const stripe_handleSubscriptionUpdated = async (subscription, customer) =
     }
   } else {
     payload = { 
+      stripe_status: 'active',
       stripe_plan: subscription, 
     }
   }
