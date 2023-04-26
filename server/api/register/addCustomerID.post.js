@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       const UnsortedCustomerID = await UnsortedCustomerIDs.findOne({stripe_customerID: customer});
       if (UnsortedCustomerID) {
         const User = await Users.findOneAndUpdate({user_uid: res.uid}, {stripe_customerID: customer, stripe_plan: UnsortedCustomerID.stripe_plan})
-        UnsortedCustomerID.deleteOne();
+        await UnsortedCustomerIDs.deleteMany({stripe_customerID: customer});
         User.save();
       } else {
         const User = await Users.findOneAndUpdate({user_uid: res.uid}, {stripe_customerID: customer})

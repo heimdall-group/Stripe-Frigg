@@ -15,8 +15,6 @@ export const stripe_handleSubscriptionDeleted = async (subscription, customer) =
 };
 
 export const stripe_handleSubscriptionCreated = async (subscription, customer) => {
-  console.log('handleSubscriptionCreated')
-  console.log(customer);
   const document = await Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { 
@@ -33,13 +31,22 @@ export const stripe_handleSubscriptionCreated = async (subscription, customer) =
 };
 
 export const stripe_handleSubscriptionUpdated = async (subscription, customer) => {
-  console.log('handleSubscriptionUpdated')
-  console.log(customer);
-  const document = await Users.findOneAndUpdate(
-    { stripe_customerID: customer },
-    { 
+  let payload;
+
+  if (subscription.data.object.cancel_at_period_end) {
+    payload = { 
+      stripe_status: 'canceled',
       stripe_plan: subscription, 
     }
+  } else {
+    payload = { 
+      stripe_plan: subscription, 
+    }
+  }
+
+  const document = await Users.findOneAndUpdate(
+    { stripe_customerID: customer },
+    payload
   );
   if (document !== null) {
     document.save();
