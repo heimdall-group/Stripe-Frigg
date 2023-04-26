@@ -1,14 +1,17 @@
 import { Users } from '../user.js'
+import { UnsortedCustomerIDs } from '../unsortedCustomerIDs.js';
 
 export const stripe_handleSubscriptionDeleted = async (subscription, customer) => {
-  console.log('handleSubscriptionDeleted')
-  console.log(customer);
   const document = await Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { stripe_status: 'expired' }
   );
-  console.log(document)
-  document.save();
+  if (document !== null) {
+    document.save();
+  } else {
+    const document = new UnsortedCustomerIDs({stripe_customerID: customer, stripe_plan: subscription})
+    document.save()
+  }
 };
 
 export const stripe_handleSubscriptionCreated = async (subscription, customer) => {
@@ -21,8 +24,12 @@ export const stripe_handleSubscriptionCreated = async (subscription, customer) =
       stripe_plan: subscription, 
     }
   );
-  console.log(document)
-  document.save();
+  if (document !== null) {
+    document.save();
+  } else {
+    const document = new UnsortedCustomerIDs({stripe_customerID: customer, stripe_plan: subscription})
+    document.save()
+  }
 };
 
 export const stripe_handleSubscriptionUpdated = async (subscription, customer) => {
@@ -34,6 +41,10 @@ export const stripe_handleSubscriptionUpdated = async (subscription, customer) =
       stripe_plan: subscription, 
     }
   );
-  console.log(document)
-  docudocumentment.save();
+  if (document !== null) {
+    document.save();
+  } else {
+    const document = new UnsortedCustomerIDs({stripe_customerID: customer, stripe_plan: subscription})
+    document.save()
+  }
 };

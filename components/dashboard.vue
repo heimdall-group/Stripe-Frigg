@@ -71,7 +71,7 @@ export default {
   mounted() {
     let payload = {
       authToken: this.user.uid,
-      user: this.user.displayName,
+      uid: this.user.uid,
       call: 'GetProfile',
     }
     this.store.getUserData(payload)

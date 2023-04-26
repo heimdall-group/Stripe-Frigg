@@ -1,5 +1,6 @@
-import { useMainStore } from "~~/stores/mainStore"
+import { useMainStore } from '~~/stores/mainStore';
 import {
+  signOut,
   getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -9,14 +10,20 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 
-export const createUser = async (username, email, password, number, dateOfBirth) => {
+export const createUser = async (
+  username,
+  email,
+  password,
+  number,
+  dateOfBirth
+) => {
   const store = useMainStore();
   const auth = getAuth();
   const router = useRouter();
   const credentials = await createUserWithEmailAndPassword(
     auth,
     email,
-    password,
+    password
   )
     .then(async () => {
       updateProfile(auth.currentUser, { displayName: username, step: 2 });
@@ -48,34 +55,25 @@ export const verifyPassword = async (pwd) => {
   const store = useMainStore();
   const user = store.getUser;
   try {
-    const credential = EmailAuthProvider.credential(
-      user.email,
-      pwd
-    )
-    const res = await reauthenticateWithCredential(
-      user, 
-      credential
-    )
-    return res.user.uid === user.uid
+    const credential = EmailAuthProvider.credential(user.email, pwd);
+    const res = await reauthenticateWithCredential(user, credential);
+    return res.user.uid === user.uid;
   } catch (err) {
-    return err
+    return err;
   }
-  
-}
+};
 
 export const signInUser = async (email, password) => {
   const store = useMainStore();
   const auth = getAuth();
-  const router = useRouter(); 
+  const router = useRouter();
   try {
-    const res = await signInWithEmailAndPassword(auth, email, password)
-    if (res) {
-      await router.push('/');
-      store.setUser(auth.currentUser);
-      const res = await getUser();
-      reloadMiddleware();
-      return true;
-    }
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    await router.push('/');
+    store.setUser(res.user);
+    const userRes = await getUser();
+    reloadMiddleware();
+    return true;
   } catch (error) {
     return error;
   }
@@ -89,7 +87,7 @@ export const initUser = async () => {
       store.setUser(false);
       subscribe();
     } else {
-      store.setUser(auth.currentUser);
+      store.setUser(user);
       const res = await getUser();
       reloadMiddleware();
       subscribe();
@@ -100,9 +98,13 @@ export const initUser = async () => {
 export const signOutUser = async () => {
   const store = useMainStore();
   const auth = getAuth();
-  const result = await auth.signOut();
-  store.setUser(false);
-  const router = useRouter();
-  router.push('/');
-  return result;
+  signOut(auth)
+    .then(() => {
+      store.setUser(false);
+      const router = useRouter();
+      router.push('/');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
