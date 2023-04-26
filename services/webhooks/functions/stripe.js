@@ -33,7 +33,7 @@ export const stripe_handleSubscriptionCreated = async (subscription, customer) =
 export const stripe_handleSubscriptionUpdated = async (subscription, customer) => {
   let payload;
 
-  if (subscription.data.object.cancel_at_period_end) {
+  if (subscription.cancel_at_period_end) {
     payload = { 
       stripe_status: 'canceled',
       stripe_plan: subscription, 
