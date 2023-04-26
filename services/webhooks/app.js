@@ -55,19 +55,19 @@ app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
     case 'customer.subscription.deleted':
       subscription = event.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = event.data.object.customer;
       stripe_handleSubscriptionDeleted(subscription, customer);
       break;
     case 'customer.subscription.created':
       subscription = event.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = event.data.object.customer;
       stripe_handleSubscriptionCreated(subscription, customer);
       break;
     case 'customer.subscription.updated':
       subscription = event.data.object;
       status = subscription.status;
-      customer = event.customer;
+      customer = event.data.object.customer;
       stripe_handleSubscriptionUpdated(subscription, customer);
       break;
   }
