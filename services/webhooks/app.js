@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
+import env from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import Stripe from 'stripe';
 
 import { stripe_handleSubscriptionCreated, stripe_handleSubscriptionUpdated, stripe_handleSubscriptionDeleted } from './functions/stripe.js';
 
-dotenv.config();
+env.config();
 
 const stripe_api_key = process.env.STRIPE_SECRET_KEY;
 const stripe_webhook_secret = process.env.STRIPE_WEBHOOK_SECRET_KEY;
@@ -14,6 +14,15 @@ const port = process.env.SERVICES_WEBHOOKS_PORT;
 const app = express();
 const stripe = Stripe(stripe_api_key);
 app.use(express.json());
+
+app.use((req, res, next) => {
+    if (req.originalUrl === '/stripe') {
+      next();
+    } else {
+      express.json()(req, res, next);
+    }
+  }
+);
 
 (async function() {
   try {
