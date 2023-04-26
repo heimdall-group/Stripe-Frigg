@@ -2,6 +2,7 @@ import { Users } from '../user.js'
 
 export const stripe_handleSubscriptionDeleted = async (subscription, customer) => {
   console.log('handleSubscriptionDeleted')
+  console.log(customer);
   const document = await Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { stripe_status: 'expired' }
@@ -12,6 +13,7 @@ export const stripe_handleSubscriptionDeleted = async (subscription, customer) =
 
 export const stripe_handleSubscriptionCreated = async (subscription, customer) => {
   console.log('handleSubscriptionCreated')
+  console.log(customer);
   const document = await Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { 
@@ -25,11 +27,13 @@ export const stripe_handleSubscriptionCreated = async (subscription, customer) =
 
 export const stripe_handleSubscriptionUpdated = async (subscription, customer) => {
   console.log('handleSubscriptionUpdated')
+  console.log(customer);
   const document = await Users.findOneAndUpdate(
     { stripe_customerID: customer },
     { 
       stripe_plan: subscription, 
     }
   );
+  console.log(document)
   docudocumentment.save();
 };
