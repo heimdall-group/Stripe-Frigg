@@ -13,7 +13,6 @@ const mongoose_key = process.env.MONGO_URL;
 const port = process.env.SERVICES_WEBHOOKS_PORT;
 const app = express();
 const stripe = Stripe(stripe_api_key);
-app.use(express.json());
 
 app.use((req, res, next) => {
     if (req.originalUrl === '/stripe') {
