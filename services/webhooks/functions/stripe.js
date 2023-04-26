@@ -6,6 +6,7 @@ export const stripe_handleSubscriptionDeleted = async (subscription, customer) =
     { stripe_customerID: customer },
     { stripe_status: 'expired' }
   );
+  console.log(document)
   document.save();
 };
 
@@ -18,6 +19,7 @@ export const stripe_handleSubscriptionCreated = async (subscription, customer) =
       stripe_plan: subscription, 
     }
   );
+  console.log(document)
   document.save();
 };
 
@@ -29,5 +31,5 @@ export const stripe_handleSubscriptionUpdated = async (subscription, customer) =
       stripe_plan: subscription, 
     }
   );
-  document.save();
+  docudocumentment.save();
 };
