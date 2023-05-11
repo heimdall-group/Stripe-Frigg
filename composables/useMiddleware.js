@@ -84,6 +84,7 @@ export const restrictAdminSupport = async () => {
 }
 
 export const reloadMiddleware = async () => {
+  console.log('reloadMiddleware')
   const pathName = useRouter().currentRoute.value.fullPath;
 
   stepRedirect();

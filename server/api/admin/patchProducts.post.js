@@ -8,6 +8,9 @@ export default defineEventHandler(async (event) => {
     if (user) {
       const data = await $fetch('/api/plans/getPlans', {
         method: 'POST',
+        body: {
+          token: token,
+        }
       });
       const currencies = Object.keys(data.data[0].prices);
       const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: data.data, stripe_currencies: currencies});

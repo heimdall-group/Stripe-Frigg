@@ -27,13 +27,14 @@ export const createUser = async (
     .then(async () => {
       updateProfile(auth.currentUser, { displayName: username, step: 2 });
       store.setUser(auth.currentUser);
-      const user_res = await fetch('/api/register/addUser', {
+      const user_res = await $fetch('/api/register/addUser', {
         method: 'POST',
         body: JSON.stringify({
           id: auth.currentUser.uid,
           username: username,
           number: number,
           dateOfBirth: dateOfBirth,
+          token: await auth.currentUser.getIdToken(),
         }),
       });
       const customer_res = await $fetch('/api/register/addCustomerID', {
@@ -43,7 +44,7 @@ export const createUser = async (
         }
       });
       if (user_res.success && customer_res.success) {
-        await getUser();
+        const res = await getUser();
         reloadMiddleware();
         return true;
       } else {

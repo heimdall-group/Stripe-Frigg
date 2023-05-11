@@ -2,11 +2,12 @@ import { useMainStore } from "~/stores/mainStore"
 
 export const updateStep = async (newStep) => {
   const store = useMainStore();
+  const user = store.getUser;
   const res = await $fetch('/api/register/patchStep', {
     method: 'POST',
     body: {
       step: newStep,
-      uid: store.getUser.uid,
+      token: await user.getIdToken(),
     }
   })
   if (res.success) {
