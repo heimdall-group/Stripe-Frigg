@@ -15,12 +15,26 @@ export default defineEventHandler(async (event) => {
         return_url: `${useRuntimeConfig().domain_url}`,
       });
 
-      return url;
+      return {
+        data: url,
+        success: true,
+      }
     } else {
-      return 'user not authenticated'
+      return {
+        data: false,
+        success: false,
+        message: 'User not authenticated',
+        code: 400,
+      }
     }
   } catch (err) {
-    return err
+    console.log(err)
+    return {
+      data: false,
+      success: false,
+      message: 'Catch Error',
+      code: 400,
+    }
   }
   
 });

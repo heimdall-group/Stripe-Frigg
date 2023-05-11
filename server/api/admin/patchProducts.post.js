@@ -9,21 +9,39 @@ export default defineEventHandler(async (event) => {
       const data = await $fetch('/api/plans/getPlans', {
         method: 'POST',
       });
-      const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: data});
+      const currencies = Object.keys(data.data[0].prices);
+      const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: data.data, stripe_currencies: currencies});
       if (document == null) {
-        const document = await new Plans({stripe_plans: data, plan_id: 1})
+        const document = await new Plans({stripe_plans: data.data, plan_id: 1, stripe_currencies: currencies})
         if (document !== null) {
           document.save();
-          return true
+          return {
+            data: true,
+            success: true,
+          }
         }
       } else {
-        return true
+        return {
+          data: true,
+          success: true,
+        }
       }
     } else {
-      return 'invalid token'
+      return {
+        data: false,
+        success: false,
+        message: 'User not authenticated',
+        code: 400,
+      }
     }
   } catch (err) {
-    return err;
+    console.log(err)
+    return {
+      data: false,
+      success: false,
+      message: 'Catch Error',
+      code: 400,
+    }
   }
 
 

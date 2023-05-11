@@ -196,7 +196,7 @@ export default {
             token: token,
           },
         });
-        if (res) {
+        if (res.success) {
           const {year, month, day} = this.dateOfBirth
           const date = new Date(`${year}-${month}-${day}`)
           const res = await createUser(
@@ -232,7 +232,7 @@ export default {
         method: 'POST',
         body: JSON.stringify({ mail: this.email }),
       });
-      if (res) {
+      if (res.success) {
         this.mailError = false;
         return true;
       } else {

@@ -1,11 +1,52 @@
 <template>
-  <v-app v-if="user !== null">
+  <v-app v-if="expired.status">
+    <v-row class="fill-height ma-0" justify="center" align="center">
+      <v-col cols="12" :class="['d-flex', 'justify-center']">
+        <v-card
+          width="fit-content" 
+          height="fit-content"
+          variant="elevated"
+          elevation="10"
+          rounded="xl"
+          class="pa-3"
+        >
+          <v-card-title class="text-center text-h4 mt-4 text-wrap">
+            {{ expired.message }}
+          </v-card-title>
+          <v-card-subtitle class="text-center">
+            You can access the customer portal below
+          </v-card-subtitle>
+          <img>
+          <v-card-actions>
+            <v-row justify="center" class="ma-0">
+              <v-btn
+                @click="getPortalSession"
+                class="text-decoration-underline"
+                color="deep-purple"
+              >
+                Customer portal
+              </v-btn>
+              <v-btn
+                @click="signOut"
+                color="deep-purple"
+                flat
+              >
+                Signout
+              </v-btn>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-app>
+  <v-app v-else-if="user !== null">
     <Header />
     <NuxtPage />
     <overlay-alert />
+    <Footer />
   </v-app>
   <v-app v-else>
-    <loading-container :lines="1" vh="50" />
+    <loading-container :lines="1" vh="5" />
     <loading-container :lines="1" vh="95" />
   </v-app>
 </template>
@@ -28,7 +69,7 @@ html {
 }
 
 .v-application {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .v-form {
@@ -83,9 +124,13 @@ export default {
         return pageTitle ? `${pageTitle} - Test` : 'Test';
       },
     });
+    const signOut = async () => {
+      const result = await signOutUser();
+    };
     const store = useMainStore();
     return {
       store,
+      signOut,
     };
   },
   name: 'App page',
@@ -96,10 +141,15 @@ export default {
     user() {
       return this.store.getUser;
     },
+    expired() {
+      return this.store.getExpired;
+    }
   },
   methods: {},
   async mounted() {
-    this.store.setPlans(await getPlans());
+    const { stripe_plans, stripe_currencies } = await getPlans();
+    this.store.setPlans(stripe_plans);
+    this.store.setCurrencies(stripe_currencies)
   },
   updated() {},
   components: {},

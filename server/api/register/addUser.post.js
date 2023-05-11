@@ -12,8 +12,17 @@ export default defineEventHandler(async (event) => {
   });
   try {
     await insert.save();
-    return {status: 200};
+    return {
+      data: true,
+      success: true,
+    }
   } catch {
-    return {status: 400};
+    console.log(err)
+    return {
+      data: false,
+      success: false,
+      message: 'Catch Error',
+      code: 400,
+    }
   }
  })

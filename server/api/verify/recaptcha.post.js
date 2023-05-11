@@ -10,5 +10,17 @@ export default defineEventHandler(async (event) => {
   const res = await $fetch(
     `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
   );
-  return res.success;
+  if (res.success) {
+    return {
+      data: true,
+      success: true,
+    }
+  } else {
+    return {
+      data: false,
+      success: false,
+      message: 'Recaptcha invalid',
+      code: 400,
+    }
+  }
  })

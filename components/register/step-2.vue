@@ -126,7 +126,7 @@
 }
 
 .plans-col {
-  height: 75%;
+  height:90%;
   display: flex;
   justify-content: center;
 }
@@ -249,7 +249,9 @@ export default {
             plan.prices[this.currency][this.annual ? 'monthly' : 'annual'].id,
         },
       });
-      window.location = res;
+      if(res.success) {
+        window.location = res.data
+      }
     },
   },
   mounted() {

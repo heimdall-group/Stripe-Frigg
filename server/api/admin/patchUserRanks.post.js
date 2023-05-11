@@ -6,29 +6,41 @@ export default defineEventHandler(async (event) => {
   try {
     const user = await getAuth().verifyIdToken(token);
     if (user) {
-      for (const key in changes) {
-        try {
+      try {
+        for (const key in changes) {
           const change = changes[key];
           const document = await Users.findOneAndUpdate({user_uid: key}, {user_ranks: change.to});
           document.save();
-        } catch (err) {
-          return {
-            status: false,
-            error: err,
-          }
+        }
+      } catch (err) {
+        console.log(err)
+        return {
+          data: false,
+          success: false,
+          message: 'Catch Error',
+          code: 401,
         }
       }
       return {
-        status: true,
+        data: true,
+        success: true,
       }
     } else {
       return {
-        status: false,
-        error: 'invalid token'
+        data: false,
+        success: false,
+        message: 'User not authenticated',
+        code: 400,
       }
     }
   } catch (err) {
-    return err;
+    console.log(err)
+    return {
+      data: false,
+      success: false,
+      message: 'Catch Error',
+      code: 400,
+    }
   }
 
 

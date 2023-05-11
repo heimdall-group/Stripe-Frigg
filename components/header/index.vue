@@ -10,6 +10,10 @@
     font-size: 16px;
   }
 
+  .v-navigation-drawer {
+    border-radius: 8px;
+  }
+
   .navigation-drawer-desktop .v-list .v-list-item .v-list-item__prepend {
     width: 56px;
   }

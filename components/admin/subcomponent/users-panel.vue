@@ -260,6 +260,9 @@ export default {
     changeHandler(user) {
       const changes =
         JSON.stringify(user.ranks) !== JSON.stringify(user.localRanks);
+      console.log(user.ranks)
+      console.log(user.localRanks)
+      console.log(changes);
       if (changes) {
         this.changes[user.firebase_id] = {
           email: user.email,
@@ -299,11 +302,16 @@ export default {
               changes: this.changes,
             },
           });
-          if (res.status) {
+          if (res.success) {
+            for (let i = 0; i < this.users.length; i++) {
+              let {localRanks} = this.users[i];
+              this.users[i].ranks = localRanks;
+            }
             this.changes = {};
             this.save_model = false;
+            this.pwd = '';
           } else {
-            console.log(res.error)
+            console.error(res)
           }
         }
       } 

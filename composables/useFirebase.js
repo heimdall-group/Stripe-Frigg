@@ -19,7 +19,6 @@ export const createUser = async (
 ) => {
   const store = useMainStore();
   const auth = getAuth();
-  const router = useRouter();
   const credentials = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -28,7 +27,7 @@ export const createUser = async (
     .then(async () => {
       updateProfile(auth.currentUser, { displayName: username, step: 2 });
       store.setUser(auth.currentUser);
-      const res = await fetch('/api/register/addUser', {
+      const user_res = await fetch('/api/register/addUser', {
         method: 'POST',
         body: JSON.stringify({
           id: auth.currentUser.uid,
@@ -37,8 +36,14 @@ export const createUser = async (
           dateOfBirth: dateOfBirth,
         }),
       });
-      if (res.status === 200) {
-        const res = await getUser();
+      const customer_res = await $fetch('/api/register/addCustomerID', {
+        method:'POST',
+        body: {
+          token: await auth.currentUser.getIdToken(),
+        }
+      });
+      if (user_res.success && customer_res.success) {
+        await getUser();
         reloadMiddleware();
         return true;
       } else {
@@ -101,6 +106,7 @@ export const signOutUser = async () => {
   signOut(auth)
     .then(() => {
       store.setUser(false);
+      store.setExpired(false);
       const router = useRouter();
       router.push('/');
     })

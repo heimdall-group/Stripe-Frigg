@@ -1,6 +1,5 @@
 <template>
   <v-container v-if="user" fluid :class="['component-main-container', 'pa-0', mobile ? '' : 'pl-14']">
-    <admin-header :mobile="mobile"></admin-header>
     <admin-subcomponent-products-refetch :mobile="mobile"></admin-subcomponent-products-refetch>
     <admin-subcomponent-users-panel :mobile="mobile"></admin-subcomponent-users-panel>
   </v-container>

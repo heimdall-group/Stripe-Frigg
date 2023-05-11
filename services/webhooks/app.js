@@ -70,6 +70,13 @@ app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
       customer = event.data.object.customer;
       stripe_handleSubscriptionUpdated(subscription, customer);
       break;
+      // INVOICE UNPAID
+    // case 'customer.subscription.updated':
+    //   subscription = event.data.object;
+    //   status = subscription.status;
+    //   customer = event.data.object.customer;
+    //   stripe_handleSubscriptionUpdated(subscription, customer);
+    //   break;
   }
     res.send();
   }

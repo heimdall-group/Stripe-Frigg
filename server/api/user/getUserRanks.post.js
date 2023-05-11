@@ -7,9 +7,17 @@ export default defineEventHandler(async (event) => {
   try {
     if (res) {
       const document = await Users.findOne({user_uid: res.uid});
-      return document.user_ranks;
+      return {
+        data: document.user_ranks,
+        success: true,
+      }
     } else {
-      return 'user not authenticated'
+      return {
+        data: false,
+        success: false,
+        message: 'User not authenticated',
+        code: 400,
+      }
     }
   } catch (err) {
     return err

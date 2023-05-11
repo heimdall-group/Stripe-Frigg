@@ -68,15 +68,6 @@ export default {
     },
   },
   methods: {
-    async addCustomerID(id) {
-      const res = await $fetch('/api/register/addCustomerID', {
-        method:'POST',
-        body: {
-          token: await this.user.getIdToken(),
-          sessionID: id,
-        }
-      });
-    },
     onResize() {
       this.mobile = window.innerWidth < 850;
     },
@@ -88,8 +79,6 @@ export default {
           const router = useRouter();
           const params = new URLSearchParams(window.location.search);
           if (params.has('session_id')) {
-            const session_id = params.get('session_id');
-            this.addCustomerID(session_id);
             updateStep('finished');
           } else {
             router.push('/');

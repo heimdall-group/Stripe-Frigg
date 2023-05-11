@@ -30,10 +30,9 @@
     </v-list>
     <template v-slot:append>
       <v-list>
-        <v-list-item rounded class="text-subtitle" prepend-icon="empty">
+        <v-list-item rounded class="text-subtitle pl-0" prepend-icon="empty">
           <v-btn
             nuxt
-            class="text-subtitle"
             color="transparent"
             to="/privacy-policy"
             rounded

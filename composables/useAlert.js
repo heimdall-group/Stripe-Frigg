@@ -18,6 +18,18 @@ export const restrictNoAuthWarning = () => {
   })
 }
 
+export const statusCanceledWarning = (expires) => {
+  const store = useMainStore();
+  const user = store.getUser;
+  const date = new Date(expires * 1000);
+  const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+  store.setAlert({
+    type: 'warning',
+    status: true,
+    message: `Your subscription is set to expire at: ${date.toLocaleDateString('en-US', options)}`,
+  })
+}
+
 export const resetWarning = () => {
   const store = useMainStore();
   store.setAlert({

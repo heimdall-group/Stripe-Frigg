@@ -6,6 +6,10 @@ export const useMainStore = defineStore('MainStore', {
       user: null,
       profile: null,
       plans: [],
+      expired: {
+        status: false,
+        message: '',
+      },
       registerSummary: {
         email: '',
         name: '',
@@ -18,8 +22,8 @@ export const useMainStore = defineStore('MainStore', {
         status: false,
         message: '',
       },
-      currencies: ['sek', 'usd'],
-      currency: 'usd',
+      currencies: [],
+      currency: '',
     };
   },
   getters: {
@@ -35,8 +39,14 @@ export const useMainStore = defineStore('MainStore', {
     getAlert() {
       return this.alert;
     },
+    getCurrencies() {
+      return this.currencies;
+    },
     getCurrency() {
       return this.currency;
+    },
+    getExpired() {
+      return this.expired;
     },
   },
   actions: {
@@ -46,17 +56,33 @@ export const useMainStore = defineStore('MainStore', {
     setUserStep(step) {
       this.user.step = step;
     },
-    setUserStatus(status) {
+    setUserStatus(status, expires) {
       this.user.status = status;
+      if (status === 'canceled') {
+        statusCanceledWarning(expires);
+      } else if (status === 'expired') {
+        this.expired = true;
+      }
     },
     setUserExpires(expires) {
       this.user.expires = expires;
+    },
+    setExpired(expired, message) {
+      this.expired.status = expired;
+      this.expired.message = message;
     },
     setAlert(alert) {
       this.alert = alert;
     },
     setPlans(plans) {
-      this.plans = plans
+      this.plans = plans;
+    },
+    setCurrencies(currencies) {
+      this.currencies = currencies;
+      this.setCurrency(currencies[0]);
+    },
+    setCurrency(currency) {
+      this.currency = currency;
     },
     getUserData(payload) {
       fetch('/api/user', {

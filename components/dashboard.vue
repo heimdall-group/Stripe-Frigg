@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    {{ profile }}
     <v-row>
       <v-col>
         <h1>Portfolio value: {{ this.stocks.Apple.value * 5 }}</h1>

@@ -5,7 +5,15 @@ export default defineEventHandler(async (event) => {
   const document = await Users.findOneAndUpdate({user_uid: uid}, {register_step: step});
   document.save()
   if (document.step === step) {
-    return true;
+    return {
+      data: true,
+      success: true,
+    }
   }
-  return false;
+  return {
+    data: false,
+    success: false,
+    message: 'Patch unsuccessfull',
+    code: 400,
+  }
  })

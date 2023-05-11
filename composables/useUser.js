@@ -9,7 +9,7 @@ export const updateStep = async (newStep) => {
       uid: store.getUser.uid,
     }
   })
-  if (res) {
+  if (res.success) {
     store.setUserStep(newStep);
   }
 }
@@ -23,8 +23,19 @@ export const getUser = async () => {
       token: await user.getIdToken(),
     }
   })
-  if (res !== false) {
-    store.setUserStep(res.step);
+  if (res.success) {
+    store.setUserStep(res.data.register_step);
+    if (res.data.expires) {
+      store.setUserExpires(res.data.expires);
+      store.setUserStatus(res.data.stripe_status, res.data.expires);
+    }
+    if (res.data.stripe_status === 'expired') {
+      store.setExpired(true, 'Subscription expired');
+    }
+    if (res.data.stripe_status === 'invoice-unpaid') {
+      store.setExpired(true, 'Invoice unpaid');
+    }
+
   }
 }
 
@@ -37,7 +48,12 @@ export const getUserRanks = async () => {
       token: await user.getIdToken(),
     }
   });
-  return res;
+  if (res.success) {
+    return res.data;
+  } else {
+    return [];
+  }
+  
 }
 
 export const getAllUsers = async () => {
@@ -49,7 +65,9 @@ export const getAllUsers = async () => {
       token: await user.getIdToken(),
     }
   });
-  return res;
+  if (res.success) {
+    return res.data;
+  }
 }
 
 export const getPortalSession = async () => {
@@ -61,7 +79,9 @@ export const getPortalSession = async () => {
       token: await user.getIdToken(),
     }
   });
-  window.location = res;
+  if(res.success) {
+    window.location = res.data;
+  }
 }
 
 export const stepRedirectValidation = async () => {

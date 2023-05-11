@@ -28,13 +28,26 @@ export default defineEventHandler(async (event) => {
             mongodb_id: dbIndex.id,
           });
         }
-        return arr;
+        return {
+          data: arr,
+          success: true,
+        }
 
       } else {
-        return 'not authenticated'
+        return {
+          data: false,
+          success: false,
+          message: 'User not admin',
+          code: 400,
+        }
       }
     } else {
-      return 'user not authenticated'
+      return {
+        data: false,
+        success: false,
+        message: 'User not authenticated',
+        code: 400,
+      }
     }
   } catch (err) {
     return err

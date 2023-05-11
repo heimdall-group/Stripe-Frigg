@@ -7,15 +7,23 @@
       width="calc(100% - 16px)"
       v-if="alert.status"
       type="warning"
-      :text="alert.message"
     >
-      <v-btn
-        flat
-        color="transparent right top-center-36 right-2"
-        @click="alertCallback"
-      >
-        <font-awesome-icon icon="fa-solid fa-xmark" />
-      </v-btn>
+      <v-row align="center">
+        <v-col>
+          <span>
+            {{ alert.message }}
+          </span>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn
+            flat
+            color="transparent"
+            @click="alertCallback"
+          >
+            <font-awesome-icon icon="fa-solid fa-xmark" />
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-alert>
   </client-only>
 </template>
