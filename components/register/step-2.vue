@@ -241,7 +241,7 @@ export default {
       }
     },
     async planButtonHandler(plan) {
-      const res = await $fetch('/api/plans/getCheckout', {
+      const res = await $fetch('/api/user/getCheckout', {
         method: 'POST',
         body: {
           token: await this.user.getIdToken(),

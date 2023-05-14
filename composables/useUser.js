@@ -74,7 +74,7 @@ export const getAllUsers = async () => {
 export const getPortalSession = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/plans/getPortalSession', {
+  const res = await $fetch('/api/user/getPortalSession', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
