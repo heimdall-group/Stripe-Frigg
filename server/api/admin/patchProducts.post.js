@@ -12,12 +12,19 @@ export default defineEventHandler(async (event) => {
           token: token,
         }
       });
-      const currencies = Object.keys(data.data[0].prices);
-      const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: data.data, stripe_currencies: currencies});
-      if (document == null) {
-        const document = await new Plans({stripe_plans: data.data, plan_id: 1, stripe_currencies: currencies})
-        if (document !== null) {
-          document.save();
+      if (data.success) {
+        const currencies = Object.keys(data.data[0].prices);
+        const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: data.data, stripe_currencies: currencies});
+        if (document == null) {
+          const document = await new Plans({stripe_plans: data.data, plan_id: 1, stripe_currencies: currencies})
+          if (document !== null) {
+            document.save();
+            return {
+              data: true,
+              success: true,
+            }
+          }
+        } else {
           return {
             data: true,
             success: true,
@@ -25,8 +32,10 @@ export default defineEventHandler(async (event) => {
         }
       } else {
         return {
-          data: true,
-          success: true,
+          data: false,
+          success: false,
+          message: 'User not authenticated',
+          code: 400,
         }
       }
     } else {
