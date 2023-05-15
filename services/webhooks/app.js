@@ -3,7 +3,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import Stripe from 'stripe';
 
-import { stripe_handleSubscriptionCreated, stripe_handleSubscriptionUpdated, stripe_handleSubscriptionDeleted } from './functions/stripe.js';
+import {
+  stripe_handleSubscriptionCreated,
+  stripe_handleSubscriptionUpdated,
+  stripe_handleSubscriptionDeleted,
+  stripe_handleInvoiceFailed,
+  stripe_handleInvoicePaid,
+  stripe_handleRequiresAction,
+} from './functions/stripe.js';
 
 env.config();
 
@@ -70,13 +77,24 @@ app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
       customer = event.data.object.customer;
       stripe_handleSubscriptionUpdated(subscription, customer);
       break;
-      // INVOICE UNPAID
-    // case 'customer.subscription.updated':
-    //   subscription = event.data.object;
-    //   status = subscription.status;
-    //   customer = event.data.object.customer;
-    //   stripe_handleSubscriptionUpdated(subscription, customer);
-    //   break;
+    case 'invoice.paid':
+      subscription = event.data.object;
+      status = subscription.status;
+      customer = event.data.object.customer;
+      stripe_handleInvoicePaid(subscription, customer);
+      break;
+    case 'invoice.payment_action_required':
+      subscription = event.data.object;
+      status = subscription.status;
+      customer = event.data.object.customer;
+      stripe_handleRequiresAction(subscription, customer);
+      break;
+    case 'invoice.payment_failed':
+      subscription = event.data.object;
+      status = subscription.status;
+      customer = event.data.object.customer;
+      stripe_handleInvoiceFailed(subscription, customer);
+      break;
   }
     res.send();
   }

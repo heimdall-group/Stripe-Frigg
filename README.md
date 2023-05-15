@@ -1,13 +1,32 @@
-# Template for Nuxt Vuetify
+# Nuxt subscription foundation
 
-- Setup:
-    - npm install
-    - npm run nuxt_dev
-    - npm run webhook_service_dev
-    - npm run cronjob_service_dev
+### Setup:
+```sh
+npm install
+```
+```sh
+npm run nuxt_dev
+```
+```sh
+npm run webhook_service_dev
+```
+```sh
+npm run cronjob_service_dev
+```
+### MongoDB statuses:
+- active: Set when subscription is active
+- expired: Set when subscription is deleted / unpaid
+- canceled: Set when subscription is canceled
+- invoice-failed: Set when subscription hasnt been paid
+- invoice-requires-action: Set when subscription hasnt been paid
 
-- Rules:
-    - Api respone:
+### Cronjobs: 
+  - expire_invoice_unpaid: Updates all invoice-unpaid statuses to expired after x days
+
+### Rules:
+  - Api 
+    - Return:
+
       ```js
         return {
           data: 'Response',
@@ -16,5 +35,5 @@
           code: 'If success false',
         }
       ```
-    - Cronjob:
-      - 400: Success
+  - Cronjob:
+    - 400: Success

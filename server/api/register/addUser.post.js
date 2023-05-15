@@ -1,4 +1,4 @@
-import Users from "~~/server/dbModels/user";
+import Users from "~~/server/models/user";
 import { getAuth } from "firebase-admin/auth";
 
 export default defineEventHandler(async (event) => {

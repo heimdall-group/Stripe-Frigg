@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
-import Plans from '~/server/dbModels/plans';
+import Plans from '~/server/models/plans';
 
 export default defineEventHandler(async (event) => {
 	const { token} = await readBody(event);

@@ -1,4 +1,4 @@
-import Plans from '~/server/dbModels/plans';
+import Plans from '~/server/models/plans';
 
 export default defineEventHandler(async (event) => {
   const document = await Plans.findOne({ plan_id: 1 });

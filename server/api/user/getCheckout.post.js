@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { getAuth } from 'firebase-admin/auth';
-import Users from '~/server/dbModels/user';
+import Users from '~/server/models/user';
 
 const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
