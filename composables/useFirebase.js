@@ -44,6 +44,7 @@ export const createUser = async (
         }
       });
       if (user_res.success && customer_res.success) {
+        alert_registerSuccess();
         const res = await getUser();
         reloadMiddleware();
         return true;
@@ -77,8 +78,9 @@ export const signInUser = async (email, password) => {
     const res = await signInWithEmailAndPassword(auth, email, password);
     await router.push('/');
     store.setUser(res.user);
+    alert_loginSuccess();
     const userRes = await getUser();
-    reloadMiddleware();
+    reloadMiddleware(); 
     return true;
   } catch (error) {
     return error;
@@ -94,6 +96,7 @@ export const initUser = async () => {
       subscribe();
     } else {
       store.setUser(user);
+      alert_loginSuccess();
       const res = await getUser();
       reloadMiddleware();
       subscribe();

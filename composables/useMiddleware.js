@@ -4,7 +4,7 @@ export const stepRedirect = async () => {
   const store = useMainStore();
   const user = store.getUser;
   if(await stepRedirectValidation()) {
-    resetWarning();
+    resetAlert();
     return await navigateTo(`/register/step-${user.step}`);
   }
 };
@@ -17,7 +17,7 @@ export const restrictAuth = async () => {
       return;
     }
     if (!await stepRedirectValidation() &&!user) {
-      restrictAuthWarning();
+      alert_restrictAuthWarning();
       return navigateTo('/login');
     }
   } catch (err) {
@@ -33,7 +33,7 @@ export const restrictNoAuth = async () => {
       return;
     }
     if (!await stepRedirectValidation() && !!user) {
-      restrictNoAuthWarning();
+      alert_restrictNoAuthWarning();
       return navigateTo('/');
     } 
   } catch (err) {
@@ -84,7 +84,6 @@ export const restrictAdminSupport = async () => {
 }
 
 export const reloadMiddleware = async () => {
-  console.log('reloadMiddleware')
   const pathName = useRouter().currentRoute.value.fullPath;
 
   stepRedirect();

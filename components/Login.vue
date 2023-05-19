@@ -15,6 +15,7 @@
         variant="outlined"
         :rules="[requiredRule, lengthRule]"
       ></v-text-field>
+      <verify-recaptcha></verify-recaptcha>
       <v-btn type="submit">Sign in</v-btn>
       <client-only>
         <v-alert
@@ -78,23 +79,25 @@ export default {
   methods: {
     async onSubmit(event) {
       event.preventDefault();
-      const { code } = await signInUser(this.email, this.pwd);
-      if (code) {
-        let message;
-        if (code.includes('auth/too-many-requests')) {
-          message = 'Too many login attempts. Please wait and try again later';
-        } else if (code.includes('auth/wrong-password')) {
-          message = 'Invalid password. Please try again';
-        } else if (code.includes('auth/user-not-found')) {
-          message = 'User not found';
+      const callback = async () => {
+        const { code } = await signInUser(this.email, this.pwd);
+        if (code) {
+          let message;
+          if (code.includes('auth/too-many-requests')) {
+            message = 'Too many login attempts. Please wait and try again later';
+          } else if (code.includes('auth/wrong-password')) {
+            message = 'Invalid password. Please try again';
+          } else if (code.includes('auth/user-not-found')) {
+            message = 'User not found';
+          }
+          
+          this.alert = {
+            status: true,
+            message: message,
+          }
         }
-        
-        this.alert = {
-          status: true,
-          message: message,
-        }
-
-      }
+      };
+      setupVerification(callback);
     },
     alertCallback() {
       this.alert.status = !this.alert.status;

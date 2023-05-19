@@ -71,29 +71,8 @@
         type="password"
         :rules="[requiredRule, pwdMatchRule, lengthRule]"
       ></v-text-field>
-      <client-only>
-        <div
-          id="recaptcha-container"
-          class="d-flex justify-center mb-4"
-          :data-sitekey="recaptchaSitekey"
-        ></div>
-      </client-only>
+      <verify-recaptcha ></verify-recaptcha>
       <v-btn type="submit" rounded elevation="10">Continue</v-btn>
-      <v-alert
-        v-show="error.status"
-        :text="error.message"
-        type="warning"
-        class="mt-4"
-      >
-        <v-btn
-          flat
-          position="absolute"
-          color="transparent right top-center-36 ml-4"
-          @click="this.error.status = false"
-        >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-alert>
     </v-form>
   </v-container>
 </template>
@@ -103,18 +82,6 @@ import { useMainStore } from '~~/stores/mainStore';
 
 export default {
   setup() {
-    useHead({
-      script: [
-        {
-          hid: 'recaptcha v2',
-          src: `https://www.google.com/recaptcha/api.js?render=${
-            useRuntimeConfig().public.recaptcha_v3
-          }`,
-          defer: true,
-          async: true,
-        },
-      ],
-    });
     const store = useMainStore();
     return {
       store,
@@ -148,13 +115,12 @@ export default {
           ? true
           : 'Password length needs to be atleast 6 characters';
       },
-      v2: false,
       error: {
         status: false,
         message:
           'A verification error has accured. Please reload the page and try again',
       },
-      recaptchaSitekey: useRuntimeConfig().public.recaptcha_v2,
+
     };
   },
   computed: {},
@@ -188,15 +154,7 @@ export default {
     },
     async signUpUser() {
       if (this.pwd === this.pwdRepeat) {
-        // Recaptcha
-        const token = await getRecaptchaToken();
-        const res = await $fetch('/api/verify/recaptcha', {
-          method: 'POST',
-          body: {
-            token: token,
-          },
-        });
-        if (res.success) {
+        const callback = async () => {
           const {year, month, day} = this.dateOfBirth
           const date = new Date(`${year}-${month}-${day}`)
           const res = await createUser(
@@ -206,14 +164,8 @@ export default {
             this.number,
             date.getTime(),
           );
-        } else if (this.v2 !== true) {
-          grecaptcha.render('recaptcha-container', {
-            sitekey: useRuntimeConfig().public.recaptcha_v2,
-          });
-          this.v2 = true;
-        } else {
-          this.error.status = true;
         }
+        setupVerification(callback);
       }
     },
     validateRequired(arr) {

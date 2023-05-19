@@ -1,12 +1,12 @@
 <template>
   <client-only>
     <v-alert
-      icon="fa-solid fa-circle-info"
+      :icon="alert.icon"
       position="absolute"
-      class="ma-2"
-      width="calc(100% - 16px)"
+      :class="class"
+      width="100%"
       v-if="alert.status"
-      type="warning"
+      :type="alert.type"
     >
       <v-row align="center">
         <v-col>
@@ -31,6 +31,34 @@
 <style scoped>
 .v-alert {
   z-index: 2000;
+  border-radius: 0px;
+  transform: translateX(0px);
+  transition-property: transform;
+  transition-duration: 500ms;
+}
+
+.fade-out {
+  transform: translateY(-200px);
+}
+
+.v-alert__prepend {
+  margin: 3px 0 0 0 !important;
+}
+
+.bg-warning {
+  border-bottom: rgb(250, 171, 75) 3px solid;
+}
+
+.bg-error {
+  border-bottom: rgb(179, 80, 98) 3px solid;
+}
+
+.bg-success {
+  border-bottom: rgb(121, 197, 123) 3px solid;
+}
+
+.bg-info {
+  border-bottom: rgb(125, 185, 235) 3px solid;
 }
 </style>
 
@@ -47,11 +75,19 @@ export default {
   },
   name: 'alertComponent',
   data() {
-    return {};
+    return {
+      clear: '',
+      class: '',
+    };
   },
   computed: {
     alert() {
       return this.store.getAlert;
+    },
+  },
+  watch: {
+    alert() {
+      this.watcherCallback()
     },
   },
   methods: {
@@ -62,6 +98,25 @@ export default {
         message: '',
       });
     },
+    watcherCallback() {
+        if(this.alert.type === 'success') {
+          this.clear = setInterval(() => {
+            this.class = 'fade-out';
+            console.log('fadeout')
+            setTimeout(() => {
+              console.log('timeout')
+              this.alertCallback();
+            }, 500)
+            clearInterval(this.clear);
+          }, 3000);
+        } else {
+          clearInterval(this.clear);
+          this.class = '';
+        }
+    }
+  },
+  mounted() {
+    this.watcherCallback();
   },
 };
 </script>

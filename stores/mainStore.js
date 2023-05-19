@@ -59,7 +59,11 @@ export const useMainStore = defineStore('MainStore', {
     setUserStatus(status, expires) {
       this.user.status = status;
       if (status === 'canceled') {
-        statusCanceledWarning(expires);
+        alert_statusCanceledWarning(expires);
+      } else if (status === 'invoice-failed') {
+        alert_statusInvoiceFailed();
+      } else if (status === 'invoice-requires-action') {
+        alert_statusInvoiceRequiresAction();
       } else if (status === 'expired') {
         this.expired = true;
       }

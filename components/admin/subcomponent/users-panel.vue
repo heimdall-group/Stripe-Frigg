@@ -260,9 +260,6 @@ export default {
     changeHandler(user) {
       const changes =
         JSON.stringify(user.ranks) !== JSON.stringify(user.localRanks);
-      console.log(user.ranks)
-      console.log(user.localRanks)
-      console.log(changes);
       if (changes) {
         this.changes[user.firebase_id] = {
           email: user.email,

@@ -67,15 +67,7 @@ export default {
         });
     }
   },
-  mounted() {
-    let payload = {
-      authToken: this.user.uid,
-      uid: this.user.uid,
-      call: 'GetProfile',
-    }
-    this.store.getUserData(payload)
-
-  },
+  mounted() {},
   updated() {},
   components: {},
 };
