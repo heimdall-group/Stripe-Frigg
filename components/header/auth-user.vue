@@ -96,6 +96,16 @@
     </v-list>
     <template v-slot:append>
       <v-list>
+        <v-list-item>
+          <v-select
+            :items="currencies"
+            v-model="currency"
+            @update:modelValue="changeHandler"
+            variant="filled"
+            menuIcon="mdi: mdi-menu-up"
+          >
+          </v-select>
+        </v-list-item>
         <v-list-item rounded class="text-subtitle">
           <v-btn
             nuxt
@@ -192,6 +202,8 @@ export default {
         },
       ],
       mobile_sub_menu: false,
+      currencies: [],
+      currency: '',
     };
   },
   props: {
@@ -200,9 +212,24 @@ export default {
       type: Boolean,
     },
   },
-  computed: {},
-  methods: {},
-  mounted() {},
+  computed: {
+    store_currencies() {
+      return this.store.getCurrencies;
+    },
+    store_currency() {
+      return this.store.getCurrency;
+    }
+  },
+  methods: {
+    changeHandler() {
+      console.log('this.changeHandler')
+      this.store.setCurrency(this.currency)
+    },
+  },
+  mounted() {
+    this.currency = this.store_currency;
+    this.currencies = this.store_currencies;
+  },
   updated() {},
   components: {},
   emits: [],

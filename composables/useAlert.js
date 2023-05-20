@@ -1,6 +1,6 @@
 import { useMainStore } from "~~/stores/mainStore"
 
-export const alert_restrictAuthWarning = () => {
+export const alert_restrictAuth = () => {
   const store = useMainStore();
   store.setAlert({
     type: 'warning',
@@ -10,7 +10,7 @@ export const alert_restrictAuthWarning = () => {
   })
 }
 
-export const alert_restrictNoAuthWarning = () => {
+export const alert_restrictNoAuth = () => {
   const store = useMainStore();
   store.setAlert({
     type: 'warning',
@@ -20,7 +20,7 @@ export const alert_restrictNoAuthWarning = () => {
   })
 }
 
-export const alert_statusCanceledWarning = (expires) => {
+export const alert_statusCanceled = (expires) => {
   const store = useMainStore();
   const user = store.getUser;
   const date = new Date(expires * 1000);

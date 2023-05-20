@@ -155,7 +155,7 @@
 }
 
 .dots-col {
-  height: 15%;
+  height: 5%;
 }
 
 .dots-col .dots {
@@ -189,6 +189,10 @@
 }
 
 @media (max-width: 850px) {
+  .subscription-type-switch {
+    height: 10%;
+  }
+
   .plans-col .plans-row {
     scroll-snap-type: x mandatory;
     flex-wrap: nowrap;
@@ -197,6 +201,10 @@
     max-width: 100%;
   }
 
+  .plans-col {
+    height: 85%;
+  }
+  
   .plans-col .plans-row .v-col {
     scroll-snap-align: center;
   }

@@ -46,8 +46,8 @@
     <Footer />
   </v-app>
   <v-app v-else>
-    <loading-container :lines="1" vh="5" />
-    <loading-container :lines="1" vh="95" />
+    <loading-container :lines="1" :vh="mobile ? '10' : '5'" />
+    <loading-container :lines="1" :vh="mobile ? '90' : '95'" />
   </v-app>
 </template>
 
@@ -112,6 +112,9 @@ html {
 }
 
 @media (max-width: 850px) {
+  .component-main-container {
+    min-height: calc(100vh - 66px);
+  }
 }
 </style>
 
@@ -135,7 +138,9 @@ export default {
   },
   name: 'App page',
   data() {
-    return {};
+    return {
+      mobile: true,
+    };
   },
   computed: {
     user() {
@@ -145,11 +150,19 @@ export default {
       return this.store.getExpired;
     }
   },
-  methods: {},
+  methods: {
+    onResize() {
+      this.mobile = window.innerWidth < 850;
+    },
+  },
   async mounted() {
-    const { stripe_plans, stripe_currencies } = await getPlans();
-    this.store.setPlans(stripe_plans);
-    this.store.setCurrencies(stripe_currencies)
+    this.onResize();
+    window.addEventListener('resize', this.onResize, { passive: true });
+    const res = await getPlans();
+    if (res.success) {
+      this.store.setPlans(res.data.stripe_plans);
+      this.store.setCurrencies(res.data.stripe_currencies);
+    }
   },
   updated() {},
   components: {},

@@ -7,7 +7,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return;
   }
   if (await stepRedirectValidation()) {
-    resetAlert();
     return navigateTo(`/register/step-${user.step}`);
   }
 })

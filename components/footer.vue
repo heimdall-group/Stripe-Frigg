@@ -1,7 +1,6 @@
 <template>
-  {{ mobile }}
-  <v-container fluid color="primary" class="pa-0">
-    <v-footer v-if="!mobile">
+  <v-container v-if="!mobile" fluid color="primary" class="pa-0">
+    <v-footer>
       <v-row class="ma-0" justify="end" align="center">
         <v-col cols="auto">
           <v-select
@@ -11,7 +10,6 @@
             variant="filled"
             menuIcon="mdi: mdi-menu-up"
           >
-
           </v-select>
         </v-col>
 

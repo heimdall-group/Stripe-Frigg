@@ -11,6 +11,11 @@ export default defineEventHandler(async (event) => {
       data: true,
       success: true,
     }
+  } else if(res.code === 'auth/invalid-email') {
+    return {
+      data: true,
+      success: true,
+    }
   } else {
     return {
       data: false,

@@ -26,17 +26,11 @@ export const getUser = async () => {
   })
   if (res.success) {
     store.setUserStep(res.data.register_step);
+    store.setUserStatus(res.data.stripe_status);
     if (res.data.expires) {
       store.setUserExpires(res.data.expires);
       store.setUserStatus(res.data.stripe_status, res.data.expires);
     }
-    if (res.data.stripe_status === 'expired') {
-      store.setExpired(true, 'Subscription expired');
-    }
-    if (res.data.stripe_status === 'invoice-unpaid') {
-      store.setExpired(true, 'Invoice unpaid');
-    }
-
   }
 }
 

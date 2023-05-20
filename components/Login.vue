@@ -1,19 +1,29 @@
 <template>
   <v-container class="component-main-container">
-    <v-form @submit.prevent="onSubmit">
-      <v-text-field 
-        label="Email" 
-        type="email" 
+    <v-form validate-on="submit" class="px-12" @submit="onSubmit" color="surface">
+      <v-text-field
         v-model="email"
+        label="Email"
+        color="secondary"
         variant="outlined"
-        :rules="[requiredRule, emailRule]"
+        type="text"
+        :error-messages="mailError ? 'Email already in use' : ''"
+        @change="mailChangeCallback"
+        :rules="[
+          this.store.verify_requiredRule, 
+          this.store.verify_emailRule, 
+        ]"
       ></v-text-field>
       <v-text-field
-        label="Password"
-        type="password"
         v-model="pwd"
+        label="Password"
+        color="secondary"
         variant="outlined"
-        :rules="[requiredRule, lengthRule]"
+        type="password"
+        :rules="[
+          this.store.verify_requiredRule, 
+          this.store.verify_LengthRule
+        ]"
       ></v-text-field>
       <verify-recaptcha></verify-recaptcha>
       <v-btn type="submit">Sign in</v-btn>
@@ -57,17 +67,6 @@ export default {
       alert: {
         status: false,
         message: '',
-      },
-      requiredRule: (value) => !!value || 'Required.',
-      emailRulePattern:
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      emailRule: (value) => {
-        return this.emailRulePattern.test(value) || 'Invalid e-mail.';
-      },
-      lengthRule: (value) => {
-        return value.length >= 6
-          ? true
-          : 'Password length needs to be atleast 6 characters';
       },
     };
   },

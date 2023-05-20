@@ -3,9 +3,8 @@
     <v-alert
       :icon="alert.icon"
       position="absolute"
-      :class="class"
       width="100%"
-      v-if="alert.status"
+      :class="alert.status ? 'show' : 'hide'"
       :type="alert.type"
     >
       <v-row align="center">
@@ -37,7 +36,7 @@
   transition-duration: 500ms;
 }
 
-.fade-out {
+.hide {
   transform: translateY(-200px);
 }
 
@@ -77,7 +76,6 @@ export default {
   data() {
     return {
       clear: '',
-      class: '',
     };
   },
   computed: {
@@ -86,32 +84,31 @@ export default {
     },
   },
   watch: {
-    alert() {
-      this.watcherCallback()
+    alert(newVal, oldVal) {
+      if(JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+        this.watcherCallback()
+      }
     },
   },
   methods: {
     alertCallback() {
       this.store.setAlert({
-        type: 'warning',
+        type: this.alert.type,
         status: false,
-        message: '',
+        message: this.alert.type,
+        icon: this.alert.icon,
       });
     },
     watcherCallback() {
+      ('watcherCallback')
         if(this.alert.type === 'success') {
-          this.clear = setInterval(() => {
-            this.class = 'fade-out';
-            console.log('fadeout')
-            setTimeout(() => {
-              console.log('timeout')
-              this.alertCallback();
-            }, 500)
-            clearInterval(this.clear);
+          this.clear = setTimeout(() => {
+            this.alertCallback();
+            clearTimeout(this.clear);
           }, 3000);
+          
         } else {
-          clearInterval(this.clear);
-          this.class = '';
+          clearTimeout(this.clear);
         }
     }
   },

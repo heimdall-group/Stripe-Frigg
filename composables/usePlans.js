@@ -5,5 +5,5 @@ export const getPlans = async () => {
   const res = await $fetch('/api/plans/getIndexedPlans', {
     method: 'POST',
   });
-  return res.data;
+  return res;
 }

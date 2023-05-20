@@ -1,13 +1,15 @@
 <template>
   <v-container fluid class="component-main-container">
-    <v-form validate-on="submit" class="px-12" @submit="submitCallback" color="surface">
+    <v-form validate-on="submit" class="px-12" @submit="onSubmit" color="surface">
       <v-text-field
         v-model="name"
         label="Name"
         color="secondary"
         variant="outlined"
         type="text"
-        :rules="[requiredRule]"
+        :rules="[
+          this.store.verify_requiredRule
+        ]"
       ></v-text-field>
       <v-text-field
         v-model="email"
@@ -17,7 +19,10 @@
         type="text"
         :error-messages="mailError ? 'Email already in use' : ''"
         @change="mailChangeCallback"
-        :rules="[requiredRule, emailRule]"
+        :rules="[
+          this.store.verify_requiredRule, 
+          this.store.verify_emailRule, 
+        ]"
       ></v-text-field>
       <v-text-field
         v-model="number"
@@ -34,7 +39,9 @@
           variant="outlined"
           type="text"
           maxlength="4"
-          :rules="[requiredRule]"
+          :rules="[
+            this.store.verify_requiredRule
+          ]"
         ></v-text-field>
         <v-text-field
           v-model="dateOfBirth.month"
@@ -43,7 +50,9 @@
           variant="outlined"
           type="text"
           maxlength="2"
-          :rules="[requiredRule]"
+          :rules="[
+            this.store.verify_requiredRule
+          ]"
         ></v-text-field>
         <v-text-field
           v-model="dateOfBirth.day"
@@ -52,7 +61,9 @@
           variant="outlined"
           type="text"
           maxlength="2"
-          :rules="[requiredRule]"
+          :rules="[
+            this.store.verify_requiredRule
+          ]"
         ></v-text-field>
       </v-row>
       <v-text-field
@@ -61,7 +72,10 @@
         color="secondary"
         variant="outlined"
         type="password"
-        :rules="[requiredRule, lengthRule]"
+        :rules="[
+          this.store.verify_requiredRule, 
+          this.store.verify_LengthRule
+        ]"
       ></v-text-field>
       <v-text-field
         v-model="pwdRepeat"
@@ -69,7 +83,11 @@
         color="secondary"
         variant="outlined"
         type="password"
-        :rules="[requiredRule, pwdMatchRule, lengthRule]"
+        :rules="[
+          this.store.verify_requiredRule, 
+          () => {this.store.verify_pwdMatchRule(this.pwd, this.pwdRepeat)}, 
+          this.store.verify_LengthRule
+        ]"
       ></v-text-field>
       <verify-recaptcha ></verify-recaptcha>
       <v-btn type="submit" rounded elevation="10">Continue</v-btn>
@@ -101,20 +119,6 @@ export default {
       pwd: '',
       pwdRepeat: '',
       mailError: false,
-      requiredRule: (value) => !!value || 'Required.',
-      emailRulePattern:
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      emailRule: (value) => {
-        return this.emailRulePattern.test(value) || 'Invalid e-mail.';
-      },
-      pwdMatchRule: (value) => {
-        return this.pwd === value ? true : 'Password doesnt match';
-      },
-      lengthRule: (value) => {
-        return value.length >= 6
-          ? true
-          : 'Password length needs to be atleast 6 characters';
-      },
       error: {
         status: false,
         message:
@@ -125,11 +129,11 @@ export default {
   },
   computed: {},
   methods: {
-    async submitCallback(event) {
+    async onSubmit(event) {
       event.preventDefault();
       const validations = [
-        this.emailRule(this.email),
-        this.validateRequired([
+        this.store.verify_emailRule(this.email),
+        this.store.verify_validateRequired([
           this.email,
           this.name,
           this.pwd,
@@ -139,11 +143,12 @@ export default {
           this.dateOfBirth.month,
           this.dateOfBirth.day,
         ]),
-        this.lengthRule(this.pwd),
-        this.lengthRule(this.pwdRepeat),
-        this.pwdMatchRule(this.pwdRepeat),
+        this.store.verify_LengthRule(this.pwd),
+        this.store.verify_LengthRule(this.pwdRepeat),
+        this.store.verify_pwdMatchRule(this.pwdRepeat, this.pwd),
         await this.mailChangeCallback(this.email),
       ];
+      (validations)
       for (let i = 0; i < validations.length; i++) {
         const validation = validations[i];
         if (validation !== true) {
@@ -168,18 +173,8 @@ export default {
         setupVerification(callback);
       }
     },
-    validateRequired(arr) {
-      for (let i = 0; i < arr.length; i++) {
-        const item = arr[i];
-        if (this.requiredRule(item)) {
-          continue;
-        } else {
-          return false;
-        }
-      }
-      return true;
-    },
     async mailChangeCallback() {
+      ('this.mailChangeCallback')
       const res = await $fetch('/api/verify/userEmail', {
         method: 'POST',
         body: JSON.stringify({ mail: this.email }),

@@ -24,6 +24,7 @@ export const useMainStore = defineStore('MainStore', {
       },
       currencies: [],
       currency: '',
+      expired: false,
     };
   },
   getters: {
@@ -58,8 +59,9 @@ export const useMainStore = defineStore('MainStore', {
     },
     setUserStatus(status, expires) {
       this.user.status = status;
+      (status)
       if (status === 'canceled') {
-        alert_statusCanceledWarning(expires);
+        alert_statusCanceled(expires);
       } else if (status === 'invoice-failed') {
         alert_statusInvoiceFailed();
       } else if (status === 'invoice-requires-action') {
@@ -71,9 +73,8 @@ export const useMainStore = defineStore('MainStore', {
     setUserExpires(expires) {
       this.user.expires = expires;
     },
-    setExpired(expired, message) {
-      this.expired.status = expired;
-      this.expired.message = message;
+    setExpired(expired) {
+      this.expired = expired;
     },
     setAlert(alert) {
       this.alert = alert;
@@ -95,6 +96,40 @@ export const useMainStore = defineStore('MainStore', {
       }).then(res => res.json()).then(async data => {
         this.profile = data.profile
       })
-    }
+    },
+    verify_requiredRule(value) {
+      ('verify_requiredRule')
+      return !!value || 'Required.'
+    },
+    verify_emailRule: (value) => {
+      ('verify_emailRule')
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return pattern.test(value) || 'Invalid e-mail.';
+    },
+    verify_pwdMatchRule: (value, repeat) => {
+      ('verify_pwdMatchRule')
+      return repeat === value ? true : 'Password doesnt match';
+    },
+    verify_LengthRule: (value) => {
+      ('verify_LengthRule')
+      return value.length >= 6
+        ? true
+        : 'Password length needs to be atleast 6 characters';
+    },
+    verify_validateRequired(arr) {
+      ('verify_validateRequired')
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        if (this.verify_requiredRule(item)) {
+          continue;
+        } else {
+          return false;
+        }
+      }
+      return true;
+    },
+    verify_validEmail() {
+
+    },
   },
 });
