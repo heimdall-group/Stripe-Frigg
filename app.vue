@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="expired.status">
+  <v-app v-if="expired">
     <v-row class="fill-height ma-0" justify="center" align="center">
       <v-col cols="12" :class="['d-flex', 'justify-center']">
         <v-card
@@ -11,7 +11,7 @@
           class="pa-3"
         >
           <v-card-title class="text-center text-h4 mt-4 text-wrap">
-            {{ expired.message }}
+            Your subscription has expired
           </v-card-title>
           <v-card-subtitle class="text-center">
             You can access the customer portal below
@@ -28,6 +28,7 @@
               </v-btn>
               <v-btn
                 @click="signOut"
+                class="text-decoration-underline"
                 color="deep-purple"
                 flat
               >
