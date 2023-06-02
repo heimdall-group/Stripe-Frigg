@@ -19,24 +19,18 @@ export default {
   },
   name: 'registerSummaryErrorComponent',
   data() {
-    return {
-      mobile: true,
-    };
+    return {};
   },
   computed: {
     user() {
       return this.store.getUser;
     },
+    mobile() {
+      return this.store.getMobile;
+    }
   },
-  methods: {
-    onResize() {
-      this.mobile = window.innerWidth < 850;
-    },
-  },
-  mounted() {
-    this.onResize();
-    window.addEventListener('resize', this.onResize, { passive: true });
-  },
+  methods: {},
+  mounted() {},
   updated() {},
   components: {},
   emits: [],

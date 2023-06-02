@@ -1,12 +1,12 @@
-export const getRecaptchaToken = async () => {
+export const recaptcha_getToken = async () => {
   const token = await grecaptcha.execute(useRuntimeConfig().public.recaptcha_v3, {
     action: 'submit',
   });
   return token;
 };
 
-export const setupVerification = async (callback) => {
-  const token = await getRecaptchaToken();
+export const recaptcha_verification = async (callback, error) => {
+  const token = await recaptcha_getToken();
   const res = await $fetch('/api/verify/recaptcha', {
     method: 'POST',
     body: {
@@ -16,6 +16,7 @@ export const setupVerification = async (callback) => {
   if (res.success) {
     callback();
   } else {
+    error();
     grecaptcha.render('recaptcha-container', {
       sitekey: useRuntimeConfig().public.recaptcha_v2,
     });

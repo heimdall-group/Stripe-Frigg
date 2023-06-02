@@ -8,8 +8,8 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const light = {
     dark: false,
     colors: {
-      background: '#dddddd',
-      surface: '#FFFFFF',
+      background: '#FFFFFF',
+      surface: '#f6f6f6',
       primary: '#ededed',
       secondary: '#7c7c7c',
       error: '#B00020',
@@ -22,7 +22,14 @@ const light = {
 const dark = {
     dark: true,
     colors: {
-      background: '#293340',
+      background: '#222',
+      surface: '#333',
+      primary: '#333',
+      secondary: '#555',
+      error: '#B00020',
+      info: '#2196F3',
+      success: '#4CAF50',
+      warning: '#FB8C00',
     }
 }
 
@@ -31,7 +38,7 @@ export default defineNuxtPlugin(nuxtApp => {
     components,
     directives,
     theme: {
-        defaultTheme: 'light',
+        defaultTheme: 'dark',
         themes: {
           light,
           dark,

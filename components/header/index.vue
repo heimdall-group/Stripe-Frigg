@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid color="primary" class="pa-0 header">
-    <header-auth-user v-if="user" :mobile="mobile"></header-auth-user>
-    <header-no-auth-user v-else :mobile="mobile"></header-no-auth-user>
+  <v-container v-scroll="onScroll" fluid color="primary" class="pa-0 header">
+    <header-auth-user :flat="flat" v-if="user" :mobile="mobile"></header-auth-user>
+    <header-no-auth-user :flat="flat" v-else :mobile="mobile"></header-no-auth-user>
   </v-container>
 </template>
 
@@ -19,9 +19,9 @@
   }
 
   .navigation-drawer-desktop .v-list .v-list-item .v-list-item__prepend .v-icon {
-    margin: 0 !important;
-    width: 56px;
+    width: 56px !important;
     text-align: center;
+    margin: 0px !important;
   }
 </style>
 
@@ -33,7 +33,7 @@ export default {
     const store = useMainStore();
     const theme = useTheme();
     const signOut = async () => {
-      const result = await signOutUser();
+      const result = await firebase_signOutUser();
     };
     return {
       store,
@@ -50,104 +50,28 @@ export default {
   name: 'headerComponent',
   data() {
     return {
-      drawer: false,
-      mobile: true,
-      navigationLinks: [
-        {
-          to: '/login',
-          title: 'Login',
-          icon: 'mdi: mdi-account-outline',
-        },
-        {
-          to: '/register/step-1',
-          title: 'Register',
-          icon: 'mdi: mdi-account-plus-outline',
-        },
-        {
-          to: '/plans',
-          title: 'Plans',
-          icon: 'mdi: mdi-finance',
-        },
-        {
-          to: '/about-us',
-          title: 'About us',
-          icon: 'mdi: mdi-information-outline',
-        },
-        {
-          to: '/contact-us',
-          title: 'Contact us',
-          icon: 'mdi: mdi-phone',
-        },
-      ],
-      userNavigationLinks: [
-        {
-          to: '/',
-          title: 'Overview',
-          icon: 'fa-solid fa-table',
-        },
-        {
-          to: '/',
-          title: 'Stocks',
-          icon: 'fa-solid fa-arrow-trend-up',
-        },
-        {
-          to: '/',
-          title: 'Real estate',
-          icon: 'fa-solid fa-building-user',
-        },
-        {
-          to: '/',
-          title: 'E-commerce',
-          icon: 'fa-solid fa-shop',
-        },
-
-      ],
-      mobileNavigationLinks: [
-        {
-          to: '/',
-          title: 'Dashboard',
-          icon: 'mdi-home',
-        },
-        {
-          to: '/',
-          title: 'Dashboard',
-          icon: 'mdi-home',
-        },
-        {
-          to: '/',
-          title: 'Dashboard',
-          icon: 'mdi-home',
-        },
-      ],
-      mobileSubNavigationLinks: [
-        {
-          to: '/plans',
-          title: 'Plans',
-          icon: 'mdi-finance',
-        },
-        {
-          to: '/contact-us',
-          title: 'Contact us',
-          icon: 'mdi-phone',
-        },
-      ],
-      mobileSubmenu: false,
+      flat: false,
     };
   },
   computed: {
     user() {
       return this.store.getUser;
     },
+    mobile() {
+      return this.store.getMobile;
+    }
   },
   methods: {
-    onResize() {
-      this.mobile = window.innerWidth < 850;
+    onScroll(e) {
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      if (top > 60) {
+        this.flat = true;
+      } else {
+        this.flat = false;
+      }
     },
   },
-  mounted() {
-    this.onResize();
-    window.addEventListener('resize', this.onResize, { passive: true });
-  },
+  mounted() {},
   updated() {
   },
   components: {},

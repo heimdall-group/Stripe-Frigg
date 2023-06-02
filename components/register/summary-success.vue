@@ -3,12 +3,12 @@
     <v-row class="fill-height" align="center">
       <v-col cols="12" :class="['d-flex', 'justify-center', mobile ? '' : 'px-16']">
         <v-card
-          width="100%" 
+          width="fit-content" 
           height="fit-content"
           variant="elevated"
           elevation="10"
           rounded="xl"
-          class="pb-3"
+          class="pa-8"
         >
           <v-card-title class="text-center text-h4 mt-4 text-wrap">
             Subscription activated
@@ -20,9 +20,9 @@
           <v-card-actions>
             <v-row justify="center">
               <v-btn
-                @click="getPortalSession"
+                @click="user_getPortalSession"
                 class="text-decoration-underline"
-                color="deep-purple"
+                color="purple-lighten-2"
               >
                 Customer portal
               </v-btn>
@@ -30,7 +30,7 @@
                 nuxt
                 to="/"
                 class="text-decoration-underline"
-                color="deep-purple"
+                color="purple-lighten-2"
               >
                 Continue to dashboard
               </v-btn>
@@ -58,20 +58,17 @@ export default {
   },
   name: 'registerSummarySuccessComponent',
   data() {
-    return {
-      mobile: true,
-    };
+    return {};
   },
   computed: {
     user() {
       return this.store.getUser;
     },
+    mobile() {
+      return this.store.getMobile;
+    }
   },
-  methods: {
-    onResize() {
-      this.mobile = window.innerWidth < 850;
-    },
-  },
+  methods: {},
   watch: {
     user: {
       handler() {
@@ -79,7 +76,7 @@ export default {
           const router = useRouter();
           const params = new URLSearchParams(window.location.search);
           if (params.has('session_id')) {
-            updateStep('finished');
+            user_updateStep('finished');
           } else {
             router.push('/');
           }
@@ -88,10 +85,7 @@ export default {
       deep: true,
     }
   },
-  mounted() {
-    this.onResize();
-    window.addEventListener('resize', this.onResize, { passive: true });
-  },
+  mounted() {},
   updated() {},
   components: {},
   emits: [],

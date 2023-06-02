@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import { useMainStore } from '~~/stores/mainStore';
-
 export default {
   setup() {
     useHead({
@@ -25,10 +23,7 @@ export default {
         },
       ],
     });
-    const store = useMainStore();
-    return {
-      store,
-    };
+    return {};
   },
   name: 'verifyRecaptchaComponent',
   data() {

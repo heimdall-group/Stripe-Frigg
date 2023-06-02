@@ -25,7 +25,7 @@ export default {
     user: {
       async handler() {
         if (this.user && this.ranks.length === 0) {
-          this.ranks = await getUserRanks();
+          this.ranks = await user_getUserRanks();
           this.user_auth = true;
         }
       },

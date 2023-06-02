@@ -73,12 +73,12 @@
                   </v-row>
                 </v-list-item>
               </v-list>
-              <v-card-actions class="d-flex justify-center">
+              <v-row justify="center" class="ma-0 purchase-button-row">
                 <v-btn
                   width="50%"
                   color="success"
                   rounded
-                  variant="outlined"
+                  flat
                   @click="
                     () => {
                       planButtonHandler(plan);
@@ -87,7 +87,7 @@
                 >
                   Continue
                 </v-btn>
-              </v-card-actions>
+              </v-row>
             </v-card>
           </v-col>
         </v-row>
@@ -138,14 +138,6 @@
 .plans-col .plans-row .v-card .v-list .v-list-item-icon {
   width: 24px;
   height: 24px;
-}
-
-.plans-col .plans-row .v-card .v-list .fa-square-check {
-  color: green;
-}
-
-.plans-col .plans-row .v-card .v-list .fa-square-xmark {
-  color: red;
 }
 
 .plans-col .plans-row .v-card-actions {
@@ -223,7 +215,6 @@ export default {
   name: 'registerStep2Component',
   data() {
     return {
-      mobile: true,
       dotsRowClass: '',
       annual: true,
     };
@@ -238,18 +229,18 @@ export default {
     user() {
       return this.store.getUser;
     },
+    mobile() {
+      return this.store.getMobile;
+    }
   },
   methods: {
-    onResize() {
-      this.mobile = window.innerWidth < 850;
-    },
     intersectionHandler(entries, index) {
       if (entries) {
         this.dotsRowClass = `dots-active-${index}`;
       }
     },
     async planButtonHandler(plan) {
-      const res = await $fetch('/api/user/getCheckout', {
+      const res = await $fetch('/api/user/get/checkout', {
         method: 'POST',
         body: {
           token: await this.user.getIdToken(),
@@ -262,10 +253,7 @@ export default {
       }
     },
   },
-  mounted() {
-    this.onResize();
-    window.addEventListener('resize', this.onResize, { passive: true });
-  },
+  mounted() {},
   updated() {},
   components: {},
   emits: [],

@@ -58,3 +58,11 @@ npm run cronjob_service_dev
       ```
   - Cronjob:
     - 400: Success
+
+## Plug and Play functions:
+  - Recaptcha verification:
+      - Send callback function to recaptcha_verification. This will be called if verification is successfull. If checkbox is wanted add the verify-recaptcha component to your file.
+  - Password verification:
+      - Add the verify-password component. This will create a button, provide the component with a callback function that will run if password verification is successfull and a text that will be displayed as the button text.
+  - Customer portal on Stripe:
+      - Call the user_getPortalSession function. This will set the url to the one provided by Stripe.

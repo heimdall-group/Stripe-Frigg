@@ -4,41 +4,27 @@ export const useMainStore = defineStore('MainStore', {
   state: () => {
     return {
       user: null,
-      profile: null,
       plans: [],
-      expired: {
-        status: false,
-        message: '',
-      },
-      registerSummary: {
-        email: '',
-        name: '',
-        number: '',
-        dateOfBirth: '',
-        plan: '',
-      },
-      alert: {
-        type: 'warning',
-        status: false,
-        message: '',
-      },
+      expired: false,
+      alerts: [],
       currencies: [],
       currency: '',
       expired: false,
+      mobile: true,
     };
   },
   getters: {
     getUser() {
       return this.user;
     },
-    getProfile() {
+    getUserProfile() {
       return this.profile;
     },
     getPlans() {
       return this.plans;
     },
-    getAlert() {
-      return this.alert;
+    getAlerts() {
+      return this.alerts;
     },
     getCurrencies() {
       return this.currencies;
@@ -49,6 +35,9 @@ export const useMainStore = defineStore('MainStore', {
     getExpired() {
       return this.expired;
     },
+    getMobile() {
+      return this.mobile;
+    }
   },
   actions: {
     setUser(user) {
@@ -76,7 +65,16 @@ export const useMainStore = defineStore('MainStore', {
       this.expired = expired;
     },
     setAlert(alert) {
-      this.alert = alert;
+      this.alerts.push(alert);
+    },
+    patchAlerts(alert) {
+      const index = this.alerts.indexOf(alert);
+      const arr = [...this.alerts];
+      arr.splice(index, 1);
+      this.alerts = arr;
+    },
+    resetAlerts() {
+      this.alerts = [];
     },
     setPlans(plans) {
       this.plans = plans;
@@ -88,35 +86,26 @@ export const useMainStore = defineStore('MainStore', {
     setCurrency(currency) {
       this.currency = currency;
     },
-    getUserData(payload) {
-      fetch('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      }).then(res => res.json()).then(async data => {
-        this.profile = data.profile
-      })
+    setMobile() {
+      this.mobile = window.innerWidth < 850;;
     },
+
     verify_requiredRule(value) {
-      ('verify_requiredRule')
       return !!value || 'Required.'
     },
     verify_emailRule: (value) => {
-      ('verify_emailRule')
       const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return pattern.test(value) || 'Invalid e-mail.';
     },
     verify_pwdMatchRule: (value, repeat) => {
-      ('verify_pwdMatchRule')
       return repeat === value ? true : 'Password doesnt match';
     },
     verify_LengthRule: (value) => {
-      ('verify_LengthRule')
       return value.length >= 6
         ? true
         : 'Password length needs to be atleast 6 characters';
     },
     verify_validateRequired(arr) {
-      ('verify_validateRequired')
       for (let i = 0; i < arr.length; i++) {
         const item = arr[i];
         if (this.verify_requiredRule(item)) {
@@ -126,9 +115,6 @@ export const useMainStore = defineStore('MainStore', {
         }
       }
       return true;
-    },
-    verify_validEmail() {
-
     },
   },
 });

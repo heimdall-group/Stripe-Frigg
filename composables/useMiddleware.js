@@ -1,21 +1,21 @@
 import { useMainStore } from '~~/stores/mainStore';
 
-export const stepRedirect = async () => {
+export const middleware_stepRedirect = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  if(await stepRedirectValidation()) {
+  if(await middleware_stepRedirectValidation()) {
     return await navigateTo(`/register/step-${user.step}`);
   }
 };
 
-export const restrictAuth = async () => {
+export const middleware_restrictAuth = async () => {
   const store = useMainStore();
   const user = store.getUser;
   try {
     if (user === null) {
       return;
     }
-    if (!await stepRedirectValidation() &&!user) {
+    if (!await middleware_stepRedirectValidation() &&!user) {
       alert_restrictAuth();
       return navigateTo('/login');
     }
@@ -24,14 +24,14 @@ export const restrictAuth = async () => {
   }
 };
 
-export const restrictNoAuth = async () => {
+export const middleware_restrictNoAuth = async () => {
   const store = useMainStore();
   const user = store.getUser;
   try {
     if (user === null) {
       return;
     }
-    if (!await stepRedirectValidation() && !!user) {
+    if (!await middleware_stepRedirectValidation() && !!user) {
       alert_restrictNoAuth();
       return navigateTo('/');
     } 
@@ -40,7 +40,7 @@ export const restrictNoAuth = async () => {
   }
 };
 
-export const restrictAdmin = async () => {
+export const middleware_restrictAdmin = async () => {
   const store = useMainStore();
   const user = store.getUser;
   try {
@@ -52,8 +52,8 @@ export const restrictAdmin = async () => {
       return navigateTo('/')
     }
     
-    const ranks = await getUserRanks();
-    if (!await stepRedirectValidation() && !ranks.includes('Admin')) {
+    const ranks = await user_getUserRanks();
+    if (!await middleware_stepRedirectValidation() && !ranks.includes('Admin')) {
       return navigateTo('/')
     }
   } catch (err) {
@@ -61,7 +61,7 @@ export const restrictAdmin = async () => {
   }
 }
 
-export const restrictAdminSupport = async () => {
+export const middleware_restrictAdminSupport = async () => {
   const store = useMainStore();
   const user = store.getUser;
   try {
@@ -73,8 +73,8 @@ export const restrictAdminSupport = async () => {
       return navigateTo('/')
     }
   
-    const ranks = await getUserRanks();
-    if (!await stepRedirectValidation() && (!ranks.includes('Admin') || !ranks.includes('Support'))) {
+    const ranks = await user_getUserRanks();
+    if (!await middleware_stepRedirectValidation() && (!ranks.includes('Admin') || !ranks.includes('Support'))) {
       return navigateTo('/')
     }
   } catch (err) {
@@ -85,14 +85,14 @@ export const restrictAdminSupport = async () => {
 export const reloadMiddleware = async () => {
   const pathName = useRouter().currentRoute.value.fullPath;
 
-  stepRedirect();
+  middleware_stepRedirect();
   if (pathName === '/login') {
-    restrictNoAuth();
+    middleware_restrictNoAuth();
   } else if (pathName === '/register/step-1') {
-    restrictNoAuth();
+    middleware_restrictNoAuth();
   } else if (pathName.includes('register/step-')) {
-    restrictAuth();
+    middleware_restrictAuth();
   } else if (pathName.includes('admin')) {
-    restrictAdmin();
+    middleware_restrictAdmin();
   }
 };

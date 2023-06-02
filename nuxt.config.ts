@@ -16,7 +16,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+      firebase_api_key: process.env.FIREBASE_API_KEY,
+      domain_url: process.env.FIREBASE_AUTH_DOMAIN,
       recaptcha_v3: process.env.RECAPTCHA_V3_KEY,
       recaptcha_v2: process.env.RECAPTCHA_V2_KEY,
     },
@@ -39,11 +40,13 @@ export default defineNuxtConfig({
       },
     ],
     ["nuxt-security", {
-      headers: {
-        crossOriginEmbedderPolicy: true,
-        contentSecurityPolicy: false,
-      }
-    },],
+        headers: {
+          crossOriginEmbedderPolicy: true,
+          contentSecurityPolicy: false,
+          crossOriginOpenerPolicy: false,
+        }
+      },
+    ],
   ],
   css: [
     'vuetify/lib/styles/main.sass',

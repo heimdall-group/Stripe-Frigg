@@ -14,7 +14,7 @@
       <v-list-item
         v-if="!mobile"
         class="my-2 pl-0"
-        title="Dashboard Drawer"
+        title="Project title"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
       <v-list-item v-for="(link, index) in links" :key="index" class="my-2 pl-0" rounded :prepend-icon="link.icon">
@@ -25,36 +25,15 @@
     </v-list>
     <template v-slot:append>
       <v-list>
-        <v-list-item rounded class="text-subtitle pl-0" prepend-icon="empty">
-          <v-btn
-            nuxt
-            class="text-subtitle"
-            color="transparent"
-            to="/privacy-policy"
-            rounded
-            width="100%"
-            flat
-          >
-            Privacy Policy
-          </v-btn>
-        </v-list-item>
       </v-list>
     </template>
   </v-navigation-drawer>
 
   <!-- Mobile Auth Toolbar -->
-  <v-toolbar v-if="mobile" color="primary" location="top">
-    <v-spacer></v-spacer>
-    <v-btn
-      @click="mobile_sub_menu = !mobile_sub_menu"
-      rounded
-      flat
-    >
-      <client-only>
-        <font-awesome-icon icon="fa-solid fa-bars" />
-      </client-only>
-    </v-btn>
-  </v-toolbar>
+  <v-app-bar v-if="mobile" :flat="flat" color="primary" class="justify-end">
+      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon @click="mobile_sub_menu = !mobile_sub_menu" icon="fa-solid fa-bars"></v-app-bar-nav-icon>
+  </v-app-bar>
 
   <v-navigation-drawer
     v-if="mobile"
@@ -64,44 +43,12 @@
     v-model="mobile_sub_menu"
   >
     <v-list>
-      <v-list-item
-        title="Dashboard Drawer"
-        class="my-2"
-        prepend-icon="fa-solid fa-bars"
-      ></v-list-item>
       <v-list-item v-for="(link, index) in links" :key="index" rounded  class="my-2">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
         </v-btn>
       </v-list-item>
     </v-list>
-    <template v-slot:append>
-      <v-list>
-        <v-list-item>
-          <v-select
-            :items="currencies"
-            v-model="currency"
-            @update:modelValue="changeHandler"
-            variant="filled"
-            menuIcon="mdi: mdi-menu-up"
-          >
-          </v-select>
-        </v-list-item>
-        <v-list-item rounded class="text-subtitle">
-          <v-btn
-            nuxt
-            class="text-subtitle"
-            color="transparent"
-            to="/privacy-policy"
-            rounded
-            width="100%"
-            flat
-          >
-            Privacy Policy
-          </v-btn>
-        </v-list-item>
-      </v-list>
-    </template>
   </v-navigation-drawer>
 </template>
 
@@ -128,42 +75,41 @@ export default {
           icon: 'fa-solid fa-user-plus',
         },
         {
-          to: '/plans',
-          title: 'Plans',
-          icon: 'fa-solid fa-layer-group',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/about-us',
-          title: 'About us',
-          icon: 'fa-solid fa-circle-info',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/contact-us',
-          title: 'Contact us',
-          icon: 'fa-solid fa-phone',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
-        
       ],
       mobile_links: [
         {
+          to: '/login',
+          title: 'Login',
+          icon: 'fa-solid fa-arrow-right-to-bracket',
+        },
+        {
+          to: '/register/step-1',
+          title: 'Register',
+          icon: 'fa-solid fa-user-plus',
+        },
+        {
           to: '/',
-          title: 'Overview',
-          icon: 'fa-solid fa-table',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/stocks',
-          title: 'Stocks',
-          icon: 'fa-solid fa-arrow-trend-up',
-        },
-        {
-          to: '/real-estate',
-          title: 'Real estate',
-          icon: 'fa-solid fa-house-chimney',
-        },
-        {
-          to: '/e-commerce',
-          title: 'E-commerce',
-          icon: 'fa-solid fa-basket-shopping',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
       ],
       mobile_sub_menu: false,
@@ -176,6 +122,10 @@ export default {
       required: true,
       type: Boolean,
     },
+    flat: {
+      required: true,
+      type: Boolean,
+    }
   },
   computed: {
     store_currencies() {
@@ -187,7 +137,6 @@ export default {
   },
   methods: {
     changeHandler() {
-      console.log('this.changeHandler')
       this.store.setCurrency(this.currency)
     },
   },

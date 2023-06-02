@@ -1,3 +1,3 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  return restrictAdminSupport();
+  return middleware_restrictAdminSupport();
 })

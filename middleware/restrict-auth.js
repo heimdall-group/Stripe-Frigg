@@ -1,3 +1,3 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  return restrictAuth();
+  return middleware_restrictAuth();
 })

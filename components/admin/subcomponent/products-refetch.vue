@@ -7,17 +7,9 @@
     <v-card-title class="text-center">Refetch Products</v-card-title>
     <v-card-subtitle class="text-center">Sync products from Stripe to server</v-card-subtitle>
     <v-card-actions>
-      <v-form @submit="onSubmitHandler">
-        <v-text-field
-          label="Password"
-          type="password"
-          v-model="pwd"
-          variant="outlined"
-          :error-messages="alert.status ? alert.message : ''"
-          :rules="[requiredRule, lengthRule]"
-        ></v-text-field>
-        <v-btn type="submit" flat>Refetch products</v-btn>
-      </v-form>
+      <v-row justify="center">
+        <verify-password color="" color_2="success" :callback="callback" text="Refetch products" />
+      </v-row>
     </v-card-actions>
   </v-card>
 </template>
@@ -60,22 +52,13 @@ export default {
     }
   },
   methods: {
-    async onSubmitHandler(event) {
-      event.preventDefault();
-      if (this.requiredRule(this.pwd) === true && this.lengthRule(this.pwd) === true) {
-        const res = await verifyPassword(this.pwd);
-        if (res && res.code === 'auth/wrong-password') {
-          this.alert.status = true;
-        } else {
-          this.alert.status = false;
-          const res = await $fetch('api/admin/patchProducts', {
-            method: 'POST',
-            body: {
-              token: await this.user.getIdToken(),
-            }
-          });
+    async callback() {
+      const res = await $fetch('api/admin/patch/products', {
+        method: 'POST',
+        body: {
+          token: await this.user.getIdToken(),
         }
-      }
+      });
     },
   },
   mounted() {},

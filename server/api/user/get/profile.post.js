@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase-admin/auth';
 import Users from "~~/server/models/user";
 
 export default defineEventHandler(async (event) => {
@@ -7,25 +6,15 @@ export default defineEventHandler(async (event) => {
   try {
     if (res) {
       const document = await Users.findOne({user_uid: res.uid});
-      if (document.stripe_plan !== undefined && document.stripe_status !== undefined) {
-        return {
-          data: {
-            register_step: document.register_step,
-            stripe_status: document.stripe_status,
-            expires: document.stripe_plan.cancel_at
-          },
-          success: true,
-        }
- 
-      } else {
-        return {
-          data: {
-            register_step: document.register_step,
-          },
-          success: true,
-        }
+      return {
+        data: {
+          user_username: document.user_username,
+          user_email: document.user_email,
+          user_number: document.user_number,
+          stripe_plan_name: document.stripe_plan_name,
+        },
+        success: true,
       }
-
     } else {
       return {
         data: false,

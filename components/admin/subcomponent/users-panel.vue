@@ -23,22 +23,20 @@
               <v-btn
                 @click="() => {copyHandler(user.email)}"
                 :disabled="!user.email"
-                class="text-subtitle"
                 variant="tonal"
               >
                 <font-awesome-icon icon="fa-solid fa-copy" />
-                <span class="ml-2 text-black">{{ user.email }}</span>
+                <span class="ml-2">{{ user.email }}</span>
               </v-btn>
             </th>
             <th>
               <v-btn
                 @click="() => {copyHandler(user.number)}"
                 :disabled="!user.number"
-                class="text-subtitle"
                 variant="tonal"
               >
                 <font-awesome-icon icon="fa-solid fa-copy" />
-                <span class="ml-2 text-black">{{ user.number }}</span>
+                <span class="ml-2">{{ user.number }}</span>
               </v-btn>
             </th>
             <th class="d-flex justify-center align-center">
@@ -71,33 +69,30 @@
               <v-btn
                 @click="() => {copyHandler(user.stripe_id)}"
                 :disabled="!user.stripe_id"
-                class="text-subtitle"
                 variant="tonal"
               >
                 <font-awesome-icon icon="fa-solid fa-copy" />
-                <span class="ml-2 text-black">{{ user.stripe_id }}</span>
+                <span class="ml-2">{{ user.stripe_id }}</span>
               </v-btn>
             </th>
             <th>
               <v-btn
                 @click="() => {copyHandler(user.firebase_id)}"
                 :disabled="!user.firebase_id"
-                class="text-subtitle"
                 variant="tonal"
               >
                 <font-awesome-icon icon="fa-solid fa-copy" />
-                <span class="ml-2 text-black">{{ user.firebase_id }}</span>
+                <span class="ml-2">{{ user.firebase_id }}</span>
               </v-btn>
             </th>
             <th>
               <v-btn
                 @click="() => {copyHandler(user.mongodb_id)}"
                 :disabled="!user.mongodb_id"
-                class="text-subtitle"
                 variant="tonal"
               >
                 <font-awesome-icon icon="fa-solid fa-copy" />
-                <span class="ml-2 text-black">{{ user.mongodb_id }}</span>
+                <span class="ml-2">{{ user.mongodb_id }}</span>
               </v-btn>
             </th>
           </tr>
@@ -173,46 +168,11 @@
             </v-row>
           </v-card>
         </v-dialog>
-        <v-dialog transition="dialog-bottom-transition" v-model="save_model" max-width="400px">
-          <template v-slot:activator="{ props }">
-            <v-btn
-              v-bind="props"
-              flat
-              color="success"
-              :disabled="Object.keys(changes).length === 0"
-              class="mx-2"
-            >
-              Save
-            </v-btn>
-          </template>
-          <v-card class="pt-8 px-8 pb-4" rounded="xl">
-            <v-form @submit="(event) => {onSubmitHandler(event, user)}"
-            >
-              <v-text-field
-                label="Password"
-                type="password"
-                v-model="pwd"
-                variant="outlined"
-                :error-messages="alert.status ? alert.message : ''"
-                :rules="[requiredRule, lengthRule]"
-              ></v-text-field>
-              <v-btn flat type="submit" color="success"> Confirm </v-btn>
-            </v-form>
-          </v-card>
-        </v-dialog>
+        <verify-password color_2="success" :disabled="Object.keys(changes).length === 0" color="success" :callback="callback" text="Save" />
       </v-row>
     </v-sheet>
   </v-col>
 </template>
-
-<style scoped>
-.fa-square-xmark {
-  color: red;
-}
-.fa-square-check {
-  color: green;
-}
-</style>
 
 <script>
 import { useMainStore } from '~/stores/mainStore';
@@ -281,41 +241,28 @@ export default {
     copyHandler(content) {
       navigator.clipboard.writeText(content);
     },
-    async onSubmitHandler(event) {
+    async callback(event) {
       event.preventDefault();
-      if (
-        this.requiredRule(this.pwd) === true &&
-        this.lengthRule(this.pwd) === true
-      ) {
-        const res = await verifyPassword(this.pwd);
-        if (res && res.code === 'auth/wrong-password') {
-          this.alert.status = true;
-        } else {
-          this.alert.status = false;
-          const res = await $fetch('api/admin/patchUserRanks', {
-            method: 'POST',
-            body: {
-              token: await this.store_user.getIdToken(),
-              changes: this.changes,
-            },
-          });
-          if (res.success) {
-            for (let i = 0; i < this.users.length; i++) {
-              let {localRanks} = this.users[i];
-              this.users[i].ranks = localRanks;
-            }
-            this.changes = {};
-            this.save_model = false;
-            this.pwd = '';
-          } else {
-            console.error(res)
-          }
+      const res = await $fetch('api/admin/patch/userRanks', {
+        method: 'POST',
+        body: {
+          token: await this.store_user.getIdToken(),
+          changes: this.changes,
+        },
+      });
+      if (res.success) {
+        for (let i = 0; i < this.users.length; i++) {
+          let {localRanks} = this.users[i];
+          this.users[i].ranks = localRanks;
         }
-      } 
+        this.changes = {};
+        this.save_model = false;
+        this.pwd = '';
+      }
     },
   },
   async mounted() {
-    this.users = await getAllUsers();
+    this.users = await user_getAllUsers();
   },
   updated() {},
   components: {},

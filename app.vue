@@ -20,16 +20,16 @@
           <v-card-actions>
             <v-row justify="center" class="ma-0">
               <v-btn
-                @click="getPortalSession"
+                @click="user_getPortalSession"
                 class="text-decoration-underline"
-                color="deep-purple"
+                color="purple-lighten-2"
               >
                 Customer portal
               </v-btn>
               <v-btn
                 @click="signOut"
                 class="text-decoration-underline"
-                color="deep-purple"
+                color="purple-lighten-2"
                 flat
               >
                 Signout
@@ -40,15 +40,15 @@
       </v-col>
     </v-row>
   </v-app>
-  <v-app v-else-if="user !== null">
+  <v-app v-else-if="user !== null" :class="mobile ? 'mt-16' : ''">
     <Header />
     <NuxtPage />
     <overlay-alert />
     <Footer />
   </v-app>
   <v-app v-else>
-    <loading-container :lines="1" :vh="mobile ? '10' : '5'" />
-    <loading-container :lines="1" :vh="mobile ? '90' : '95'" />
+    <loading-container :lines="1" vh='7' />
+    <loading-container :lines="1" vh='93' />
   </v-app>
 </template>
 
@@ -84,6 +84,21 @@ html {
   width: 100%;
 }
 
+.v-icon.fa-solid,
+.v-icon.fa-brands {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-square-check {
+  color: green;
+}
+
+.fa-square-xmark {
+  color: #B00020;
+}
+
 .grecaptcha-badge {
   visibility: hidden;
 }
@@ -106,7 +121,7 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #b0b0b0;
+  background: #424242;
   border-radius: 7px;
   width: 7px;
   border: 1px solid transparent;
@@ -129,7 +144,7 @@ export default {
       },
     });
     const signOut = async () => {
-      const result = await signOutUser();
+      const result = await firebase_signOutUser();
     };
     const store = useMainStore();
     return {
@@ -139,9 +154,7 @@ export default {
   },
   name: 'App page',
   data() {
-    return {
-      mobile: true,
-    };
+    return {};
   },
   computed: {
     user() {
@@ -149,17 +162,20 @@ export default {
     },
     expired() {
       return this.store.getExpired;
+    },
+    mobile() {
+      return this.store.getMobile;
     }
   },
   methods: {
     onResize() {
-      this.mobile = window.innerWidth < 850;
+      this.store.setMobile();
     },
   },
   async mounted() {
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
-    const res = await getPlans();
+    const res = await plans_getPlans();
     if (res.success) {
       this.store.setPlans(res.data.stripe_plans);
       this.store.setCurrencies(res.data.stripe_currencies);

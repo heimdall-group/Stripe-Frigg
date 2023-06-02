@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (user === null) {
     return;
   }
-  if (await stepRedirectValidation()) {
+  if (await middleware_stepRedirectValidation()) {
     return navigateTo(`/register/step-${user.step}`);
   }
 })

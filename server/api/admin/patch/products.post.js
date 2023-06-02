@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   try {
     const user = await getAuth().verifyIdToken(token);
     if (user) {
-      const data = await $fetch('/api/plans/getPlans', {
+      const data = await $fetch('/api/plans/get/plans', {
         method: 'POST',
         body: {
           token: token,

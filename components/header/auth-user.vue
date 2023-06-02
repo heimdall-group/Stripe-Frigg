@@ -14,7 +14,7 @@
       <v-list-item
         v-if="!mobile"
         class="my-2 pl-0"
-        title="Dashboard Drawer"
+        title="Project title"
         prepend-icon="fa-solid fa-bars"
       ></v-list-item>
       <v-list-item 
@@ -30,18 +30,6 @@
     </v-list>
     <template v-slot:append>
       <v-list>
-        <v-list-item rounded class="text-subtitle pl-0" prepend-icon="empty">
-          <v-btn
-            nuxt
-            color="transparent"
-            to="/privacy-policy"
-            rounded
-            width="100%"
-            flat
-          >
-            Privacy Policy
-          </v-btn>
-        </v-list-item>
         <v-list-item rounded class="pl-0" prepend-icon="fa-solid fa-right-from-bracket">
           <v-btn rounded width="100%" flat @click="signOut"> Logout </v-btn>
         </v-list-item>
@@ -50,28 +38,9 @@
   </v-navigation-drawer>
 
   <!-- Mobile Auth Toolbar -->
-  <v-app-bar v-if="mobile" color="primary" location="bottom">
-    <v-row justify="space-around" class="px-4">
-      <v-btn
-        v-for="(link, index) in mobile_links"
-        :key="index"
-        nuxt
-        :to="link.to"
-        rounded
-        flat
-        size="small"
-      >
-        <font-awesome-icon :icon="link.icon" />
-      </v-btn>
-      <v-btn
-        @click="mobile_sub_menu = !mobile_sub_menu"
-        rounded
-        flat
-        size="small"
-      >
-        <font-awesome-icon icon="fa-solid fa-bars" />
-      </v-btn>
-    </v-row>
+  <v-app-bar v-if="mobile" :flat="flat" color="primary" class="justify-end">
+      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon @click="mobile_sub_menu = !mobile_sub_menu" icon="fa-solid fa-bars"></v-app-bar-nav-icon>
   </v-app-bar>
 
   <!-- Mobile Auth Drawer -->
@@ -83,11 +52,6 @@
     v-model="mobile_sub_menu"
   >
     <v-list>
-      <v-list-item
-        title="Dashboard Drawer"
-        class="my-2"
-        prepend-icon="fa-solid fa-bars"
-      ></v-list-item>
       <v-list-item v-for="(link, index) in links" :key="index" rounded  class="my-2">
         <v-btn nuxt :to="link.to" rounded flat width="100%">
           {{ link.title }}
@@ -96,29 +60,6 @@
     </v-list>
     <template v-slot:append>
       <v-list>
-        <v-list-item>
-          <v-select
-            :items="currencies"
-            v-model="currency"
-            @update:modelValue="changeHandler"
-            variant="filled"
-            menuIcon="mdi: mdi-menu-up"
-          >
-          </v-select>
-        </v-list-item>
-        <v-list-item rounded class="text-subtitle">
-          <v-btn
-            nuxt
-            class="text-subtitle"
-            color="transparent"
-            to="/privacy-policy"
-            rounded
-            width="100%"
-            flat
-          >
-            Privacy Policy
-          </v-btn>
-        </v-list-item>
         <v-list-item rounded>
           <v-btn rounded width="100%" flat @click="signOut"> Logout </v-btn>
         </v-list-item>
@@ -134,7 +75,7 @@ export default {
   setup() {
     const store = useMainStore();
     const signOut = async () => {
-      const result = await signOutUser();
+      const result = await firebase_signOutUser();
     };
 
     return { store, signOut };
@@ -143,30 +84,30 @@ export default {
   data() {
     return {
       links: [
+      {
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
+        },
         {
           to: '/',
-          title: 'Overview',
-          icon: 'fa-solid fa-table',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/stocks',
-          title: 'Stocks',
-          icon: 'fa-solid fa-arrow-trend-up',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/real-estate',
-          title: 'Real estate',
-          icon: 'fa-solid fa-house-chimney',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/e-commerce',
-          title: 'E-commerce',
-          icon: 'fa-solid fa-basket-shopping',
-        },
-        {
-          to: '/plans',
-          title: 'Plans',
-          icon: 'fa-solid fa-layer-group',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
           to: '/profile',
@@ -177,23 +118,23 @@ export default {
       mobile_links: [
         {
           to: '/',
-          title: 'Overview',
-          icon: 'fa-solid fa-table',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/stocks',
-          title: 'Stocks',
-          icon: 'fa-solid fa-arrow-trend-up',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/real-estate',
-          title: 'Real estate',
-          icon: 'fa-solid fa-house-chimney',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
-          to: '/e-commerce',
-          title: 'E-commerce',
-          icon: 'fa-solid fa-basket-shopping',
+          to: '/',
+          title: '',
+          icon: 'fa-solid fa-house',
         },
         {
           to: '/profile',
@@ -211,6 +152,10 @@ export default {
       required: true,
       type: Boolean,
     },
+    flat: {
+      required: true,
+      type: Boolean,
+    }
   },
   computed: {
     store_currencies() {
@@ -222,7 +167,6 @@ export default {
   },
   methods: {
     changeHandler() {
-      console.log('this.changeHandler')
       this.store.setCurrency(this.currency)
     },
   },

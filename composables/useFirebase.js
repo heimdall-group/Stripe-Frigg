@@ -5,89 +5,134 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  updateProfile,
+  signInWithPopup,
+  reauthenticateWithPopup,
   EmailAuthProvider,
+  GoogleAuthProvider,
   reauthenticateWithCredential,
+  sendEmailVerification,
+  getAdditionalUserInfo,
 } from 'firebase/auth';
 
-export const createUser = async (
+export const firebase_password_createUser = async (
   username,
-  email,
-  password,
-  number,
-  dateOfBirth
+  mail,
+  password
 ) => {
-  const store = useMainStore();
   const auth = getAuth();
-  const credentials = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  )
-    .then(async () => {
-      updateProfile(auth.currentUser, { displayName: username, step: 2 });
-      store.setUser(auth.currentUser);
-      const user_res = await $fetch('/api/register/addUser', {
-        method: 'POST',
-        body: JSON.stringify({
-          id: auth.currentUser.uid,
-          username: username,
-          number: number,
-          dateOfBirth: dateOfBirth,
-          token: await auth.currentUser.getIdToken(),
-        }),
-      });
-      const customer_res = await $fetch('/api/register/addCustomerID', {
-        method:'POST',
-        body: {
-          token: await auth.currentUser.getIdToken(),
-        }
-      });
-      if (user_res.success && customer_res.success) {
-        alert_registerSuccess();
-        const res = await getUser();
-        reloadMiddleware();
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((error) => {
-      return error;
-    });
-  return credentials;
-};
-
-export const verifyPassword = async (pwd) => {
-  const store = useMainStore();
-  const user = store.getUser;
   try {
-    const credential = EmailAuthProvider.credential(user.email, pwd);
-    const res = await reauthenticateWithCredential(user, credential);
-    return res.user.uid === user.uid;
-  } catch (err) {
-    return err;
-  }
-};
-
-export const signInUser = async (email, password) => {
-  const store = useMainStore();
-  const auth = getAuth();
-  const router = useRouter();
-  try {
-    const res = await signInWithEmailAndPassword(auth, email, password);
-    await router.push('/');
-    store.setUser(res.user);
-    alert_loginSuccess();
-    const userRes = await getUser();
-    reloadMiddleware(); 
-    return true;
+    const result = await createUserWithEmailAndPassword(auth, mail, password);
+    const { uid, email } = result.user;
+    firebase_userCreated(username, uid, email);
+    return {
+      data: true,
+      success: true,
+    };
   } catch (error) {
-    return error;
+    firebase_handleError(error);
+    return {
+      data: false,
+      success: false,
+      message: 'Firebase Catch Error',
+      code: 400,
+    };
   }
 };
 
-export const initUser = async () => {
+export const firebase_password_signInUser = async (email, password) => {
+  const auth = getAuth();
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    firebase_userSignedIn();
+    return {
+      data: true,
+      success: true,
+    };
+  } catch (error) {
+    firebase_handleError(error);
+    return {
+      data: false,
+      success: false,
+      message: 'Firebase Catch Error',
+      code: 400,
+    };
+  }
+};
+
+export const firebase_google_createUser = async () => {
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const { uid, email, displayName } = result.user;
+    const { isNewUser } = getAdditionalUserInfo(result);
+    if (isNewUser) {
+      firebase_userCreated(displayName, uid, email);
+    } else {
+      firebase_userSignedIn();
+    }
+    return {
+      data: true,
+      success: true,
+    };
+  } catch (error) {
+    firebase_handleError(error);
+    return {
+      data: false,
+      success: false,
+      message: 'Firebase Catch Error',
+      code: 400,
+    };
+  }
+};
+
+export const firebase_userCreated = async (username, uid, email) => {
+  const auth = getAuth();
+  const store = useMainStore();
+  store.setUser(auth.currentUser);
+  const user_res = await $fetch('/api/register/add/user', {
+    method: 'POST',
+    body: JSON.stringify({
+      uid: uid,
+      email: email,
+      username: username,
+      token: await auth.currentUser.getIdToken(),
+    }),
+  });
+  const customer_res = await $fetch('/api/register/add/customerID', {
+    method: 'POST',
+    body: {
+      token: await auth.currentUser.getIdToken(),
+    },
+  });
+  if (user_res.success && customer_res.success) {
+    if (!auth.currentUser.emailVerified) {
+      alert_verifyEmail();
+    }
+    alert_registerSuccess();
+    const res = await user_getUser();
+    reloadMiddleware();
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const firebase_userSignedIn = async () => {
+  const auth = getAuth();
+  const store = useMainStore();
+  const router = useRouter();
+  await router.push('/');
+  store.setUser(auth.currentUser);
+  if (!auth.currentUser.emailVerified) {
+    alert_verifyEmail();
+  }
+  alert_loginSuccess();
+  const userRes = await user_getUser();
+  reloadMiddleware();
+};
+
+export const firebase_initUser = async () => {
   const store = useMainStore();
   const auth = getAuth();
   const subscribe = onAuthStateChanged(auth, async (user) => {
@@ -96,15 +141,18 @@ export const initUser = async () => {
       subscribe();
     } else {
       store.setUser(user);
+      if (!user.emailVerified) {
+        alert_verifyEmail();
+      }
       alert_loginSuccess();
-      const res = await getUser();
+      const res = await user_getUser();
       reloadMiddleware();
       subscribe();
     }
   });
 };
 
-export const signOutUser = async () => {
+export const firebase_signOutUser = async () => {
   const store = useMainStore();
   const auth = getAuth();
   signOut(auth)
@@ -113,8 +161,154 @@ export const signOutUser = async () => {
       store.setExpired(false);
       const router = useRouter();
       router.push('/');
+      resetAlert();
+      alert_signoutSuccess();
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      firebase_handleError(error);
     });
+};
+
+export const firebase_verifyEmail = async (alert) => {
+  const store = useMainStore();
+  const user = store.getUser;
+  store.patchAlerts(alert);
+  try {
+    const result = await sendEmailVerification(user);
+  } catch (error) {
+    console.error(error);
+    const { errorCode, errorMessage } = error;
+  }
+};
+
+export const firebase_verifyPassword = async (pwd) => {
+  const store = useMainStore();
+  const user = store.getUser;
+  try {
+    const credential = EmailAuthProvider.credential(user.email, pwd);
+    const result = await reauthenticateWithCredential(user, credential);
+    return {
+      data: true,
+      success: true,
+    }
+  } catch (error) {
+    firebase_handleError(error);
+    return {
+      data: false,
+      success: false,
+      message: 'Firebase Catch Error',
+      code: 400,
+    };
+  }
+};
+
+export const firebase_reauthenticateProvider = async () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  const { providerId } = user.providerData[0];
+  try {
+    let provider;
+    switch (providerId) {
+      case 'google.com':
+        provider = new GoogleAuthProvider;
+        break;
+      case 'apple.com':
+        break;
+      case 'facebook.com':
+        break;
+      case 'twitter.com':
+        break;
+
+      default:
+        return {
+          data: false,
+          success: false,
+          message: 'Provider not supported',
+          code: 400,
+        };
+        break;
+    }
+    try {
+      const result = await reauthenticateWithPopup(user, provider);
+      return {
+        data: true,
+        success: true,
+      }
+    } catch (error) {
+      firebase_handleError(error);
+      return {
+        data: false,
+        success: false,
+        message: 'Firebase Catch Error',
+        code: 400,
+      };
+    }
+  } catch (err) {
+    firebase_handleError(error);
+    return {
+      data: false,
+      success: false,
+      message: 'Firebase Catch Error',
+      code: 400,
+    };
+  }
+};
+
+export const firebase_handleError = async (error) => {
+  const { code } = error;
+  switch (code) {
+    case 'auth/weak-password':
+      alert_firebase_weakPassword();
+      break;
+    case 'auth/wrong-password':
+      alert_firebase_wrongPassword();
+      break;
+    case 'auth/email-already-in-use':
+      alert_firebase_emailAlreadyInUse();
+      break;
+    case 'auth/popup-closed-by-user':
+      alert_firebase_popupClosedByUser();
+      break;
+    case 'auth/popup-blocked':
+      alert_firebase_popupBlocked();
+      break;
+    case 'auth/popup-request-cancelled':
+      alert_firebase_popupRequestCancelled();
+      break;
+    case 'auth/user-not-found':
+      alert_firebase_userNotFound();
+      break;
+    case 'auth/user-disabled':
+      alert_firebase_userDisabled();
+      break;
+    case 'auth/user-mismatch':
+      alert_firebase_userMismatch();
+      break;
+    default:
+      console.error(error)
+      alert_firebase_defaultStatus(code);
+      break;
+  }
+};
+
+export const firebase_getProviderIcon = (provider) => {
+  let icon;
+  switch (provider) {
+    case 'password':
+      icon = 'fa-solid fa-envelope-circle-check';
+      break;
+    case 'google.com':
+      icon = 'fa-brands fa-google';
+      break;
+    case 'apple.com':
+      icon = 'fa-brands fa-apple';
+      break;
+    case 'facebook.com':
+      icon = 'fa-brands fa-facebook';
+      break;
+    case 'twitter.com':
+      icon = 'fa-brands fa-twitter';
+      break;
+  }
+  return icon;
 };

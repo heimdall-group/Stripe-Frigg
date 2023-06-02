@@ -1,20 +1,6 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <h1>Portfolio value: {{ this.stocks.Apple.value * 5 }}</h1>
-      </v-col>
-    </v-row>
-    <v-row no-gutters v-for="(stock, index) in stocks" :key="index">
-        {{index}}: {{ stock.stocks }}
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-btn @click="getStockData()">Stock data</v-btn>
-        <v-btn @click="signOut()">Sign Out</v-btn>
-        <v-btn @click="getPortalSession">Customer Portal</v-btn>
-      </v-col>
-    </v-row>
+    dashboard
   </v-container>
 </template>
 
@@ -34,38 +20,21 @@ export default {
   },
   name: 'dashboardPage',
   data() {
-    return {
-      stocks: {
-        Apple: {
-          value: 0,
-          stocks: 5
-        },
-        Tesla: {
-          value: 0,
-          stocks: 10
-        },
-      }
-
-    };
+    return {};
   },
   computed: {
     user() {
       return this.store.getUser;
     },
     profile() {
-      return this.store.getProfile
+      return this.store.get/profile
     }
   },
   methods: {
     async signOut() {
       await navigateTo('/')
-      signOutUser()
+      firebase_signOutUser()
     },
-    getStockData() {
-        this.client.quote({symbol: "AAPL"}).then((res) => {
-          this.stocks.Apple.value = res.latestPrice
-        });
-    }
   },
   mounted() {},
   updated() {},
