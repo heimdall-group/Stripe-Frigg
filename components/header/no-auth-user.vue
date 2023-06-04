@@ -118,10 +118,6 @@ export default {
     };
   },
   props: {
-    mobile: {
-      required: true,
-      type: Boolean,
-    },
     flat: {
       required: true,
       type: Boolean,
@@ -133,6 +129,9 @@ export default {
     },
     store_currency() {
       return this.store.getCurrency;
+    },
+    mobile() {
+      return this.store.getMobile;
     }
   },
   methods: {

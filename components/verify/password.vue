@@ -1,5 +1,5 @@
 <template>
-    <v-dialog transition="dialog-bottom-transition" width="auto" v-model="dialog">
+    <v-dialog transition="dialog-bottom-transition" width="auto" v-model="password_dialog">
       <template v-slot:activator="{ props }">
         <v-btn :disabled="disabled" flat :color="color" @click="clickHandler" >{{ text }}</v-btn>
       </template>
@@ -12,16 +12,8 @@
             Password verification
           </v-card-title>
           <v-form class="pb-4" @submit="passwordHandler">
-            <v-text-field
-              label="Password"
-              type="password"
-              v-model="pwd"
-              variant="outlined"
-              :rules="[
-                this.store.verify_requiredRule, 
-                this.store.verify_LengthRule
-              ]"
-            ></v-text-field>
+            <form-password :origin="pwd" @onInput="(prop) => this.pwd = prop" />
+              {{ color_2 }}
             <v-btn flat type="submit" :color="color_2">Continue</v-btn>
           </v-form>
         </v-card>
@@ -29,7 +21,7 @@
     <v-dialog  transition="dialog-bottom-transition" width="auto" v-model="provider_dialog">
       <v-card
           width="400px"
-          class="pa-4 px-8 ma-4"
+          class="pa-4 pb-6 px-8 ma-4"
           rounded="xl"
         >
           <v-card-title class="text-center">
@@ -58,7 +50,7 @@ export default {
         status: false,
         message: 'Incorrect password.',
       },
-      dialog: false,
+      password_dialog: false,
       provider_dialog: false,
     };
   },
@@ -105,23 +97,23 @@ export default {
         if (result.success) {
           this.callback();
         }
-        this.dialog = false;
+        this.password_dialog = false;
         this.pwd = '';
       }
     },
     async providerHandler() {
       const result = await firebase_reauthenticateProvider();
-        if (result.success) {
-          this.callback();
-        }
-        this.dialog = false;
-        this.provider_dialog = false;
+      if (result.success) {
+        this.callback();
+      }
+      this.password_dialog = false;
+      this.provider_dialog = false;
     },  
     async clickHandler() {
       const { providerId } = this.user.providerData[0];
       switch (providerId) {
         case 'password': 
-          this.dialog = true;
+          this.password_dialog = true;
           break
         default:
           this.provider_dialog = true;

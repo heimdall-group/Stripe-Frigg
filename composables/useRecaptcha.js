@@ -7,13 +7,13 @@ export const recaptcha_getToken = async () => {
 
 export const recaptcha_verification = async (callback, error) => {
   const token = await recaptcha_getToken();
-  const res = await $fetch('/api/verify/recaptcha', {
+  const result = await $fetch('/api/verify/recaptcha', {
     method: 'POST',
     body: {
       token: token,
     },
   });
-  if (res.success) {
+  if (result.success) {
     callback();
   } else {
     error();

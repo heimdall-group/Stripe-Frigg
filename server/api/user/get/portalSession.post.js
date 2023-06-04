@@ -6,10 +6,10 @@ const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
 export default defineEventHandler(async (event) => {
   const { token, return_url } = await readBody(event);
-  const res = await getAuth().verifyIdToken(token);
+  const result = await getAuth().verifyIdToken(token);
   try {
-    if (res) {
-      const { stripe_customerID } = await Users.findOne({user_uid: res.uid});
+    if (result) {
+      const { stripe_customerID } = await Users.findOne({user_uid: result.uid});
       const { url } = await stripe.billingPortal.sessions.create({
         customer: stripe_customerID,
         return_url: return_url,

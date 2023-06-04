@@ -19,7 +19,7 @@ env.config();
     })();
 
     try {
-      const res = await Users.updateMany({stripe_expires_at: date}, {stripe_status: 'expired', stripe_expires_at: '0'})
+      const result = await Users.updateMany({stripe_expires_at: date}, {stripe_status: 'expired', stripe_expires_at: '0'})
     } catch (err) {
 
     }

@@ -3,10 +3,10 @@ import Users from "~~/server/models/user";
 
 export default defineEventHandler(async (event) => {
 	const { token } = await readBody(event);
-  const res = await getAuth().verifyIdToken(token);
+  const result = await getAuth().verifyIdToken(token);
   try {
-    if (res) {
-      const document = await Users.findOne({user_uid: res.uid});
+    if (result) {
+      const document = await Users.findOne({user_uid: result.uid});
       return {
         data: document.user_ranks,
         success: true,

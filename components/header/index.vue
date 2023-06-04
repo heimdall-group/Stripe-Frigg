@@ -1,7 +1,7 @@
 <template>
   <v-container v-scroll="onScroll" fluid color="primary" class="pa-0 header">
-    <header-auth-user :flat="flat" v-if="user" :mobile="mobile"></header-auth-user>
-    <header-no-auth-user :flat="flat" v-else :mobile="mobile"></header-no-auth-user>
+    <header-auth-user :flat="flat" v-if="user"></header-auth-user>
+    <header-no-auth-user :flat="flat" v-else></header-no-auth-user>
   </v-container>
 </template>
 

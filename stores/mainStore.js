@@ -105,6 +105,10 @@ export const useMainStore = defineStore('MainStore', {
         ? true
         : 'Password length needs to be atleast 6 characters';
     },
+    verify_numberRule: (value) => {
+      const pattern = /^\+[1-9]\d{10,14}$/
+      return pattern.test(value) ? true : 'Invalid phone number'
+    },
     verify_validateRequired(arr) {
       for (let i = 0; i < arr.length; i++) {
         const item = arr[i];

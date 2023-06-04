@@ -243,14 +243,14 @@ export default {
     },
     async callback(event) {
       event.preventDefault();
-      const res = await $fetch('api/admin/patch/userRanks', {
+      const result = await $fetch('api/admin/patch/userRanks', {
         method: 'POST',
         body: {
           token: await this.store_user.getIdToken(),
           changes: this.changes,
         },
       });
-      if (res.success) {
+      if (result.success) {
         for (let i = 0; i < this.users.length; i++) {
           let {localRanks} = this.users[i];
           this.users[i].ranks = localRanks;

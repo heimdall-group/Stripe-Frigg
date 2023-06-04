@@ -110,7 +110,7 @@ export const firebase_userCreated = async (username, uid, email) => {
       alert_verifyEmail();
     }
     alert_registerSuccess();
-    const res = await user_getUser();
+    const result = await user_getUser();
     reloadMiddleware();
     return true;
   } else {
@@ -145,7 +145,7 @@ export const firebase_initUser = async () => {
         alert_verifyEmail();
       }
       alert_loginSuccess();
-      const res = await user_getUser();
+      const result = await user_getUser();
       reloadMiddleware();
       subscribe();
     }
@@ -221,7 +221,7 @@ export const firebase_reauthenticateProvider = async () => {
 
       default:
         return {
-          data: false,
+          data: providerId,
           success: false,
           message: 'Provider not supported',
           code: 400,

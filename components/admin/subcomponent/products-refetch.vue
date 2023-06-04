@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async callback() {
-      const res = await $fetch('api/admin/patch/products', {
+      const result = await $fetch('api/admin/patch/products', {
         method: 'POST',
         body: {
           token: await this.user.getIdToken(),

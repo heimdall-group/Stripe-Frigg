@@ -175,10 +175,10 @@ export default {
   async mounted() {
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
-    const res = await plans_getPlans();
-    if (res.success) {
-      this.store.setPlans(res.data.stripe_plans);
-      this.store.setCurrencies(res.data.stripe_currencies);
+    const result = await plans_getPlans();
+    if (result.success) {
+      this.store.setPlans(result.data.stripe_plans);
+      this.store.setCurrencies(result.data.stripe_currencies);
     }
   },
   updated() {},

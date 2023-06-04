@@ -7,10 +7,10 @@ export default defineEventHandler(async (event) => {
   if (!secret) {
     return 'Internal error';
   }
-  const res = await $fetch(
+  const result = await $fetch(
     `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
   );
-  if (res.success) {
+  if (result.success) {
     return {
       data: true,
       success: true,

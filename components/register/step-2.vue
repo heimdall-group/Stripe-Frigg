@@ -240,7 +240,7 @@ export default {
       }
     },
     async planButtonHandler(plan) {
-      const res = await $fetch('/api/user/get/checkout', {
+      const result = await $fetch('/api/user/get/checkout', {
         method: 'POST',
         body: {
           token: await this.user.getIdToken(),
@@ -248,8 +248,8 @@ export default {
             plan.prices[this.currency][this.annual ? 'monthly' : 'annual'].id,
         },
       });
-      if(res.success) {
-        window.location = res.data
+      if(result.success) {
+        window.location = result.data
       }
     },
   },

@@ -6,7 +6,7 @@
           <form-email :origin="email" :disabled="disabled" @onInput="(prop) => (this.email = prop)" />
           <form-name :origin="name" @onInput="(prop) => (this.name = prop)" />
           <form-number :origin="number" @onInput="(prop) => (this.number = prop)" />
-          <verify-password :disabled="!changes" color_2="success" :callback="updateProfile" color="success" text="Save"></verify-password>
+          <verify-password :disabled="!changes" color_2="" :callback="updateProfile" color="success" text="Save"></verify-password>
         </v-form>
         <v-card class="pa-6 my-6">
           <v-row>
@@ -101,15 +101,15 @@ export default {
     },
   },
   async mounted() {
-    const res = await user_getUserProfile();
-    if (res.success) {
+    const result = await user_getUserProfile();
+    if (result.success) {
       const {
         user_email,
         user_number,
         user_name,
         user_provider,
         email_verified,
-      } = res.data;
+      } = result.data;
       this.email = user_email;
       this.number = user_number || '';
       this.name = user_name || '';

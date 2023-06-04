@@ -6,10 +6,10 @@ const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
 export default defineEventHandler(async (event) => {
   const {priceID, token} = await readBody(event);
-  const res = await getAuth().verifyIdToken(token);
-  const user = await Users.findOne({user_uid: res.uid});
+  const result = await getAuth().verifyIdToken(token);
+  const user = await Users.findOne({user_uid: result.uid});
   try {
-    if (res) {
+    if (result) {
       const prices = await stripe.prices.retrieve(priceID);
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card',],

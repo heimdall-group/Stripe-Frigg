@@ -73,7 +73,7 @@ export default {
       if (this.pwd === this.pwdRepeat) {
         this.loading = true;
         const callback = async () => {
-          const res = await firebase_password_createUser(
+          const result = await firebase_password_createUser(
             this.name,
             this.email,
             this.pwd,

@@ -6,10 +6,10 @@ const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
 export default defineEventHandler(async (event) => {
   const { token } = await readBody(event);
-  const res = await getAuth().verifyIdToken(token);
+  const result = await getAuth().verifyIdToken(token);
 
-  if (res) {
-    const { user_ranks } = await Users.findOne({user_uid: res.uid});
+  if (result) {
+    const { user_ranks } = await Users.findOne({user_uid: result.uid});
     if (user_ranks.includes('Admin')) {
       try {
         const arr = [];

@@ -66,7 +66,7 @@ export default {
   methods: {
     async providerHandler(provider) {
       provider.loading = true;
-      const res = await provider.callback();
+      const result = await provider.callback();
       provider.loading = false;
     },
   },

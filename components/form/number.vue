@@ -1,9 +1,11 @@
 <template>
   <v-text-field
     v-model="text"
-    label="Number (Optional)"
+    label="Phone Number"
     variant="solo"
-    type="text"
+    :rules="[
+      this.store.verify_numberRule,
+    ]"
     @input="onInput"
   ></v-text-field>
 </template>

@@ -21,11 +21,11 @@ const port = process.env.SERVICES_WEBHOOKS_PORT;
 const app = express();
 const stripe = Stripe(stripe_api_key);
 
-app.use((req, res, next) => {
+app.use((req, result, next) => {
     if (req.originalUrl === '/stripe') {
       next();
     } else {
-      express.json()(req, res, next);
+      express.json()(req, result, next);
     }
   }
 );
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
   }
 }());
 
-app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
+app.post('/stripe',express.raw({ type: 'application/json' }), (req, result) => {
     let event = req.body;
     if (stripe_webhook_secret) {
       const signature = req.headers['stripe-signature'];
@@ -51,7 +51,7 @@ app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
         );
       } catch (err) {
         console.log(`⚠️  Webhook signature verification failed.`, err.message);
-        return res.sendStatus(400);
+        return result.sendStatus(400);
       }
     }
 
@@ -96,7 +96,7 @@ app.post('/stripe',express.raw({ type: 'application/json' }), (req, res) => {
       stripe_handleInvoiceFailed(subscription, customer);
       break;
   }
-    res.send();
+    result.send();
   }
 );
 

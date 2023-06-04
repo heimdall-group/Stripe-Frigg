@@ -6,13 +6,13 @@ const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
 export default defineEventHandler(async (event) => {
   const { token } = await readBody(event);
-  const res = await getAuth().verifyIdToken(token);
+  const result = await getAuth().verifyIdToken(token);
   try {
-    if (res) {
+    if (result) {
       const customer = await stripe.customers.create({
-        email: res.email,
+        email: result.email,
       });
-      const document = await Users.findOneAndUpdate({user_uid: res.uid}, {stripe_customerID: customer.id})
+      const document = await Users.findOneAndUpdate({user_uid: result.uid}, {stripe_customerID: customer.id})
       document.save();
       return {
         data: true,

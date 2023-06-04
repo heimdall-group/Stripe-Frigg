@@ -81,15 +81,20 @@ export default {
       return this.store.getMobile;
     }
   },
+  watch: {
+    store_currencies() {
+      this.currencies = this.store_currencies;
+    },
+    store_currency() {
+      this.currency = this.store_currency;
+    },
+  },
   methods: {
     changeHandler() {
       this.store.setCurrency(this.currency)
     },
   },
-  mounted() {
-    this.currency = this.store_currency;
-    this.currencies = this.store_currencies;
-  },
+  mounted() {},
   updated() {},
   components: {},
   emits: [],

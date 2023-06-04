@@ -1,16 +1,17 @@
 import { useMainStore } from "~/stores/mainStore"
+import { updateProfile } from "firebase/auth";
 
 export const user_updateStep = async (newStep) => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/register/patch/step', {
+  const result = await $fetch('/api/register/patch/step', {
     method: 'POST',
     body: {
       step: newStep,
       token: await user.getIdToken(),
     }
   })
-  if (res.success) {
+  if (result.success) {
     store.setUserStep(newStep);
   }
 }
@@ -18,19 +19,19 @@ export const user_updateStep = async (newStep) => {
 export const user_getUser = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/user/get/user', {
+  const result = await $fetch('/api/user/get/user', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
     }
   });
-  if (res.success) {
-    if (res.data.expires) {
-      store.setUserExpires(res.data.expires);
-      store.setUserStatus(res.data.stripe_status, res.data.expires);
+  if (result.success) {
+    if (result.data.expires) {
+      store.setUserExpires(result.data.expires);
+      store.setUserStatus(result.data.stripe_status, result.data.expires);
     } else {
-      store.setUserStep(res.data.register_step);
-      store.setUserStatus(res.data.stripe_status);
+      store.setUserStep(result.data.register_step);
+      store.setUserStatus(result.data.stripe_status);
     }
   }
 }
@@ -38,19 +39,19 @@ export const user_getUser = async () => {
 export const user_getUserProfile = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/user/get/userProfile', {
+  const result = await $fetch('/api/user/get/userProfile', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
     }
   });
-  return res;
+  return result;
 }
 
 export const user_patchUserProfile = async (number, name) => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/user/patch/userProfile', {
+  const result = await $fetch('/api/user/patch/userProfile', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
@@ -58,20 +59,20 @@ export const user_patchUserProfile = async (number, name) => {
       user_username: name,
     }
   });
-  return res;
+  return result;
 }
 
 export const user_getUserRanks = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/user/get/userRanks', {
+  const result = await $fetch('/api/user/get/userRanks', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
     }
   });
-  if (res.success) {
-    return res.data;
+  if (result.success) {
+    return result.data;
   } else {
     return [];
   }
@@ -81,29 +82,29 @@ export const user_getUserRanks = async () => {
 export const user_getAllUsers = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/admin/get/allUsers', {
+  const result = await $fetch('/api/admin/get/allUsers', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
     }
   });
-  if (res.success) {
-    return res.data;
+  if (result.success) {
+    return result.data;
   }
 }
 
 export const user_getPortalSession = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const res = await $fetch('/api/user/get/portalSession', {
+  const result = await $fetch('/api/user/get/portalSession', {
     method: 'POST',
     body: {
       token: await user.getIdToken(),
       return_url: location.href,
     }
   });
-  if(res.success) {
-    window.location = res.data;
+  if(result.success) {
+    window.location = result.data;
   }
 }
 

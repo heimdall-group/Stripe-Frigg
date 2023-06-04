@@ -1,23 +1,22 @@
-import { getAuth } from 'firebase-admin/auth';
 import Users from "~~/server/models/user";
+import { getAuth } from "firebase-admin/auth";
 
 export default defineEventHandler(async (event) => {
-	const { token } = await readBody(event);
+	let { token, user_number, user_username } = await readBody(event);
+  console.log('patch/userProfile')
   const auth = await getAuth();
   const result = await auth.verifyIdToken(token);
   const uid = result.uid;
   try {
     if (result) {
-      const document = await Users.findOne({user_uid: uid});
-      const result = await auth.getUser(uid);
+      const document = await Users.findOneAndUpdate({user_uid: uid}, {
+        user_number: user_number,  
+      })
+      const result = await auth.updateUser(uid ,{
+        displayName: user_username === '' ? null : user_username,
+      })
       return {
-        data: {
-          user_email: document.user_email,
-          user_number: document.user_number,
-          user_name: result.displayName,
-          user_provider: result.providerData[0].providerId,
-          email_verified: result.emailVerified
-        },
+        data: true,
         success: true,
       }
     } else {

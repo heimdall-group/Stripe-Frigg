@@ -3,10 +3,9 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema(
   {
     user_uid: String,
-    user_username: String,
     user_email: String,
-    user_ranks: Array,
     user_number: String,
+    user_ranks: Array,
     register_step: String,
     stripe_plan: Object,
     stripe_plan_name: String,
