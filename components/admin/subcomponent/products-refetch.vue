@@ -8,7 +8,7 @@
     <v-card-subtitle class="text-center">Sync products from Stripe to server</v-card-subtitle>
     <v-card-actions>
       <v-row justify="center">
-        <verify-password color="" color_2="success" :callback="callback" text="Refetch products" />
+        <verify-password color="" color_2="" :callback="callback" text="Refetch products" />
       </v-row>
     </v-card-actions>
   </v-card>
@@ -53,8 +53,8 @@ export default {
   },
   methods: {
     async callback() {
-      const result = await $fetch('api/admin/patch/products', {
-        method: 'POST',
+      const result = await $fetch('api/admin/products', {
+        method: 'PUT',
         body: {
           token: await this.user.getIdToken(),
         }

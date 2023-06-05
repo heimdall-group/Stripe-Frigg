@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { getAuth } from 'firebase-admin/auth';
 import Users from "~~/server/models/user";
+import Plans from '~/server/models/plans';
 
 const stripe = new Stripe(useRuntimeConfig().stripe_secret);
 
@@ -61,10 +62,24 @@ export default defineEventHandler(async (event) => {
             ).toLocaleString('sv', { style: 'currency', currency: currency });
           }
         }
-        return {
-          data: arr.reverse(),
-          success: true,
-        };
+        arr.reverse();
+        const currencies = Object.keys(arr[0].prices);
+        const document = await Plans.findOneAndUpdate({plan_id: 1}, {stripe_plans: arr, stripe_currencies: currencies});
+        if (document == null) {
+          const document = await new Plans({stripe_plans: arr, plan_id: 1, stripe_currencies: currencies})
+          if (document !== null) {
+            document.save();
+            return {
+              data: true,
+              success: true,
+            }
+          }
+        } else {
+          return {
+            data: true,
+            success: true,
+          }
+        }
       } catch (err) {
         console.log(err);
         return {

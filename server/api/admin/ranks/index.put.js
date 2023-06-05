@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
         for (const key in changes) {
           const change = changes[key];
           const document = await Users.findOneAndUpdate({user_uid: key}, {user_ranks: change.to});
-          document.save();
+          await document.save();
         }
       } catch (err) {
         console.log(err)

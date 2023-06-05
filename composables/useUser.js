@@ -1,11 +1,10 @@
 import { useMainStore } from "~/stores/mainStore"
-import { updateProfile } from "firebase/auth";
 
 export const user_updateStep = async (newStep) => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/register/patch/step', {
-    method: 'POST',
+  const result = await $fetch('/api/users/register', {
+    method: 'PUT',
     body: {
       step: newStep,
       token: await user.getIdToken(),
@@ -19,11 +18,8 @@ export const user_updateStep = async (newStep) => {
 export const user_getUser = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/user/get/user', {
-    method: 'POST',
-    body: {
-      token: await user.getIdToken(),
-    }
+  const result = await $fetch(`/api/users/user/${await user.getIdToken()}`, {
+    method: 'GET',
   });
   if (result.success) {
     if (result.data.expires) {
@@ -39,11 +35,9 @@ export const user_getUser = async () => {
 export const user_getUserProfile = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/user/get/userProfile', {
-    method: 'POST',
-    body: {
-      token: await user.getIdToken(),
-    }
+  const result = await $fetch(`/api/users/user/profile/${await user.getIdToken()}`, {
+    method: 'GET',
+
   });
   return result;
 }
@@ -51,8 +45,8 @@ export const user_getUserProfile = async () => {
 export const user_patchUserProfile = async (number, name) => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/user/patch/userProfile', {
-    method: 'POST',
+  const result = await $fetch('/api/users/user/profile', {
+    method: 'PUT',
     body: {
       token: await user.getIdToken(),
       user_number: number,
@@ -65,11 +59,8 @@ export const user_patchUserProfile = async (number, name) => {
 export const user_getUserRanks = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/user/get/userRanks', {
-    method: 'POST',
-    body: {
-      token: await user.getIdToken(),
-    }
+  const result = await $fetch(`/api/users/user/ranks/${await user.getIdToken()}`, {
+    method: 'GET',
   });
   if (result.success) {
     return result.data;
@@ -82,11 +73,8 @@ export const user_getUserRanks = async () => {
 export const user_getAllUsers = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/admin/get/allUsers', {
-    method: 'POST',
-    body: {
-      token: await user.getIdToken(),
-    }
+  const result = await $fetch(`/api/admin/users/${await user.getIdToken()}`, {
+    method: 'GET',
   });
   if (result.success) {
     return result.data;
@@ -96,8 +84,8 @@ export const user_getAllUsers = async () => {
 export const user_getPortalSession = async () => {
   const store = useMainStore();
   const user = store.getUser;
-  const result = await $fetch('/api/user/get/portalSession', {
-    method: 'POST',
+  const result = await $fetch(`/api/users/user/stripe/portal`, {
+    method: 'POST', 
     body: {
       token: await user.getIdToken(),
       return_url: location.href,

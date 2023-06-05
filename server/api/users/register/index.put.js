@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 	const { token, step } = await readBody(event);
   const result = await getAuth().verifyIdToken(token);
   if (result) {
-    const document = await Users.findOneAndUpdate({user_uid: result.uid}, {register_step: step});
+    const document = await Users.findOneAndUpdate({user_uid: result.uid}, {register_step: 'finished'});
     document.save()
     return {
       data: true,

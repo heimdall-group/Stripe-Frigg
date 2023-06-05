@@ -242,9 +242,8 @@ export default {
       navigator.clipboard.writeText(content);
     },
     async callback(event) {
-      event.preventDefault();
-      const result = await $fetch('api/admin/patch/userRanks', {
-        method: 'POST',
+      const result = await $fetch('api/admin/ranks', {
+        method: 'PUT',
         body: {
           token: await this.store_user.getIdToken(),
           changes: this.changes,

@@ -90,7 +90,7 @@ export const firebase_userCreated = async (username, uid, email) => {
   const auth = getAuth();
   const store = useMainStore();
   store.setUser(auth.currentUser);
-  const user_res = await $fetch('/api/register/add/user', {
+  const user_res = await $fetch('/api/users/register', {
     method: 'POST',
     body: JSON.stringify({
       uid: uid,
@@ -99,13 +99,7 @@ export const firebase_userCreated = async (username, uid, email) => {
       token: await auth.currentUser.getIdToken(),
     }),
   });
-  const customer_res = await $fetch('/api/register/add/customerID', {
-    method: 'POST',
-    body: {
-      token: await auth.currentUser.getIdToken(),
-    },
-  });
-  if (user_res.success && customer_res.success) {
+  if (user_res.success) {
     if (!auth.currentUser.emailVerified) {
       alert_verifyEmail();
     }

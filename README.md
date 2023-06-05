@@ -56,6 +56,7 @@ npm run cronjob_service_dev
           code: 'If success false',
         }
       ```
+    - Unless function is supposed to be called when user is not signed in send token with your request. 
   - Cronjob:
     - 400: Success
 

@@ -14,7 +14,7 @@
           <v-form class="pb-4" @submit="passwordHandler">
             <form-password :origin="pwd" @onInput="(prop) => this.pwd = prop" />
               {{ color_2 }}
-            <v-btn flat type="submit" :color="color_2">Continue</v-btn>
+            <v-btn flat type="submit" :loading="password_loading" :color="color_2">Continue</v-btn>
           </v-form>
         </v-card>
     </v-dialog>
@@ -27,7 +27,7 @@
           <v-card-title class="text-center">
             This action is protected.
           </v-card-title>
-          <v-btn flat type="submit" :color="color_2" @click="providerHandler">Reauthenticate</v-btn>
+          <v-btn flat type="submit" :loading="provider_loading" :color="color_2" @click="providerHandler">Reauthenticate</v-btn>
         </v-card>
     </v-dialog>
 </template>
@@ -51,7 +51,9 @@ export default {
         message: 'Incorrect password.',
       },
       password_dialog: false,
+      password_loading: false,
       provider_dialog: false,
+      provider_loading: false,
     };
   },
   computed: {
@@ -93,8 +95,10 @@ export default {
         this.store.verify_requiredRule(this.pwd) === true &&
         this.store.verify_LengthRule(this.pwd) === true
       ) {
+        this.password_loading = true;
         const result = await firebase_verifyPassword(this.pwd);
         if (result.success) {
+          this.password_loading = false;
           this.callback();
         }
         this.password_dialog = false;
@@ -102,9 +106,11 @@ export default {
       }
     },
     async providerHandler() {
+      this.provider_loading = true;
       const result = await firebase_reauthenticateProvider();
       if (result.success) {
-        this.callback();
+        this.provider_loading = false;
+        this.callback(); 
       }
       this.password_dialog = false;
       this.provider_dialog = false;

@@ -2,7 +2,7 @@ import { getAuth } from 'firebase-admin/auth';
 import Users from "~~/server/models/user";
 
 export default defineEventHandler(async (event) => {
-	const { token } = await readBody(event);
+  const { token } = event.context.params;
   const result = await getAuth().verifyIdToken(token);
   try {
     if (result) {
