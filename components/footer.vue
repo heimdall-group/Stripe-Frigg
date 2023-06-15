@@ -6,6 +6,13 @@
           <v-list>
             <v-list-item>
               <v-btn
+                @click="user_getPortalSession"
+              >
+                Customer Portal
+              </v-btn>
+            </v-list-item>
+            <v-list-item>
+              <v-btn
                 nuxt
                 color="transparent"
                 to="/privacy-policy"
@@ -94,7 +101,10 @@ export default {
       this.store.setCurrency(this.currency)
     },
   },
-  mounted() {},
+  mounted() {
+    this.currencies = this.store_currencies;
+    this.currency = this.store_currency;
+  },
   updated() {},
   components: {},
   emits: [],

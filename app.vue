@@ -47,8 +47,10 @@
     <Footer />
   </v-app>
   <v-app v-else>
-    <loading-container :lines="1" vh='7' />
-    <loading-container :lines="1" vh='93' />
+    <v-container fluid class="ma-0 pa-0">
+      <loading-container :lines="1" vh='7' />
+      <loading-container :lines="1" vh='93' />
+    </v-container>
   </v-app>
 </template>
 

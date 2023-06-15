@@ -11,6 +11,7 @@
   border-radius: 8px;
   display: inline-block;
   position: relative;
+  margin: 8px;
 
   animation-duration: 1.5s;
   animation-fill-mode: forwards;

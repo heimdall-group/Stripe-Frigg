@@ -189,6 +189,44 @@ export const alert_firebase_userMismatch = () => {
   })
 };
 
+export const alert_firebase_passwordEmailSent = () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  store.setAlert({
+    type: 'success',
+    icon: 'fa-solid fa-square-check',
+    message: `Password reset email sent to ${user.email}`,
+  })
+};
+ 
+export const alert_firebase_passwordUpdated = () => {
+  const store = useMainStore();
+  store.setAlert({
+    type: 'success',
+    icon: 'fa-solid fa-square-check',
+    message: 'Your password has been updated.',
+  })
+};
+
+export const alert_firebase_verifyEmailSent = () => {
+  const store = useMainStore();
+  const user = store.getUser;
+  store.setAlert({
+    type: 'success',
+    icon: 'fa-solid fa-square-check',
+    message: `Verification email sent to ${user.email}`,
+  })
+};
+
+export const alert_accountRemoved = () => {
+  const store = useMainStore();
+  store.setAlert({
+    type: 'success',
+    icon: 'fa-solid fa-square-check',
+    message: `Your account has been removed`,
+  })
+};
+
 export const alert_firebase_defaultStatus = (code) => {
   const store = useMainStore();
   store.setAlert({
@@ -206,7 +244,7 @@ export const alert_firebase_defaultStatus = (code) => {
   })
 };
 
-export const resetAlert = () => {
+export const alert_resetAlert = () => {
   const store = useMainStore();
   store.resetAlerts();
 };

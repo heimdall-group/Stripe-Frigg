@@ -15,7 +15,7 @@ export const middleware_restrictAuth = async () => {
     if (user === null) {
       return;
     }
-    if (!await middleware_stepRedirectValidation() &&!user) {
+    if (!await middleware_stepRedirectValidation() && !user) {
       alert_restrictAuth();
       return navigateTo('/login');
     }
@@ -84,7 +84,6 @@ export const middleware_restrictAdminSupport = async () => {
 
 export const reloadMiddleware = async () => {
   const pathName = useRouter().currentRoute.value.fullPath;
-
   middleware_stepRedirect();
   if (pathName === '/login') {
     middleware_restrictNoAuth();
@@ -94,5 +93,7 @@ export const reloadMiddleware = async () => {
     middleware_restrictAuth();
   } else if (pathName.includes('admin')) {
     middleware_restrictAdmin();
+  } else if (pathName.includes('/profile')) {
+    middleware_restrictAuth();
   }
 };

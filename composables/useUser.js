@@ -32,16 +32,6 @@ export const user_getUser = async () => {
   }
 }
 
-export const user_getUserProfile = async () => {
-  const store = useMainStore();
-  const user = store.getUser;
-  const result = await $fetch(`/api/users/user/profile/${await user.getIdToken()}`, {
-    method: 'GET',
-
-  });
-  return result;
-}
-
 export const user_patchUserProfile = async (number, name) => {
   const store = useMainStore();
   const user = store.getUser;
@@ -97,11 +87,18 @@ export const user_getPortalSession = async () => {
 }
 
 export const user_removeAccount = async () => {
-  console.log('remove account');
-
-  // Clear stripe account and stop subscription
-  // Remove from firebase
-  // Remove from mongodb
+  const store = useMainStore();
+  const user = store.getUser;
+  const result = await $fetch('api/users/user', {
+    method: 'DELETE',
+    body: {
+      token: await user.getIdToken(),
+    }
+  });
+  if(result.success) {
+    firebase_signOutUser();
+    alert_accountRemoved();
+  }
 }
 
 export const middleware_stepRedirectValidation = async () => {

@@ -4,29 +4,54 @@
         <v-btn :disabled="disabled" flat :color="color" @click="clickHandler" >{{ text }}</v-btn>
       </template>
         <v-card
-          width="400px"
-          class="pa-4 px-8 ma-4"
+          width="auto"
+          class="pa-4 px-8"
           rounded="xl"
         >
           <v-card-title class="text-center">
             Password verification
           </v-card-title>
+          <v-list
+            v-if="list"
+            density="compact"
+            class="pt-0"
+          >
+            <v-list-item
+              v-for="(item, index) in list"
+              :key="index"
+              class="text-center text-subtitle"
+            >
+              {{ item }}
+            </v-list-item>
+          </v-list>
           <v-form class="pb-4" @submit="passwordHandler">
             <form-password :origin="pwd" @onInput="(prop) => this.pwd = prop" />
-              {{ color_2 }}
             <v-btn flat type="submit" :loading="password_loading" :color="color_2">Continue</v-btn>
           </v-form>
         </v-card>
     </v-dialog>
     <v-dialog  transition="dialog-bottom-transition" width="auto" v-model="provider_dialog">
       <v-card
-          width="400px"
+          width="auto"
           class="pa-4 pb-6 px-8 ma-4"
           rounded="xl"
         >
-          <v-card-title class="text-center">
+          <v-card-title class="text-center pb-0">
             This action is protected.
           </v-card-title>
+          <v-list
+            v-if="list"
+            density="compact"
+            class="pt-0"
+          >
+            <v-list-item
+              v-for="(item, index) in list"
+              :key="index"
+              class="text-center text-subtitle"
+            >
+              {{ item }}
+            </v-list-item>
+          </v-list>
           <v-btn flat type="submit" :loading="provider_loading" :color="color_2" @click="providerHandler">Reauthenticate</v-btn>
         </v-card>
     </v-dialog>
@@ -83,6 +108,10 @@ export default {
       type: String,
       required: false,
     },
+    list: {
+      type: Array,
+      required: false,
+    },
     disabled: {
       type: Boolean,
       required: false,
@@ -114,6 +143,9 @@ export default {
       }
       this.password_dialog = false;
       this.provider_dialog = false;
+      this.provider_loading = false;
+      this.password_loading = false;
+
     },  
     async clickHandler() {
       const { providerId } = this.user.providerData[0];

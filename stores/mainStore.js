@@ -4,6 +4,7 @@ export const useMainStore = defineStore('MainStore', {
   state: () => {
     return {
       user: null,
+      profile: {},
       plans: [],
       expired: false,
       alerts: [],
@@ -17,7 +18,7 @@ export const useMainStore = defineStore('MainStore', {
     getUser() {
       return this.user;
     },
-    getUserProfile() {
+    getProfile() {
       return this.profile;
     },
     getPlans() {
@@ -42,6 +43,9 @@ export const useMainStore = defineStore('MainStore', {
   actions: {
     setUser(user) {
       this.user = user;
+    },
+    setProfile(profile) {
+      this.profile = profile;
     },
     setUserStep(step) {
       this.user.step = step;

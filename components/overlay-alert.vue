@@ -45,7 +45,12 @@
           </v-row>
         </v-alert>
       </v-list-item>
-      
+      <v-list-item
+        v-if="alerts.length > 1"
+        class="px-4 py-1 alert-button-list-item"
+      >
+        <v-btn position="relative" class="alert-button" color="transparent" flat @click="alert_resetAlert">Clear all</v-btn>    
+      </v-list-item>
     </v-list>
   </client-only>
 </template>
@@ -55,6 +60,11 @@
   position: fixed;
   z-index: 2000;
   background: transparent;
+}
+
+.alert-button-list-item {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .alert-list.v-list, .alert-list .v-list-item, .alert-list .v-alert {

@@ -1,6 +1,7 @@
 <template>
   <v-text-field
     v-model="text"
+    :loading="loading"
     label="Password"
     variant="solo"
     type="password"
@@ -46,6 +47,10 @@ export default {
       required: true,
     },
     disabled: {
+      type: Boolean,
+      required: false,
+    },
+    loading: {
       type: Boolean,
       required: false,
     }

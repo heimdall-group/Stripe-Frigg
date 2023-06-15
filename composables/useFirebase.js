@@ -12,7 +12,10 @@ import {
   reauthenticateWithCredential,
   sendEmailVerification,
   getAdditionalUserInfo,
+  updatePassword,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
+import { alert_firebase_verifyEmailSent } from './useAlert';
 
 export const firebase_password_createUser = async (
   username,
@@ -140,6 +143,7 @@ export const firebase_initUser = async () => {
       }
       alert_loginSuccess();
       const result = await user_getUser();
+      console.log('reload called')
       reloadMiddleware();
       subscribe();
     }
@@ -155,7 +159,7 @@ export const firebase_signOutUser = async () => {
       store.setExpired(false);
       const router = useRouter();
       router.push('/');
-      resetAlert();
+      alert_resetAlert();
       alert_signoutSuccess();
     })
     .catch((error) => {
@@ -168,12 +172,40 @@ export const firebase_verifyEmail = async (alert) => {
   const user = store.getUser;
   store.patchAlerts(alert);
   try {
-    const result = await sendEmailVerification(user);
+    sendEmailVerification(user).then(() => {
+      alert_firebase_verifyEmailSent();
+    });
   } catch (error) {
     console.error(error);
     const { errorCode, errorMessage } = error;
   }
 };
+
+export const firebase_resetPassword = async () => {
+  console.log('reset password');
+  const auth = getAuth();
+  try {
+    sendPasswordResetEmail(auth, auth.currentUser.email).then(() => {
+      alert_firebase_passwordEmailSent();
+    })
+  } catch (error) {
+    console.error(error);
+    const { errorCode, errorMessage } = error;
+  }
+}
+
+export const firebase_updatePassword = async (pwd) => {
+  const store = useMainStore();
+  const user = store.getUser;
+  try {
+    updatePassword(user, pwd).then(() => {
+      alert_firebase_passwordUpdated()
+    })
+  } catch (error) {
+    console.error(error);
+    const { errorCode, errorMessage } = error;
+  }
+}
 
 export const firebase_verifyPassword = async (pwd) => {
   const store = useMainStore();

@@ -1,6 +1,7 @@
 <template>
   <v-text-field
     v-model="text"
+    :loading="loading"
     label="Phone Number"
     variant="solo"
     :rules="[
@@ -41,6 +42,10 @@ export default {
     origin: {
       type: String,
       required: true,
+    },
+    loading: {
+      type: Boolean,
+      required: false,
     }
   },
   emits: ['onInput']
